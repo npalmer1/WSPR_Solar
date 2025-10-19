@@ -57,13 +57,6 @@
             datelabel = new Label();
             label7 = new Label();
             groupBox1 = new GroupBox();
-            configgroupBox = new GroupBox();
-            showcheckBox = new CheckBox();
-            cancelbutton = new Button();
-            savebutton = new Button();
-            passtextBox = new TextBox();
-            textBox4 = new TextBox();
-            label24 = new Label();
             label23 = new Label();
             hamqslbutton = new Button();
             hamqslgroupBox = new GroupBox();
@@ -136,12 +129,10 @@
             infobutton = new Button();
             label22 = new Label();
             sqlCommandBuilder1 = new Microsoft.Data.SqlClient.SqlCommandBuilder();
-            timer1 = new System.Windows.Forms.Timer(components);
-            configbutton = new Button();
-            timer2 = new System.Windows.Forms.Timer(components);
+            solartimer = new System.Windows.Forms.Timer(components);
+            solarstartuptimer = new System.Windows.Forms.Timer(components);
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             groupBox1.SuspendLayout();
-            configgroupBox.SuspendLayout();
             groupBox2.SuspendLayout();
             EventsgroupBox.SuspendLayout();
             groupBox4.SuspendLayout();
@@ -156,7 +147,7 @@
             getLatestbutton.Name = "getLatestbutton";
             getLatestbutton.Size = new Size(75, 23);
             getLatestbutton.TabIndex = 0;
-            getLatestbutton.Text = "Get Latest";
+            getLatestbutton.Text = "Get Update";
             getLatestbutton.UseVisualStyleBackColor = true;
             getLatestbutton.Click += getLatestbutton_Click;
             // 
@@ -227,7 +218,7 @@
             // Column1
             // 
             Column1.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
-            Column1.HeaderText = "A index";
+            Column1.HeaderText = "Ap (est.)";
             Column1.Name = "Column1";
             Column1.ReadOnly = true;
             Column1.Width = 60;
@@ -331,18 +322,20 @@
             // label4
             // 
             label4.AutoSize = true;
+            label4.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
             label4.Location = new Point(307, 418);
             label4.Name = "label4";
-            label4.Size = new Size(54, 15);
+            label4.Size = new Size(132, 13);
             label4.TabIndex = 8;
-            label4.Text = "K indices";
+            label4.Text = "K indices (current actual)";
             // 
             // classlabel
             // 
             classlabel.AutoSize = true;
-            classlabel.Location = new Point(6, 463);
+            classlabel.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            classlabel.Location = new Point(6, 467);
             classlabel.Name = "classlabel";
-            classlabel.Size = new Size(59, 15);
+            classlabel.Size = new Size(57, 13);
             classlabel.TabIndex = 9;
             classlabel.Text = "Planetary:";
             // 
@@ -367,15 +360,16 @@
             // label7
             // 
             label7.AutoSize = true;
-            label7.Location = new Point(14, 490);
+            label7.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            label7.Location = new Point(14, 493);
             label7.Name = "label7";
-            label7.Size = new Size(51, 15);
+            label7.Size = new Size(50, 13);
             label7.TabIndex = 13;
             label7.Text = "Boulder:";
             // 
             // groupBox1
             // 
-            groupBox1.Controls.Add(configgroupBox);
+            groupBox1.Controls.Add(label23);
             groupBox1.Controls.Add(hamqslbutton);
             groupBox1.Controls.Add(hamqslgroupBox);
             groupBox1.Controls.Add(Rlabel);
@@ -394,101 +388,28 @@
             groupBox1.Controls.Add(label1);
             groupBox1.Controls.Add(textBox2);
             groupBox1.Controls.Add(textBox1);
-            groupBox1.Location = new Point(44, 44);
+            groupBox1.Location = new Point(26, 44);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(1035, 562);
+            groupBox1.Size = new Size(1067, 562);
             groupBox1.TabIndex = 14;
             groupBox1.TabStop = false;
             groupBox1.Text = "Current solar data from Boulder, CO.";
             // 
-            // configgroupBox
-            // 
-            configgroupBox.BackColor = Color.LightYellow;
-            configgroupBox.Controls.Add(showcheckBox);
-            configgroupBox.Controls.Add(cancelbutton);
-            configgroupBox.Controls.Add(savebutton);
-            configgroupBox.Controls.Add(passtextBox);
-            configgroupBox.Controls.Add(textBox4);
-            configgroupBox.Controls.Add(label24);
-            configgroupBox.Controls.Add(label23);
-            configgroupBox.Location = new Point(532, 89);
-            configgroupBox.Name = "configgroupBox";
-            configgroupBox.Size = new Size(411, 206);
-            configgroupBox.TabIndex = 23;
-            configgroupBox.TabStop = false;
-            configgroupBox.Text = "Database configuration";
-            configgroupBox.Visible = false;
-            // 
-            // showcheckBox
-            // 
-            showcheckBox.AutoSize = true;
-            showcheckBox.Location = new Point(284, 113);
-            showcheckBox.Name = "showcheckBox";
-            showcheckBox.Size = new Size(108, 19);
-            showcheckBox.TabIndex = 6;
-            showcheckBox.Text = "Show password";
-            showcheckBox.UseVisualStyleBackColor = true;
-            showcheckBox.CheckedChanged += showcheckBox_CheckedChanged;
-            // 
-            // cancelbutton
-            // 
-            cancelbutton.Location = new Point(260, 157);
-            cancelbutton.Name = "cancelbutton";
-            cancelbutton.Size = new Size(75, 23);
-            cancelbutton.TabIndex = 5;
-            cancelbutton.Text = "Cancel";
-            cancelbutton.UseVisualStyleBackColor = true;
-            cancelbutton.Click += cancelbutton_Click;
-            // 
-            // savebutton
-            // 
-            savebutton.Location = new Point(150, 157);
-            savebutton.Name = "savebutton";
-            savebutton.Size = new Size(75, 23);
-            savebutton.TabIndex = 4;
-            savebutton.Text = "Save";
-            savebutton.UseVisualStyleBackColor = true;
-            savebutton.Click += savebutton_Click;
-            // 
-            // passtextBox
-            // 
-            passtextBox.Location = new Point(117, 109);
-            passtextBox.Name = "passtextBox";
-            passtextBox.PasswordChar = '*';
-            passtextBox.Size = new Size(146, 23);
-            passtextBox.TabIndex = 3;
-            // 
-            // textBox4
-            // 
-            textBox4.Location = new Point(103, 54);
-            textBox4.Name = "textBox4";
-            textBox4.ReadOnly = true;
-            textBox4.Size = new Size(132, 23);
-            textBox4.TabIndex = 2;
-            // 
-            // label24
-            // 
-            label24.AutoSize = true;
-            label24.Location = new Point(47, 57);
-            label24.Name = "label24";
-            label24.Size = new Size(50, 15);
-            label24.TabIndex = 1;
-            label24.Text = "DB user:";
-            // 
             // label23
             // 
             label23.AutoSize = true;
-            label23.Location = new Point(6, 112);
+            label23.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            label23.Location = new Point(20, 544);
             label23.Name = "label23";
-            label23.Size = new Size(111, 15);
-            label23.TabIndex = 0;
-            label23.Text = "Database password:";
+            label23.Size = new Size(199, 13);
+            label23.TabIndex = 25;
+            label23.Text = "(depending on storm/blackout levels)";
             // 
             // hamqslbutton
             // 
             hamqslbutton.BackColor = Color.MistyRose;
             hamqslbutton.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            hamqslbutton.Location = new Point(532, 524);
+            hamqslbutton.Location = new Point(658, 525);
             hamqslbutton.Name = "hamqslbutton";
             hamqslbutton.Size = new Size(75, 23);
             hamqslbutton.TabIndex = 23;
@@ -511,7 +432,7 @@
             // Rlabel
             // 
             Rlabel.AutoSize = true;
-            Rlabel.Location = new Point(454, 532);
+            Rlabel.Location = new Point(608, 525);
             Rlabel.Name = "Rlabel";
             Rlabel.Size = new Size(17, 15);
             Rlabel.TabIndex = 19;
@@ -520,7 +441,7 @@
             // Slabel
             // 
             Slabel.AutoSize = true;
-            Slabel.Location = new Point(431, 532);
+            Slabel.Location = new Point(585, 525);
             Slabel.Name = "Slabel";
             Slabel.Size = new Size(17, 15);
             Slabel.TabIndex = 18;
@@ -529,7 +450,7 @@
             // Glabel
             // 
             Glabel.AutoSize = true;
-            Glabel.Location = new Point(408, 532);
+            Glabel.Location = new Point(562, 525);
             Glabel.Name = "Glabel";
             Glabel.Size = new Size(17, 15);
             Glabel.TabIndex = 17;
@@ -538,7 +459,7 @@
             // label21
             // 
             label21.AutoSize = true;
-            label21.Location = new Point(307, 532);
+            label21.Location = new Point(464, 525);
             label21.Name = "label21";
             label21.Size = new Size(95, 15);
             label21.TabIndex = 16;
@@ -547,11 +468,12 @@
             // conditionlabel
             // 
             conditionlabel.AutoSize = true;
-            conditionlabel.Location = new Point(22, 532);
+            conditionlabel.Location = new Point(20, 525);
             conditionlabel.Name = "conditionlabel";
             conditionlabel.Size = new Size(22, 15);
             conditionlabel.TabIndex = 15;
             conditionlabel.Text = "---";
+            conditionlabel.Click += conditionlabel_Click;
             // 
             // label17
             // 
@@ -585,7 +507,7 @@
             groupBox2.Controls.Add(dateTimePicker1);
             groupBox2.Controls.Add(toplabel);
             groupBox2.Controls.Add(dataGridView2);
-            groupBox2.Location = new Point(7, 44);
+            groupBox2.Location = new Point(4, 42);
             groupBox2.Name = "groupBox2";
             groupBox2.Size = new Size(1163, 556);
             groupBox2.TabIndex = 15;
@@ -610,9 +532,9 @@
             Eventsbutton.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
             Eventsbutton.Location = new Point(1045, 463);
             Eventsbutton.Name = "Eventsbutton";
-            Eventsbutton.Size = new Size(69, 23);
+            Eventsbutton.Size = new Size(109, 23);
             Eventsbutton.TabIndex = 53;
-            Eventsbutton.Text = "Summary";
+            Eventsbutton.Text = "Current Summary";
             Eventsbutton.UseVisualStyleBackColor = true;
             Eventsbutton.Visible = false;
             Eventsbutton.Click += Eventsbutton_Click;
@@ -1065,17 +987,17 @@
             // 
             label18.AutoSize = true;
             label18.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label18.Location = new Point(679, 613);
+            label18.Location = new Point(610, 625);
             label18.Name = "label18";
-            label18.Size = new Size(412, 13);
+            label18.Size = new Size(453, 13);
             label18.TabIndex = 15;
-            label18.Text = "Geomagnetic storms: G1 minor, G2 moderate, G3 strong, G4 severe, G5 extreme";
+            label18.Text = "Geomagnetic storms: G1 minor, G2 moderate, G3 strong, G4 severe, G5 extreme (Kp 5-9)";
             // 
             // label16
             // 
             label16.AutoSize = true;
             label16.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label16.Location = new Point(40, 609);
+            label16.Location = new Point(26, 608);
             label16.Name = "label16";
             label16.Size = new Size(563, 13);
             label16.TabIndex = 14;
@@ -1104,7 +1026,7 @@
             // 
             label20.AutoSize = true;
             label20.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label20.Location = new Point(40, 649);
+            label20.Location = new Point(26, 648);
             label20.Name = "label20";
             label20.Size = new Size(514, 26);
             label20.TabIndex = 18;
@@ -1113,26 +1035,26 @@
             // label5
             // 
             label5.AutoSize = true;
-            label5.Location = new Point(679, 633);
+            label5.Location = new Point(611, 640);
             label5.Name = "label5";
-            label5.Size = new Size(394, 15);
+            label5.Size = new Size(540, 15);
             label5.TabIndex = 19;
-            label5.Text = "Radiation storms: S1 minor, S2 moderate, S3 strong, S4 severe, S5 extreme";
+            label5.Text = "Radiation storms: S1 minor, S2 moderate, S3 strong, S4 severe, S5 extreme (Pflux >= 10 MeV particles)";
             // 
             // label8
             // 
             label8.AutoSize = true;
-            label8.Location = new Point(679, 657);
+            label8.Location = new Point(610, 655);
             label8.Name = "label8";
-            label8.Size = new Size(389, 15);
+            label8.Size = new Size(459, 15);
             label8.TabIndex = 20;
-            label8.Text = "Radio blackout: R1 minor, R2 moderate, R3 strong, R4 severe, R5 extreme";
+            label8.Text = "Radio blackout: R1 minor, R2 moderate, R3 strong, R4 severe, R5 extreme (flares > M1)";
             // 
             // infobutton
             // 
             infobutton.BackColor = Color.MistyRose;
             infobutton.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            infobutton.Location = new Point(1085, 633);
+            infobutton.Location = new Point(1115, 608);
             infobutton.Name = "infobutton";
             infobutton.Size = new Size(82, 23);
             infobutton.TabIndex = 21;
@@ -1144,40 +1066,28 @@
             // 
             label22.AutoSize = true;
             label22.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label22.Location = new Point(40, 626);
+            label22.Location = new Point(26, 625);
             label22.Name = "label22";
             label22.Size = new Size(218, 13);
             label22.TabIndex = 22;
             label22.Text = "Lower Ap index = more stable conditions";
             // 
-            // timer1
+            // solartimer
             // 
-            timer1.Interval = 900000;
-            timer1.Tick += timer1_Tick;
+            solartimer.Interval = 300000;
+            solartimer.Tick += solartimer_Tick;
             // 
-            // configbutton
+            // solarstartuptimer
             // 
-            configbutton.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            configbutton.Location = new Point(582, 648);
-            configbutton.Name = "configbutton";
-            configbutton.Size = new Size(61, 23);
-            configbutton.TabIndex = 23;
-            configbutton.Text = "Config";
-            configbutton.UseVisualStyleBackColor = true;
-            configbutton.Click += configbutton_Click;
-            // 
-            // timer2
-            // 
-            timer2.Interval = 10000;
-            timer2.Tick += timer2_Tick;
+            solarstartuptimer.Interval = 5000;
+            solarstartuptimer.Tick += solarstartuptimer_Tick;
             // 
             // Solar
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.SeaShell;
-            ClientSize = new Size(1182, 683);
-            Controls.Add(configbutton);
+            ClientSize = new Size(1222, 683);
             Controls.Add(label22);
             Controls.Add(infobutton);
             Controls.Add(label8);
@@ -1198,8 +1108,6 @@
             ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
             groupBox1.ResumeLayout(false);
             groupBox1.PerformLayout();
-            configgroupBox.ResumeLayout(false);
-            configgroupBox.PerformLayout();
             groupBox2.ResumeLayout(false);
             groupBox2.PerformLayout();
             EventsgroupBox.ResumeLayout(false);
@@ -1300,6 +1208,8 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Column14;
         private System.Windows.Forms.GroupBox hamqslgroupBox;
         private Microsoft.Data.SqlClient.SqlCommandBuilder sqlCommandBuilder1;
+        private System.Windows.Forms.Timer solartimer;
+        private System.Windows.Forms.Timer solarstartuptimer;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn3;
@@ -1313,16 +1223,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn11;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column12;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column15;
-        private System.Windows.Forms.Timer timer1;
-        private GroupBox configgroupBox;
-        private Label label23;
-        private CheckBox showcheckBox;
-        private Button cancelbutton;
-        private Button savebutton;
-        private TextBox passtextBox;
-        private TextBox textBox4;
-        private Label label24;
-        private Button configbutton;
-        private System.Windows.Forms.Timer timer2;
+        private System.Windows.Forms.Label label23;
     }
 }

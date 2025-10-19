@@ -6,7 +6,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Net.NetworkInformation;
+
 namespace WSPR_Solar
 {
     internal class MessageClass
@@ -27,6 +27,8 @@ namespace WSPR_Solar
             mForm.delay = delay;
             mForm.StartPosition = FormStartPosition.CenterParent;
             mForm.ShowDialog();
+            mForm.BringToFront();
+           
         }
         public async void TMessageBox(string text, string caption, int delay)
         {

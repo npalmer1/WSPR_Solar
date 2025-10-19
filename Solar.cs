@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
+using System.Diagnostics.Eventing.Reader;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
@@ -23,7 +24,6 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
-using System.Security.Cryptography;
 using System.Security.Policy;
 using System.Text;
 using System.Text.Json;
@@ -32,9 +32,9 @@ using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using System.Web;
 using System.Windows.Forms;
-using static Org.BouncyCastle.Asn1.Cmp.Challenge;
 using static System.Net.Mime.MediaTypeNames;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.Button;
+using static WSPR_Solar.Solar;
 
 
 
@@ -49,9 +49,9 @@ namespace WSPR_Solar
         private string[] cells2 = new string[14];
         private string[] cells3 = new string[14];
 
-        private string server = "127.0.0.1";
-        private string user = "admin";
-        private string pass = "wspr";
+        private string server;
+        private string user;
+        private string pass;
         public struct SolarIndexes
         {
             public string Ap;
@@ -118,11 +118,23 @@ namespace WSPR_Solar
         int Slevel = 0;
         int Rlevel = 0;
 
+        string SFI = "";
+
         public bool stopUrl = false;
 
         public string results = "";
 
         bool hamqslopened = false;
+
+        int timercount = 0;
+
+        string serverName = "127.0.0.1";
+        string db_user = "admin";
+        string db_pass = "wspr";
+        string slash = "\\"; //default to Windows
+        string  root = "/";
+        int OpSystem = 0; //default windwows
+        string dateformat = "yyyy-MM-dd";
 
         public SolarIndexes solar = new SolarIndexes();
         public Solar()
@@ -130,49 +142,187 @@ namespace WSPR_Solar
             InitializeComponent();
         }
 
-        private async void Solar_Load(object sender, EventArgs e)
+        public async Task setConfig(string serverName, string db_user, string db_pass)
         {
-            System.Version version = Assembly.GetExecutingAssembly().GetName().Version;
-            string ver = "0.1.1";
-            this.Text = "WSPR Scheduler Solar                   V." + ver + "    GNU GPLv3 License";
-            getUserandPassword();
-            await checkNOAA();
-            dataGridView3.DefaultCellStyle.Font = new System.Drawing.Font("Segoe UI", 8);
-            for (int i = 0; i < dataGridView1.Columns.Count; i++)
+            server = serverName;
+            user = db_user;
+            pass = db_pass;
+            bool check = await checkNOAA();
+            if (!check)
             {
-                dataGridView1.Columns[i].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+                Msg.TMessageBox("Warning: unable to connect to NOAA", "Solar data", 1500);
             }
-            for (int i = 0; i < dataGridView2.Columns.Count; i++)
+            else
             {
-                dataGridView2.Columns[i].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+                await getLatestSolar(serverName, db_user, db_pass);
+                await updateGeo(serverName, db_user, db_pass, true); //true - update yesterday as well
+                await updateSolar(serverName, db_user, db_pass);
+                await updateAllProtonandFlare(serverName, db_user, db_pass, true); //update yesterday
+                await updateAllProtonandFlare(serverName, db_user, db_pass, false); //update today
             }
-            dataGridView1.DefaultCellStyle.Font = new System.Drawing.Font("Segoe UI", 8);
-            dataGridView3.DefaultCellStyle.Font = new System.Drawing.Font("Segoe UI", 8);
-            dataGridView3.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
-
-            // Automatically adjust row height to fit content
-            dataGridView3.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
-
-
-            await updateGeo(server, user, pass, true); //true - update yesterday as well
-            await updateSolar(server, user, pass);
-            await updateAllProtonandFlare(server, user, pass, true); //update yesterday
-            await updateAllProtonandFlare(server, user, pass, false); //update today
-            await getLatestSolar(server, user, pass);
-            timer2.Enabled = true;
-            timer2.Start();
-
-
 
         }
 
-
-        public async Task checkNOAA()
+        private void Solar_Load(object sender, EventArgs e)
         {
+
+            System.Version version = Assembly.GetExecutingAssembly().GetName().Version;
+            string ver = "0.1.1";
+            this.Text = "WSPR Solar                       V." + ver + "    GNU GPLv3 License";
+           
+            if (checkSlotDB())
+            {
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                {
+                    OpSystem = 0; //Windows
+                }
+                else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+                {
+                    OpSystem = 1; //Linux
+                    slash = "/"; //Linux uses forward slash
+                    root = "/"; //Linux root
+                }
+                else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+                {
+                    OpSystem = 2; //MacOS
+                    slash = "/"; //MacOS uses forward slash
+                    root = "/"; //MacOS root
+                }
+                else if (OperatingSystem.IsAndroid())
+                {
+                    OpSystem = 3; //Android
+                    slash = "/"; //Android uses forward slash
+                    root = "/"; //Android root
+                }
+                solartimer.Enabled = true;
+                solartimer.Start();
+
+                for (int i = 0; i < dataGridView1.Columns.Count; i++)
+                {
+                    dataGridView1.Columns[i].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+                }
+                for (int i = 0; i < dataGridView2.Columns.Count; i++)
+                {
+                    dataGridView2.Columns[i].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+                }
+                dataGridView1.DefaultCellStyle.Font = new System.Drawing.Font("Segoe UI", 8);
+                dataGridView2.DefaultCellStyle.Font = new System.Drawing.Font("Segoe UI", 8);
+                dataGridView3.DefaultCellStyle.Font = new System.Drawing.Font("Segoe UI", 8);
+                dataGridView3.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
+
+                // Automatically adjust row height to fit content
+                dataGridView3.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
+
+                setConfig(serverName, db_user, db_pass);
+            }
+            else
+            {
+                Msg.TMessageBox("Unable to contact database", "", 2000);
+                solartimer.Stop();
+                solartimer.Enabled = false;
+
+            }
+
+        }
+
+        private bool getUserandPassword()
+        {
+            string key = "wsproundtheworld";
+            Encryption enc = new Encryption();
+            string encryptedpassword;
+            string content = "";
+            bool ok = false;
+
+            string homeDirectory = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+            string filepath = homeDirectory;
+            //string content = "db_user: " + user + " db_pass: " + passwordhash;
+
+            if (Path.Exists(filepath))
+            {
+
+                if (filepath.EndsWith(slash))
+                {
+                    slash = "";
+                }
+                filepath = filepath + slash + "DBcredential";
+                if (File.Exists(filepath))
+                {
+                    try
+                    {
+                        using (StreamReader reader = new StreamReader(filepath))
+                        {
+                            content = reader.ReadLine();
+                            reader.Close();
+                        }
+                        if (content != null || content != "")
+                        {
+                            if (content.Contains("db_pass:"))
+                            {
+                                encryptedpassword = content.Substring(content.IndexOf("db_pass: ") + "db_pass: ".Length);
+                                string password = enc.Decrypt(encryptedpassword, key);
+                                if (password.Length > 0 && password != null)
+                                {
+                                    db_pass = password;
+                                    //PasstextBox.Text = password;
+
+                                    ok = true;
+                                }
+                            }
+                        }
+
+                        if (!ok)
+                        {
+                            Msg.TMessageBox("Unable to read database credentials", "", 1000);
+                            return false;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Msg.TMessageBox("Unable to read database credentials", "", 1000);
+                        return false;
+                    }
+                }
+            }
+            //PasstextBox2.Visible = false;
+            //Passlabel2.Visible = false;
+            return ok;
+        }
+
+        private bool checkSlotDB()
+        {
+            string myConnectionString = "server=" + serverName + ";user id=" + db_user + ";password=" + db_pass + ";database=wspr_slots";
+
+            MySqlConnection connection = new MySqlConnection(myConnectionString);
+
+
+            try
+            {
+                connection.Open();
+                connection.Close();
+                return true;
+            }
+            catch
+            {
+
+                connection.Close();
+                return false;
+            }
+        }
+        public async Task<bool> checkNOAA()
+        {
+            if (stopUrl)
+            {
+                return false;
+            }
             string url = "https://services.swpc.noaa.gov/";
             if (!await Msg.IsUrlReachable(url))
             {
                 Msg.TMessageBox("Unable to connect to NOAA url", "Solar data", 3000);
+                return false;
+            }
+            else
+            {
+                return true;
             }
         }
         public async Task updateGeo(string server, string user, string pass, bool updateyesterday)
@@ -195,8 +345,7 @@ namespace WSPR_Solar
         }
         public async Task updateSolar(string server, string user, string pass)
         {
-            //DateTime dt = DateTime.Now.ToUniversalTime();           
-            //string date = dt.ToString("yyyy-MM-dd");
+
             await fetchSolardata();
             DateTime date = DateTime.Now.ToUniversalTime();
             await findSolar();
@@ -207,8 +356,7 @@ namespace WSPR_Solar
 
         public async Task updateBursts(string server, string user, string pass)
         {
-            //DateTime dt = DateTime.Now.ToUniversalTime();           
-            //string date = dt.ToString("yyyy-MM-dd");
+
             await fetchBurstdata();
             DateTime date = DateTime.Now.ToUniversalTime();
             await findBurst();
@@ -390,8 +538,7 @@ namespace WSPR_Solar
                 {
                     solar.Xray = Xray;
                 }
-                conditionlabel.Text = "Higher HF propagation: " + findConditions(solar.flux);
-
+                SFI = solar.flux;              
             }
         }
 
@@ -399,6 +546,7 @@ namespace WSPR_Solar
         {
             int t;
             string P = "";
+            string F = "SFI: " + flux +" - ";
             int.TryParse(flux, out t);
             if (t < 70)
             {
@@ -424,6 +572,11 @@ namespace WSPR_Solar
             {
                 P = "outstanding";
             }
+            if (Glabel.Text.Contains("G") || Rlabel.Text.Contains("R") || Slabel.Text.Contains("S"))
+            {
+                P = "unstable/degraded - (storm or blackout)";
+            }
+            conditionlabel.Text = F + "Higher HF propagation: " + P;
             return P;
         }
 
@@ -433,10 +586,19 @@ namespace WSPR_Solar
             {
                 return;
             }
-            cells1[0] = solar.Ap;
-            double A = Convert.ToDouble(solar.Ap);
-            string L = find_activity_level(A);
-            cells1[1] = L;
+            if (row == 0 || (row == 1 && solar.Ap != "-1")) //planetary)
+            {
+                cells1[0] = solar.Ap;
+                double A = Convert.ToDouble(solar.Ap);
+                string L = find_activity_level(A);
+                cells1[1] = L;
+            }
+            else //if Boulder
+            {
+                cells1[0] = "n/a";
+                cells1[1] = "n/a";
+            }
+
 
             cells1[2] = solar.K00 + findKplevel(solar.K00);
             cells1[3] = solar.K03 + findKplevel(solar.K03);
@@ -447,9 +609,18 @@ namespace WSPR_Solar
             cells1[7] = solar.K15 + findKplevel(solar.K15);
             cells1[8] = solar.K18 + findKplevel(solar.K18);
             cells1[9] = solar.K21 + findKplevel(solar.K21);
-            cells1[10] = solar.flux;
-            cells1[11] = solar.SSN;
-            cells1[12] = solar.Xray;
+            if (row == 0) //planetary
+            {
+                cells1[10] = solar.flux;
+                cells1[11] = solar.SSN;
+                cells1[12] = solar.Xray;
+            }
+            else //boulder
+            {
+                cells1[10] = "-";
+                cells1[11] = "-";
+                cells1[12] = "-";
+            }
 
             for (int i = 0; i < dataGridView1.Columns.Count; i++)
             {
@@ -524,13 +695,6 @@ namespace WSPR_Solar
             }
             return s;
         }
-
-        /* private async Task saveGeoData(DateTime date)
-         {
-
-             SaveGeoDB(date);
-
-         }*/
 
 
         public async Task fetchGeodata()
@@ -948,12 +1112,12 @@ namespace WSPR_Solar
             string myConnectionString = "server=" + server + ";user id=" + user + ";password=" + pass + ";database=wspr_sol";
 
 
+            MySqlConnection connection = new MySqlConnection(myConnectionString);
+
+
             try
             {
-                MySqlConnection connection = new MySqlConnection(myConnectionString);
-
                 connection.Open();
-
                 MySqlCommand command = connection.CreateCommand();
 
                 string C = "";
@@ -985,7 +1149,7 @@ namespace WSPR_Solar
                         if (C != "")
                         { and = " AND "; }
                     }
-                    //command.CommandText = "SELECT * FROM received WHERE datetime >= '" + datetime1 + "' AND datetime <= '" + datetime2 + "' AND " + bandstr + callstr + fromstr + tostr + " ORDER BY datetime DESC LIMIT " + maxrows;
+
                     command.CommandText = "SELECT * FROM weather WHERE " + D + and + C + order;
                 }
                 MySqlDataReader Reader;
@@ -1037,6 +1201,7 @@ namespace WSPR_Solar
             catch
             {
                 found = false;
+                connection.Close();
             }
         }
 
@@ -1101,7 +1266,7 @@ namespace WSPR_Solar
         {
             if (Switchbutton.Text == "Database")
             {
-                Switchbutton.Text = "Live data";
+                Switchbutton.Text = "Current data";
                 groupBox1.Visible = false;
                 groupBox2.Visible = true;
                 await find_data(false, "", ""); //do not filter
@@ -1135,8 +1300,8 @@ namespace WSPR_Solar
 
             }
             catch
-            {         //if row already exists then try updating it in database
-
+            {
+                connection.Close();
             }
 
 
@@ -1162,9 +1327,7 @@ namespace WSPR_Solar
                 command.CommandText += ", Kp03 = '" + solar.K03 + "', Kp06 = '" + solar.K06 + "', Kp09 = '" + solar.K09 + "'";
                 command.CommandText += ", Kp12 = '" + solar.K12 + "', Kp15 = '" + solar.K15 + "', Kp18 = '" + solar.K18 + "'";
                 command.CommandText += ", Kp21 = '" + solar.K21 + "'";
-                /*command.CommandText = "INSERT IGNORE INTO weather(datetime,Ap,Kp00,Kp03,Kp06,Kp09,Kp12,Kp15,Kp18,Kp21)";
 
-                command.CommandText += " VALUES(@datetime,@Ap,@Kp00,@Kp03,@Kp06,@Kp09,@Kp12,@Kp15,@Kp18,@Kp21)";*/
                 connection.Open();
 
 
@@ -1176,7 +1339,7 @@ namespace WSPR_Solar
             }
             catch
             {
-
+                connection.Close();
             }
 
 
@@ -1224,8 +1387,8 @@ namespace WSPR_Solar
 
             }
             catch
-            {         //if row already exists then try updating it in database
-
+            {
+                connection.Close();
             }
 
 
@@ -1239,12 +1402,12 @@ namespace WSPR_Solar
             int i = 0;
             bool found = false;
             string myConnectionString = "server=" + server + ";user id=" + user + ";password=" + pass + ";database=wspr_sol";
+            MySqlConnection connection = new MySqlConnection(myConnectionString);
+
 
 
             try
             {
-                MySqlConnection connection = new MySqlConnection(myConnectionString);
-
                 connection.Open();
 
                 MySqlCommand command = connection.CreateCommand();
@@ -1289,6 +1452,8 @@ namespace WSPR_Solar
                 MySqlDataReader Reader;
                 Reader = command.ExecuteReader();
 
+                DateTime Today = DateTime.Now.ToUniversalTime();
+                string today = Today.ToString("yyyy-MM-dd");
                 while (Reader.Read())
                 {
                     found = true;
@@ -1319,9 +1484,18 @@ namespace WSPR_Solar
                     cells1[7] = zeros(solar.K15) + findKplevel(solar.K15);
                     cells1[8] = zeros(solar.K18) + findKplevel(solar.K18);
                     cells1[9] = zeros(solar.K21) + findKplevel(solar.K21);
-                    cells1[10] = zeros(solar.flux);
-                    cells1[11] = solar.SSN;
-                    cells1[12] = solar.Xray;
+                    if (date == today)
+                    {
+                        cells1[10] = "-";
+                        cells1[11] = "-";
+                        cells1[12] = "-";
+                    }
+                    else
+                    {
+                        cells1[10] = zeros(solar.flux);
+                        cells1[11] = solar.SSN;
+                        cells1[12] = solar.Xray;
+                    }
 
                     update_grid2(); //add this row to the datagridview
 
@@ -1334,6 +1508,7 @@ namespace WSPR_Solar
             catch
             {
                 found = false;
+                connection.Close();
             }
         }
 
@@ -1438,9 +1613,7 @@ namespace WSPR_Solar
         {
             dataGridView2.Rows.Clear();
             dataGridView2.Sort(dataGridView2.Columns[0], ListSortDirection.Descending);  //order by date
-                                                                                         //DateTime dt = DateTime.Now.ToUniversalTime();
-                                                                                         //dt = dt.AddHours(-2);
-                                                                                         // string date = dt.ToString("yyyy-MM-dd HH:mm:00");
+
             int rows = table_count();
             if (rows > 0)
             {
@@ -1881,7 +2054,10 @@ namespace WSPR_Solar
             await find_extra_data(false, "", "");
 
             findstormlevels();
-            stormlabels();
+            if (!yesterday)
+            {
+                stormlabels();
+            }
 
         }
 
@@ -1980,6 +2156,7 @@ namespace WSPR_Solar
             {
                 Rlabel.Text = "--";
             }
+            findConditions(SFI);
         }
 
         public async Task updateProtonandFlare(string server, string user, string pass, bool yesterday, int h)
@@ -2019,7 +2196,10 @@ namespace WSPR_Solar
             Rlevel = 0;
             Slevel = 0;
             await find_extra_data(false, "", "");
-            stormlabels();
+            if (!yesterday)
+            {
+                stormlabels();
+            }
         }
 
         public async Task SavePFdata(DateTime date)
@@ -2047,6 +2227,7 @@ namespace WSPR_Solar
             }
             catch
             {         //if row already exists then try updating it in database
+                connection.Close();
 
             }
 
@@ -2079,6 +2260,7 @@ namespace WSPR_Solar
             }
             catch
             {         //if row already exists then try updating it in database
+                connection.Close();
 
             }
 
@@ -2120,13 +2302,13 @@ namespace WSPR_Solar
             bool found = false;
             string myConnectionString = "server=" + server + ";user id=" + user + ";password=" + pass + ";database=wspr_sol";
 
+            MySqlConnection connection = new MySqlConnection(myConnectionString);
+
 
             try
             {
-                MySqlConnection connection = new MySqlConnection(myConnectionString);
 
                 connection.Open();
-
                 MySqlCommand command = connection.CreateCommand();
 
                 string C = "";
@@ -2224,6 +2406,7 @@ namespace WSPR_Solar
             catch
             {
                 found = false;
+                connection.Close();
             }
         }
         private void update_grid3() //add rows to the datagridview
@@ -2417,25 +2600,6 @@ namespace WSPR_Solar
                         double intXR = Convert.ToDouble(current_int_xrlong);
                         intXR = Math.Round(intXR, 4);
 
-
-                        /*double beginFlux = ClassToFlux(begin_class);   //convert class to xray flux
-                        double endFlux = ClassToFlux(end_class);
-                        double avgFlux = (beginFlux + endFlux) / 2;
-                        string avgClass = FluxToClass(avgFlux);
-
-                        string[] m = max_time.Split('T');
-                        max_time = m[0] + " " + m[1];
-
-                        string[] b = begin_time.Split('T');
-                        begin_time = b[0] + " " + b[1];
-                        string[] e = end_time.Split('T');
-                        end_time = e[0] + " " + e[1];
-                        DateTime bt = Convert.ToDateTime(begin_time);
-                        DateTime et = Convert.ToDateTime(end_time);
-                        TimeSpan duration = et - bt;
-                        int durMin = duration.Minutes;*/
-
-
                         DateTime maxt = Convert.ToDateTime(max_time).ToUniversalTime();
                         maxHM = maxt.Hour.ToString().PadLeft(2, '0') + ":" + maxt.Minute.ToString().PadLeft(2, '0');
 
@@ -2614,7 +2778,7 @@ namespace WSPR_Solar
 
         private void Eventsbutton_Click(object sender, EventArgs e)
         {
-            if (Eventsbutton.Text == "Summary")
+            if (Eventsbutton.Text == "Current Summary")
             {
                 EventsgroupBox.Visible = true;
                 Eventsbutton.Text = "Hide";
@@ -2622,7 +2786,7 @@ namespace WSPR_Solar
             }
             else
             {
-                Eventsbutton.Text = "Summary";
+                Eventsbutton.Text = "Current Summary";
                 EventsgroupBox.Visible = false;
             }
 
@@ -2650,19 +2814,22 @@ namespace WSPR_Solar
             if (await Msg.IsUrlReachable(url))
             {
                 //OpenBrowser(url);
-                showHamqsl();
+
             }
             else
             {
                 Msg.TMessageBox("No Internet connection", "Info", 1000);
+                return;
             }
             if (hamqslbutton.Text == "Forecast")
             {
                 hamqslbutton.Text = "Hide";
+                showHamqsl();
             }
             else
             {
                 hamqslbutton.Text = "Forecast";
+
                 hamqslgroupBox.Visible = false;
 
             }
@@ -2671,13 +2838,15 @@ namespace WSPR_Solar
         private void showHamqsl()
         {
             hamqslopened = false;
-            hamqslgroupBox.Text = "Solar-Terrestrial Data - courtesy of hamqsl.com";
+            hamqslgroupBox.Text = "Solar-Terrestrial Data - courtesy of N0NBH at hamqsl.com";
             WebBrowser browser = new WebBrowser();
             browser.Size = new Size(hamqslgroupBox.Width - 20, hamqslgroupBox.Height - 30);
             browser.Location = new Point(10, 20);
             browser.ScrollBarsEnabled = false;
             browser.ScriptErrorsSuppressed = true;
 
+
+            hamqslgroupBox.Controls.Clear();
 
             hamqslgroupBox.Controls.Add(browser);
             string html = @"<center><a href='https://www.hamqsl.com/solar.html' ";
@@ -2710,175 +2879,70 @@ namespace WSPR_Solar
                 OpenBrowser(url);
                 hamqslopened = true;
             }
-            // Open the URL in the default browser
-            //System.Diagnostics.Process.Start(new ProcessStartInfo(e.Url.ToString()) { UseShellExecute = true });
+
         }
 
-        private async void timer1_Tick(object sender, EventArgs e)
+        private async void solartimer_Tick(object sender, EventArgs e)
         {
+            await solartimer_action();
+        }
+
+      
+        private async Task solartimer_action()
+        {
+            timercount++;
             DateTime dt = DateTime.Now.ToUniversalTime();
-            if (dt.Minute >= 45)
+            if (timercount == 9) //45 mins
             {
                 await getLatestSolar(server, user, pass); //update 
-
 
             }
 
             await checkNOAA();
 
 
-            if (dt.Minute >= 46)
+            if (timercount == 8)    //40 mins
             {
                 await updateGeo(server, user, pass, true); //true - update yesterday as well
 
 
             }
-            if (dt.Minute >= 10 && dt.Minute < 28)
+            if (timercount == 6)  //30 mins
+            {
+                await updateAllProtonandFlare(server, user, pass, false);
+
+            }
+            if (timercount == 5 && dt.Hour == 3)  //25 mins
             {
                 await updateAllProtonandFlare(server, user, pass, true); //get results for 2100-2400 yesterday
 
             }
 
-
-            if (dt.Hour == 4 && dt.Minute >= 20 && dt.Minute < 45)
+            if (timercount == 7)  //35 mins
             {
-                await updateGeo(server, user, pass, true); //false - don't update yesterday as well
+                //await updateGeo(server, user, pass, true); //false - don't update yesterday as well
                 await updateSolar(server, user, pass);
             }
-
-
-        }
-
-        private bool saveUserandPassword(string user, string password)
-        {
-            string key = "wsproundtheworld";
-            Encryption enc = new Encryption();
-            string encryptedpassword = enc.Encrypt(password, key);
-
-            string homeDirectory = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
-            string filepath = homeDirectory;
-            string content = "db_user: " + user + " db_pass: " + encryptedpassword;
-            if (Path.Exists(filepath))
+            if (timercount == 11) //55 mins
             {
-                string slash = "\\";
-                if (filepath.EndsWith("\\"))
-                {
-                    slash = "";
-                }
-                filepath = filepath + slash + "DBsolarcredential";
-                try
-                {
-                    using (StreamWriter writer = new StreamWriter(filepath, false))
-                    {
-                        writer.WriteLine(content);
-                        writer.Close();
-                    }
-                }
-                catch (Exception ex)
-                {
-                    return false;
-                }
-            }
-            return true;
-        }
+                timercount = 0; //reset timer
 
-        private bool getUserandPassword()
-        {
-            string key = "wsproundtheworld";
-            Encryption enc = new Encryption();
-            string encryptedpassword;
-            string content = "";
-            bool ok = false;
-
-            string homeDirectory = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
-            string filepath = homeDirectory;
-            //string content = "db_user: " + user + " db_pass: " + passwordhash;
-
-            if (Path.Exists(filepath))
-            {
-                string slash = "\\";
-                if (filepath.EndsWith("\\"))
-                {
-                    slash = "";
-                }
-                filepath = filepath + slash + "DBsolarcredential";
-                if (File.Exists(filepath))
-                {
-                    try
-                    {
-                        using (StreamReader reader = new StreamReader(filepath))
-                        {
-                            content = reader.ReadLine();
-                            reader.Close();
-                        }
-                        if (content != null || content != "")
-                        {
-                            if (content.Contains("db_pass:"))
-                            {
-                                encryptedpassword = content.Substring(content.IndexOf("db_pass: ") + "db_pass: ".Length);
-                                string password = enc.Decrypt(encryptedpassword, key);
-                                if (password.Length > 0 && password != null)
-                                {
-                                    pass = password;
-                                    passtextBox.Text = password;
-
-                                    ok = true;
-                                }
-                            }
-                        }
-
-                        if (!ok)
-                        {
-                            MessageBox.Show("Unable to read database credentials", "");
-                            return false;
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show("Unable to read database credentials", "");
-                        return false;
-                    }
-                }
-            }
-
-
-            return ok;
-        }
-
-        private void configbutton_Click(object sender, EventArgs e)
-        {
-            configgroupBox.Visible = true;
-        }
-
-        private void cancelbutton_Click(object sender, EventArgs e)
-        {
-            configgroupBox.Visible = false;
-        }
-
-        private void savebutton_Click(object sender, EventArgs e)
-        {
-            saveUserandPassword("admin", passtextBox.Text.Trim());
-            configgroupBox.Visible = false;
-        }
-
-        private void showcheckBox_CheckedChanged(object sender, EventArgs e)
-        {
-            if (showcheckBox.Checked)
-            {
-                passtextBox.PasswordChar = '\0'; //show password
-            }
-            else
-            {
-                passtextBox.PasswordChar = '*'; //hide password
             }
         }
 
-        private void timer2_Tick(object sender, EventArgs e)
+        private void solarstartuptimer_Tick(object sender, EventArgs e)
         {
             getLatestSolar(server, user, pass);
-            timer2.Stop();
-            timer2.Enabled = false;
+            solarstartuptimer.Enabled = false;
+            solarstartuptimer.Stop();
+
+        }
+
+        private void conditionlabel_Click(object sender, EventArgs e)
+        {
+
         }
     }
+
 }
 
