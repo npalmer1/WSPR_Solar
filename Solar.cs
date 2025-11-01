@@ -136,6 +136,8 @@ namespace WSPR_Solar
         int OpSystem = 0; //default windwows
         string dateformat = "yyyy-MM-dd";
 
+        string activity_level = "";
+
         public SolarIndexes solar = new SolarIndexes();
         public Solar()
         {
@@ -572,6 +574,14 @@ namespace WSPR_Solar
             {
                 P = "outstanding";
             }
+            if (activity_level.Contains("storm"))
+            {
+                P = activity_level;
+            }           
+            else
+            {
+                P = P + ", Sun: " + activity_level.ToLower();
+            }
             if (Glabel.Text.Contains("G") || Rlabel.Text.Contains("R") || Slabel.Text.Contains("S"))
             {
                 P = "unstable/degraded - (storm or blackout)";
@@ -591,6 +601,7 @@ namespace WSPR_Solar
                 cells1[0] = solar.Ap;
                 double A = Convert.ToDouble(solar.Ap);
                 string L = find_activity_level(A);
+                activity_level = L;
                 cells1[1] = L;
             }
             else //if Boulder
