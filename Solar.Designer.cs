@@ -131,6 +131,7 @@
             sqlCommandBuilder1 = new Microsoft.Data.SqlClient.SqlCommandBuilder();
             solartimer = new System.Windows.Forms.Timer(components);
             solarstartuptimer = new System.Windows.Forms.Timer(components);
+            stormlabel = new Label();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             groupBox1.SuspendLayout();
             groupBox2.SuspendLayout();
@@ -369,6 +370,7 @@
             // 
             // groupBox1
             // 
+            groupBox1.Controls.Add(stormlabel);
             groupBox1.Controls.Add(label23);
             groupBox1.Controls.Add(hamqslbutton);
             groupBox1.Controls.Add(hamqslgroupBox);
@@ -409,7 +411,7 @@
             // 
             hamqslbutton.BackColor = Color.MistyRose;
             hamqslbutton.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            hamqslbutton.Location = new Point(658, 525);
+            hamqslbutton.Location = new Point(746, 534);
             hamqslbutton.Name = "hamqslbutton";
             hamqslbutton.Size = new Size(75, 23);
             hamqslbutton.TabIndex = 23;
@@ -1082,6 +1084,15 @@
             solarstartuptimer.Interval = 5000;
             solarstartuptimer.Tick += solarstartuptimer_Tick;
             // 
+            // stormlabel
+            // 
+            stormlabel.AutoSize = true;
+            stormlabel.Location = new Point(562, 543);
+            stormlabel.Name = "stormlabel";
+            stormlabel.Size = new Size(17, 15);
+            stormlabel.TabIndex = 26;
+            stormlabel.Text = "--";
+            // 
             // Solar
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -1224,5 +1235,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Column12;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column15;
         private System.Windows.Forms.Label label23;
+        private Label stormlabel;
     }
 }

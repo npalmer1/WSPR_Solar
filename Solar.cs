@@ -580,7 +580,7 @@ namespace WSPR_Solar
             }           
             else
             {
-                P = P + ", Sun: " + activity_level.ToLower();
+                P = P + ", Sun: " + activity_level;
             }
             if (Glabel.Text.Contains("G") || Rlabel.Text.Contains("R") || Slabel.Text.Contains("S"))
             {
@@ -601,7 +601,8 @@ namespace WSPR_Solar
                 cells1[0] = solar.Ap;
                 double A = Convert.ToDouble(solar.Ap);
                 string L = find_activity_level(A);
-                activity_level = L;
+                activity_level = L.ToLower();
+                
                 cells1[1] = L;
             }
             else //if Boulder
@@ -2167,7 +2168,15 @@ namespace WSPR_Solar
             {
                 Rlabel.Text = "--";
             }
-            findConditions(SFI);
+            if (activity_level.Contains("storm"))
+            {
+                stormlabel.Text = activity_level;
+            }
+            else
+            {
+                stormlabel.Text = "--";
+            }
+                findConditions(SFI);
         }
 
         public async Task updateProtonandFlare(string server, string user, string pass, bool yesterday, int h)
