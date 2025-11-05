@@ -2828,12 +2828,13 @@ namespace WSPR_Solar
                 return;
             }
             string url = "https://www.swpc.noaa.gov/noaa-scales-explanation";
-            if (await Msg.IsUrlReachable(url))
+            //if (await Msg.IsUrlReachable(url))
+            try
             {
                 OpenBrowser(url);
             }
-            else
-            {
+            catch { 
+            
                 Msg.TMessageBox("No Internet connection", "Info", 1000);
             }
         }
