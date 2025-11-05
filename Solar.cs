@@ -1892,7 +1892,7 @@ namespace WSPR_Solar
             return S;
         }
 
-        private string findR2(string C)
+        private string findR2_Old(string C)
         {
             string R = "";
             int r = 0;
@@ -1962,6 +1962,89 @@ namespace WSPR_Solar
                 {
                     R = "";
                 }
+            }
+            catch { }
+
+            return R;
+        }
+
+        private string findR2(string C)
+        {
+            string R = "";
+            string S = "";
+            int r = 0;
+            int x = 0;
+            if (C.Trim() == "" || C == null)
+            {
+                return "";
+            }
+            try
+            {
+
+                string[] F = C.Split('/');
+                R = "";
+                if (F.Count() > 0)
+                {
+                    for (int i = 0; i < F.Count(); i++)
+                    {
+                        
+                        char c = F[i][0];
+                        S = F[i].Substring(1);
+                        double t = 0;
+
+                        double.TryParse(S, out t);
+                        if (t > 0)
+                        {
+                            if (c == 'M')
+                            {
+                                if (t < 5 && x < 1)
+                                {
+                                    r = 1;
+                                    R = "R1";
+                                }
+                                else if (t >= 5 && x < 2)
+                                {
+                                    r = 2;
+                                    R = "R2";
+                                }
+                            }
+                            else if (c == 'X' && x < 3)
+                            {
+                                if (t < 10)
+                                {
+                                    r = 3;
+                                    R = "R3";
+                                }
+                                else if (t >= 10 && t < 20 && x < 4)
+                                {
+                                    r = 4;
+                                    R = "R4";
+                                }
+                                else if (t >= 20 && x < 5)
+                                {
+                                    r = 5;
+                                    R = "R5";
+                                }
+                                x = r;
+                            }
+                           
+                        }
+                        else
+                        {
+                            R = "";
+                        }
+                       
+                    }
+                }
+                else
+                {
+                    R = "";
+                }
+                if (R != "")
+                {
+                    R = " (" + R + ")";
+                }
+
             }
             catch { }
 
