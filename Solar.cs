@@ -1862,6 +1862,7 @@ namespace WSPR_Solar
 
             return S;
         }
+        /*
         private string findS(double pf, bool addbracket)
         {
             string S = "";
@@ -1891,7 +1892,8 @@ namespace WSPR_Solar
             }
             return S;
         }
-
+        */
+        /*
         private string findR2_Old(string C)
         {
             string R = "";
@@ -1967,6 +1969,7 @@ namespace WSPR_Solar
 
             return R;
         }
+        */
 
         private string findR2(string C)
         {
