@@ -405,6 +405,7 @@ namespace WSPR_Solar
 
         public async Task findGeo(string datetime, string source)
         {
+          
             bool found = false;
 
             if (datetime[9] == '0')
@@ -2401,6 +2402,15 @@ namespace WSPR_Solar
 
         private async Task find_extra_data(bool filter, string datetime1, string datetime2) //find a slot row for display in grid from the database corresponding to the date/time from the slot
         {
+
+            cells2[1] = "";
+            cells2[2] = "";
+            cells2[3] = "";
+            cells2[4] = "";
+            cells2[5] = "";
+            cells2[6] = "";
+            cells2[7] = "";
+            cells2[8] = "";
             DataTable Slots = new DataTable();
             dataGridView3.Rows.Clear();
 
