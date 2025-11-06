@@ -551,6 +551,7 @@ namespace WSPR_Solar
             string P = "";
             string F = "SFI: " + flux +" - ";
             int.TryParse(flux, out t);
+           
             if (t < 70)
             {
                 P = "poor";
@@ -574,6 +575,10 @@ namespace WSPR_Solar
             if (t > 199)
             {
                 P = "outstanding";
+            }
+            if (flux == "" || flux == null)
+            {
+                P = "unknown";
             }
             if (activity_level.Contains("storm"))
             {
