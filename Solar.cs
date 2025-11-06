@@ -1868,114 +1868,7 @@ namespace WSPR_Solar
 
             return S;
         }
-        /*
-        private string findS(double pf, bool addbracket)
-        {
-            string S = "";
-            if (pf >= 10)
-            {
-                S = "S1";
-            }
-            if (pf >= 100)
-            {
-                S = "S2";
-            }
-            if (pf >= 1000)
-            {
-                S = "S3";
-            }
-            if (pf >= 10000)
-            {
-                S = "S4";
-            }
-            if (pf > 100000)
-            {
-                S = "S5";
-            }
-            if (S != "" && addbracket)
-            {
-                S = "/" + S;
-            }
-            return S;
-        }
-        */
-        /*
-        private string findR2_Old(string C)
-        {
-            string R = "";
-            int r = 0;
-            if (C.Trim() == "" || C == null)
-            {
-                return "";
-            }
-            try
-            {
-
-                string[] F = C.Split('/');
-                if (F.Count() > 0)
-                {
-                    char c = F[1][0];
-                    R = F[1].Substring(1);
-                    double t = 0;
-
-                    double.TryParse(R, out t);
-                    if (t > 0)
-                    {
-                        if (c == 'M')
-                        {
-                            if (t < 5)
-                            {
-                                r = 1;
-                                R = "R1";
-                            }
-                            else if (t >= 5)
-                            {
-                                r = 2;
-                                R = "R2";
-                            }
-                        }
-                        else if (c == 'X')
-                        {
-                            if (t < 10)
-                            {
-                                r = 3;
-                                R = "R3";
-                            }
-                            else if (t >= 10 && t < 20)
-                            {
-                                r = 4;
-                                R = "R4";
-                            }
-                            else if (t >= 20)
-                            {
-                                r = 5;
-                                R = "R5";
-                            }
-                        }
-                        else
-                        {
-                            R = "";
-                        }
-                    }
-                    else
-                    {
-                        R = "";
-                    }
-                    if (R != "")
-                    {
-                        R = " (" + R + ")";
-                    }
-                }
-                else
-                {
-                    R = "";
-                }
-            }
-            catch { }
-
-            return R;
-        }
-        */
+      
 
         private string findR2(string C)
         {
@@ -2457,7 +2350,7 @@ namespace WSPR_Solar
                         if (C != "")
                         { and = " AND "; }
                     }
-                    //command.CommandText = "SELECT * FROM received WHERE datetime >= '" + datetime1 + "' AND datetime <= '" + datetime2 + "' AND " + bandstr + callstr + fromstr + tostr + " ORDER BY datetime DESC LIMIT " + maxrows;
+                   
                     command.CommandText = "SELECT * FROM weather WHERE " + D + and + C + order;
                 }
                 MySqlDataReader Reader;
