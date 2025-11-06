@@ -57,6 +57,7 @@
             datelabel = new Label();
             label7 = new Label();
             groupBox1 = new GroupBox();
+            label24 = new Label();
             stormlabel = new Label();
             label23 = new Label();
             hamqslbutton = new Button();
@@ -132,7 +133,6 @@
             sqlCommandBuilder1 = new Microsoft.Data.SqlClient.SqlCommandBuilder();
             solartimer = new System.Windows.Forms.Timer(components);
             solarstartuptimer = new System.Windows.Forms.Timer(components);
-            label24 = new Label();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             groupBox1.SuspendLayout();
             groupBox2.SuspendLayout();
@@ -399,6 +399,15 @@
             groupBox1.TabStop = false;
             groupBox1.Text = "Current solar data from Boulder, CO.";
             // 
+            // label24
+            // 
+            label24.AutoSize = true;
+            label24.Location = new Point(531, 543);
+            label24.Name = "label24";
+            label24.Size = new Size(25, 15);
+            label24.TabIndex = 27;
+            label24.Text = "Ap:";
+            // 
             // stormlabel
             // 
             stormlabel.AutoSize = true;
@@ -520,7 +529,7 @@
             groupBox2.Controls.Add(dateTimePicker1);
             groupBox2.Controls.Add(toplabel);
             groupBox2.Controls.Add(dataGridView2);
-            groupBox2.Location = new Point(4, 42);
+            groupBox2.Location = new Point(12, 45);
             groupBox2.Name = "groupBox2";
             groupBox2.Size = new Size(1163, 556);
             groupBox2.TabIndex = 15;
@@ -533,7 +542,7 @@
             // 
             RBlabel.AutoSize = true;
             RBlabel.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            RBlabel.Location = new Point(477, 43);
+            RBlabel.Location = new Point(573, 42);
             RBlabel.Name = "RBlabel";
             RBlabel.Size = new Size(355, 13);
             RBlabel.TabIndex = 54;
@@ -589,7 +598,7 @@
             // flarelabel
             // 
             flarelabel.AutoSize = true;
-            flarelabel.Location = new Point(477, 27);
+            flarelabel.Location = new Point(571, 27);
             flarelabel.Name = "flarelabel";
             flarelabel.Size = new Size(273, 15);
             flarelabel.TabIndex = 52;
@@ -639,7 +648,7 @@
             // 
             // changebutton
             // 
-            changebutton.Location = new Point(768, 15);
+            changebutton.Location = new Point(951, 21);
             changebutton.Name = "changebutton";
             changebutton.Size = new Size(148, 23);
             changebutton.TabIndex = 50;
@@ -1018,7 +1027,7 @@
             // 
             // Switchbutton
             // 
-            Switchbutton.Location = new Point(782, 12);
+            Switchbutton.Location = new Point(968, 15);
             Switchbutton.Name = "Switchbutton";
             Switchbutton.Size = new Size(125, 24);
             Switchbutton.TabIndex = 16;
@@ -1095,21 +1104,13 @@
             solarstartuptimer.Interval = 5000;
             solarstartuptimer.Tick += solarstartuptimer_Tick;
             // 
-            // label24
-            // 
-            label24.AutoSize = true;
-            label24.Location = new Point(531, 543);
-            label24.Name = "label24";
-            label24.Size = new Size(25, 15);
-            label24.TabIndex = 27;
-            label24.Text = "Ap:";
-            // 
             // Solar
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.SeaShell;
             ClientSize = new Size(1222, 683);
+            Controls.Add(groupBox2);
             Controls.Add(label22);
             Controls.Add(infobutton);
             Controls.Add(label8);
@@ -1120,7 +1121,6 @@
             Controls.Add(label16);
             Controls.Add(Switchbutton);
             Controls.Add(groupBox1);
-            Controls.Add(groupBox2);
             Controls.Add(datelabel);
             Name = "Solar";
             Text = "Solar Data";

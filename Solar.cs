@@ -169,7 +169,7 @@ namespace WSPR_Solar
         {
 
             System.Version version = Assembly.GetExecutingAssembly().GetName().Version;
-            string ver = "0.1.1";
+            string ver = "0.1.2";
             this.Text = "WSPR Solar                       V." + ver + "    GNU GPLv3 License";
            
             if (checkSlotDB())
@@ -2804,7 +2804,7 @@ namespace WSPR_Solar
                 groupBox4.Visible = true;
                 dataGridView2.Visible = false;
                 dataGridView3.Visible = true;
-                toplabel.Text = "Proton flux >=10MeV (avg/max):";
+                toplabel.Text = "Proton flux (protons/cm²·s·sr)>=10MeV (avg/max):";
                 flarelabel.Text = "Flares: max time/ max class/int xrlong (J/m\u00B2)";
                 flarelabel.Visible = true;
                 Eventsbutton.Visible = true;
