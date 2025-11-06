@@ -2038,11 +2038,7 @@ namespace WSPR_Solar
                             }
                            
                         }
-                        else
-                        {
-                            R = "";
-                        }
-                       
+                      
                     }
                 }
                 else
