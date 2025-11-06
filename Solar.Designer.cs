@@ -57,6 +57,7 @@
             datelabel = new Label();
             label7 = new Label();
             groupBox1 = new GroupBox();
+            stormlabel = new Label();
             label23 = new Label();
             hamqslbutton = new Button();
             hamqslgroupBox = new GroupBox();
@@ -131,7 +132,7 @@
             sqlCommandBuilder1 = new Microsoft.Data.SqlClient.SqlCommandBuilder();
             solartimer = new System.Windows.Forms.Timer(components);
             solarstartuptimer = new System.Windows.Forms.Timer(components);
-            stormlabel = new Label();
+            label24 = new Label();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             groupBox1.SuspendLayout();
             groupBox2.SuspendLayout();
@@ -370,6 +371,7 @@
             // 
             // groupBox1
             // 
+            groupBox1.Controls.Add(label24);
             groupBox1.Controls.Add(stormlabel);
             groupBox1.Controls.Add(label23);
             groupBox1.Controls.Add(hamqslbutton);
@@ -396,6 +398,15 @@
             groupBox1.TabIndex = 14;
             groupBox1.TabStop = false;
             groupBox1.Text = "Current solar data from Boulder, CO.";
+            // 
+            // stormlabel
+            // 
+            stormlabel.AutoSize = true;
+            stormlabel.Location = new Point(562, 543);
+            stormlabel.Name = "stormlabel";
+            stormlabel.Size = new Size(17, 15);
+            stormlabel.TabIndex = 26;
+            stormlabel.Text = "--";
             // 
             // label23
             // 
@@ -1084,14 +1095,14 @@
             solarstartuptimer.Interval = 5000;
             solarstartuptimer.Tick += solarstartuptimer_Tick;
             // 
-            // stormlabel
+            // label24
             // 
-            stormlabel.AutoSize = true;
-            stormlabel.Location = new Point(562, 543);
-            stormlabel.Name = "stormlabel";
-            stormlabel.Size = new Size(17, 15);
-            stormlabel.TabIndex = 26;
-            stormlabel.Text = "--";
+            label24.AutoSize = true;
+            label24.Location = new Point(531, 543);
+            label24.Name = "label24";
+            label24.Size = new Size(25, 15);
+            label24.TabIndex = 27;
+            label24.Text = "Ap:";
             // 
             // Solar
             // 
@@ -1236,5 +1247,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Column15;
         private System.Windows.Forms.Label label23;
         private Label stormlabel;
+        private Label label24;
     }
 }
