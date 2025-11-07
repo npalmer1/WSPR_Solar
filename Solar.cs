@@ -733,7 +733,7 @@ namespace WSPR_Solar
                     try
                     {
                         results = client.DownloadString(ftpUrl);
-                        //textBox1.Text = results;
+                       
                     }
                     catch (WebException ex)
                     {
@@ -776,13 +776,12 @@ namespace WSPR_Solar
             }
             if (await Msg.IsUrlReachable(Url))
             {
-                using (WebClient client = new WebClient())
+                using (HttpClient client = new HttpClient())
                 {
-                    //client.Credentials = new NetworkCredential(username, password);
-
+                  
                     try
                     {
-                        results = client.DownloadString(Url);
+                       results = client.GetAsync(Url).Result.Content.ReadAsStringAsync().Result;                       
 
                     }
                     catch (WebException ex)
@@ -2931,7 +2930,7 @@ namespace WSPR_Solar
 
             if (timercount == 7)  //35 mins
             {
-                //await updateGeo(server, user, pass, true); //false - don't update yesterday as well
+                
                 await updateSolar(server, user, pass);
             }
             if (timercount == 11) //55 mins
