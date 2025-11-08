@@ -811,6 +811,10 @@ namespace WSPR_Solar
                 }
                 reader.Close();
             }
+            else
+            {
+                Msg.TMessageBox("Unable to reach NOAA solar data", "Solar data", 3000);
+            }
         }
 
 
@@ -850,6 +854,10 @@ namespace WSPR_Solar
                     }
                 }
 
+            }
+            else
+            {
+                Msg.TMessageBox("Unable to reach NOAA radio burst data", "Solar data", 3000);
             }
         }
         List<string> st = new List<string>();
@@ -2647,6 +2655,10 @@ namespace WSPR_Solar
                     //Msg.TMessageBox("Error reading satellite data", "GOES " + satno, 1000);
                 }
             }
+            else
+            {
+                Msg.TMessageBox("Unable to reach GOES data", "GOES data", 3000);
+            }
         }
 
 
@@ -2888,6 +2900,10 @@ namespace WSPR_Solar
                 }
                 OpenBrowser(url);
                 hamqslopened = true;
+            }
+            else
+            {
+                Msg.TMessageBox("Unable to reach hamqsl.com", "", 1000);
             }
 
         }
