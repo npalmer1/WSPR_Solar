@@ -2416,8 +2416,7 @@ namespace WSPR_Solar
 
             }
             catch
-            {
-                Msg.TMessageBox("Error reading data from database", "Solar data", 2000);
+            {                
                 found = false;
                 connection.Close();
             }
