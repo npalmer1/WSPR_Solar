@@ -172,10 +172,9 @@ namespace WSPR_Solar
             string ver = "0.1.2";
             this.Text = "WSPR Solar                       V." + ver + "    GNU GPLv3 License";
 
-            solarstartuptimer.Enabled = true;
-            solarstartuptimer.Start();
-            if (checkSolarDB())
-            {
+            //solarstartuptimer.Enabled = true;
+            //solarstartuptimer.Start();
+           
                 if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
                 {
                     OpSystem = 0; //Windows
@@ -218,15 +217,7 @@ namespace WSPR_Solar
                 dataGridView3.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
 
                 setConfig(serverName, db_user, db_pass);
-            }
-            else
-            {
-                Msg.TMessageBox("Unable to contact database", "", 2000);
-                solartimer.Stop();
-                solartimer.Enabled = false;
-
-            }
-
+          
         }
 
         private bool getUserandPassword()
@@ -321,7 +312,7 @@ namespace WSPR_Solar
             string url = "https://services.swpc.noaa.gov/";
             if (!await Msg.IsUrlReachable(url))
             {
-                Msg.TMessageBox("Unable to connect to NOAA url", "Solar data", 3000);
+                Msg.TMessageBox("Unable to connect to NOAA url", "Solar data", 1000);
                 return false;
             }
             else
@@ -375,13 +366,13 @@ namespace WSPR_Solar
         {
             if (stopUrl)
             {
-                Msg.TMessageBox("You have disabled the Internet connection", "Solar data", 3000);
+                Msg.TMessageBox("You have disabled the Internet connection", "Solar data", 1000);
                 return;
             }
             string url = "https://services.swpc.noaa.gov/";
             if (!await Msg.IsUrlReachable(url))
             {
-                Msg.TMessageBox("Unable to connect to NOAA url", "Solar data", 3000);
+                Msg.TMessageBox("Unable to connect to NOAA url", "Solar data", 1000);
                 return;
             }
             getLatestSolar(server, user, pass);
@@ -815,7 +806,7 @@ namespace WSPR_Solar
             }
             else
             {
-                Msg.TMessageBox("Unable to reach NOAA solar data", "Solar data", 3000);
+                Msg.TMessageBox("Unable to reach NOAA solar data", "Solar data", 1000);
             }
         }
 
@@ -859,7 +850,7 @@ namespace WSPR_Solar
             }
             else
             {
-                Msg.TMessageBox("Unable to reach NOAA radio burst data", "Solar data", 3000);
+                Msg.TMessageBox("Unable to reach NOAA radio burst data", "Solar data", 1000);
             }
         }
         List<string> st = new List<string>();
@@ -1270,13 +1261,13 @@ namespace WSPR_Solar
         {
             if (stopUrl)
             {
-                Msg.TMessageBox("You have disabled the Internet connection", "Solar data", 3000);
+                Msg.TMessageBox("You have disabled the Internet connection", "Solar data", 1000);
                 return;
             }
             string url = "https://services.swpc.noaa.gov/";
             if (!await Msg.IsUrlReachable(url))
             {
-                Msg.TMessageBox("Unable to connect to NOAA url", "Solar data", 3000);
+                Msg.TMessageBox("Unable to connect to NOAA url", "Solar data", 1000);
                 return;
             }
             await updateGeo(server, user, pass, true);
@@ -2662,7 +2653,7 @@ namespace WSPR_Solar
             }
             else
             {
-                Msg.TMessageBox("Unable to reach GOES data", "GOES data", 3000);
+                Msg.TMessageBox("Unable to reach GOES data", "GOES data", 1000);
             }
         }
 
