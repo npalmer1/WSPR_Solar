@@ -1225,6 +1225,7 @@ namespace WSPR_Solar
             }
             catch
             {
+                Msg.TMessageBox("Error reading burst data from database", "Solar data", 1000);  
                 found = false;
                 connection.Close();
             }
@@ -1532,6 +1533,7 @@ namespace WSPR_Solar
             }
             catch
             {
+                Msg.TMessageBox("Error reading data from database", "Solar data", 1000);
                 found = false;
                 connection.Close();
             }
@@ -2422,6 +2424,7 @@ namespace WSPR_Solar
             }
             catch
             {
+                Msg.TMessageBox("Error reading data from database", "Solar data", 1000);
                 found = false;
                 connection.Close();
             }
