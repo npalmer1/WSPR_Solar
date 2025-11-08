@@ -171,8 +171,10 @@ namespace WSPR_Solar
             System.Version version = Assembly.GetExecutingAssembly().GetName().Version;
             string ver = "0.1.2";
             this.Text = "WSPR Solar                       V." + ver + "    GNU GPLv3 License";
-           
-            if (checkSlotDB())
+
+            solarstartuptimer.Enabled = true;
+            solarstartuptimer.Start();
+            if (checkSolarDB())
             {
                 if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
                 {
@@ -274,13 +276,13 @@ namespace WSPR_Solar
 
                         if (!ok)
                         {
-                            Msg.TMessageBox("Unable to read database credentials", "", 1000);
+                            Msg.TMessageBox("Unable to read database credentials", "", 2000);
                             return false;
                         }
                     }
                     catch (Exception ex)
                     {
-                        Msg.TMessageBox("Unable to read database credentials", "", 1000);
+                        Msg.TMessageBox("Unable to read database credentials", "", 2000);
                         return false;
                     }
                 }
@@ -290,9 +292,9 @@ namespace WSPR_Solar
             return ok;
         }
 
-        private bool checkSlotDB()
+        private bool checkSolarDB()
         {
-            string myConnectionString = "server=" + serverName + ";user id=" + db_user + ";password=" + db_pass + ";database=wspr_slots";
+            string myConnectionString = "server=" + serverName + ";user id=" + db_user + ";password=" + db_pass + ";database=wspr_solar";
 
             MySqlConnection connection = new MySqlConnection(myConnectionString);
 
@@ -1225,7 +1227,7 @@ namespace WSPR_Solar
             }
             catch
             {
-                Msg.TMessageBox("Error reading burst data from database", "Solar data", 1000);  
+                Msg.TMessageBox("Error reading burst data from database", "Solar data", 2000);  
                 found = false;
                 connection.Close();
             }
@@ -1533,7 +1535,7 @@ namespace WSPR_Solar
             }
             catch
             {
-                Msg.TMessageBox("Error reading data from database", "Solar data", 1000);
+                Msg.TMessageBox("Error reading data from database", "Solar data", 2000);
                 found = false;
                 connection.Close();
             }
@@ -2424,7 +2426,7 @@ namespace WSPR_Solar
             }
             catch
             {
-                Msg.TMessageBox("Error reading data from database", "Solar data", 1000);
+                Msg.TMessageBox("Error reading data from database", "Solar data", 2000);
                 found = false;
                 connection.Close();
             }
@@ -2742,7 +2744,7 @@ namespace WSPR_Solar
         {
             if (stopUrl)
             {
-                Msg.TMessageBox("No Internet connection", "Info", 1000);
+                Msg.TMessageBox("No Internet connection", "Info", 2000);
                 return;
             }
             string url = "https://www.swpc.noaa.gov/noaa-scales-explanation";
@@ -2753,7 +2755,7 @@ namespace WSPR_Solar
             }
             catch { 
             
-                Msg.TMessageBox("No Internet connection", "Info", 1000);
+                Msg.TMessageBox("No Internet connection", "Info", 2000);
             }
         }
 
@@ -2832,7 +2834,7 @@ namespace WSPR_Solar
         {
             if (stopUrl)
             {
-                Msg.TMessageBox("No Internet connection", "Info", 1000);
+                Msg.TMessageBox("No Internet connection", "Info", 2000);
                 return;
             }
             string url = "https://www.hamqsl.com/solar2.html";
@@ -2843,7 +2845,7 @@ namespace WSPR_Solar
             }
             else
             {
-                Msg.TMessageBox("No Internet connection", "Info", 1000);
+                Msg.TMessageBox("No Internet connection", "Info", 2000);
                 return;
             }
             if (hamqslbutton.Text == "Forecast")
@@ -2891,7 +2893,7 @@ namespace WSPR_Solar
 
             if (stopUrl)
             {
-                Msg.TMessageBox("No Internet connection", "Info", 1000);
+                Msg.TMessageBox("No Internet connection", "Info", 2000);
                 return;
             }
             string url = "https://www.hamqsl.com/solar2.html";
@@ -2906,7 +2908,7 @@ namespace WSPR_Solar
             }
             else
             {
-                Msg.TMessageBox("Unable to reach hamqsl.com", "", 1000);
+                Msg.TMessageBox("Unable to reach hamqsl.com", "", 2000);
             }
 
         }
