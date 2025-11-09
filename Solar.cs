@@ -1509,54 +1509,65 @@ namespace WSPR_Solar
                 }
                 MySqlDataReader Reader;
                 Reader = command.ExecuteReader();
-
+           
                 DateTime Today = DateTime.Now.ToUniversalTime();
                 string today = Today.ToString("yyyy-MM-dd");
+           
                 while (Reader.Read())
                 {
                     found = true;
-                    DateTime dt = (DateTime)Reader["datetime"];
-                    string date = dt.ToString("yyyy-MM-dd");
-                    solar.Ap = Convert.ToString((int)Reader["Ap"]);
-
-                    solar.K00 = ((float)Reader["Kp00"]).ToString("F2");
-
-                    solar.K03 = ((float)Reader["Kp03"]).ToString("F2");
-                    solar.K06 = ((float)Reader["Kp06"]).ToString("F2");
-                    solar.K09 = ((float)Reader["Kp09"]).ToString("F2");
-                    solar.K12 = ((float)Reader["Kp12"]).ToString("F2");
-                    solar.K15 = ((float)Reader["Kp15"]).ToString("F2");
-                    solar.K18 = ((float)Reader["Kp18"]).ToString("F2");
-                    solar.K21 = ((float)Reader["Kp21"]).ToString("F2");
-                    solar.flux = ((float)Reader["flux"]).ToString("F0"); ;
-                    solar.SSN = Convert.ToString((int)Reader["SSN"]);
-                    solar.Xray = (string)Reader["Xray"];
-
-                    cells1[0] = date;
-                    cells1[1] = zeros(solar.Ap);
-                    cells1[2] = zeros(solar.K00) + findKplevel(solar.K00);
-                    cells1[3] = zeros(solar.K03) + findKplevel(solar.K03);
-                    cells1[4] = zeros(solar.K06) + findKplevel(solar.K06);
-                    cells1[5] = zeros(solar.K09) + findKplevel(solar.K09);
-                    cells1[6] = zeros(solar.K12) + findKplevel(solar.K12);
-                    cells1[7] = zeros(solar.K15) + findKplevel(solar.K15);
-                    cells1[8] = zeros(solar.K18) + findKplevel(solar.K18);
-                    cells1[9] = zeros(solar.K21) + findKplevel(solar.K21);
-                    if (date == today)
+                    try
                     {
-                        cells1[10] = "-";
-                        cells1[11] = "-";
-                        cells1[12] = "-";
-                    }
-                    else
-                    {
-                        cells1[10] = zeros(solar.flux);
-                        cells1[11] = solar.SSN;
-                        cells1[12] = solar.Xray;
-                    }
+                        DateTime dt = (DateTime)Reader["datetime"];
+                        string date = dt.ToString("yyyy-MM-dd");
+                        solar.Ap = Convert.ToString((int)Reader["Ap"]);
 
-                    update_grid2(); //add this row to the datagridview
+                        solar.K00 = ((float)Reader["Kp00"]).ToString("F2");
 
+                        solar.K03 = ((float)Reader["Kp03"]).ToString("F2");
+                        solar.K06 = ((float)Reader["Kp06"]).ToString("F2");
+                        solar.K09 = ((float)Reader["Kp09"]).ToString("F2");
+                        solar.K12 = ((float)Reader["Kp12"]).ToString("F2");
+                        solar.K15 = ((float)Reader["Kp15"]).ToString("F2");
+                        solar.K18 = ((float)Reader["Kp18"]).ToString("F2");
+                        solar.K21 = ((float)Reader["Kp21"]).ToString("F2");
+                        try
+                        {
+                            solar.flux = ((float)Reader["flux"]).ToString("F0"); ;
+                            solar.SSN = Convert.ToString((int)Reader["SSN"]);
+                            solar.Xray = (string)Reader["Xray"];
+                        }
+                        catch
+                        {
+
+                        }
+
+                        cells1[0] = date;
+                        cells1[1] = zeros(solar.Ap);
+                        cells1[2] = zeros(solar.K00) + findKplevel(solar.K00);
+                        cells1[3] = zeros(solar.K03) + findKplevel(solar.K03);
+                        cells1[4] = zeros(solar.K06) + findKplevel(solar.K06);
+                        cells1[5] = zeros(solar.K09) + findKplevel(solar.K09);
+                        cells1[6] = zeros(solar.K12) + findKplevel(solar.K12);
+                        cells1[7] = zeros(solar.K15) + findKplevel(solar.K15);
+                        cells1[8] = zeros(solar.K18) + findKplevel(solar.K18);
+                        cells1[9] = zeros(solar.K21) + findKplevel(solar.K21);
+                        if (date == today)
+                        {
+                            cells1[10] = "-";
+                            cells1[11] = "-";
+                            cells1[12] = "-";
+                        }
+                        else
+                        {
+                            cells1[10] = zeros(solar.flux);
+                            cells1[11] = solar.SSN;
+                            cells1[12] = solar.Xray;
+                        }
+
+                        update_grid2(); //add this row to the datagridview
+                    }
+                    catch { }
 
                 }
                 Reader.Close();
@@ -1567,6 +1578,7 @@ namespace WSPR_Solar
             {
                 Msg.TMessageBox("Error reading data from database", "Solar data", 2000);
                 found = false;
+               
                 connection.Close();
             }
         }
