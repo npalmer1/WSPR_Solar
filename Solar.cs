@@ -33,6 +33,7 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Windows.Forms;
 using static System.Net.Mime.MediaTypeNames;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.Button;
 using static WSPR_Solar.Solar;
 
@@ -150,12 +151,14 @@ namespace WSPR_Solar
             user = db_user;
             pass = db_pass;
             bool check = await checkNOAA();
+            DateTime date = DateTime.Now.ToUniversalTime();
             if (!check)
             {
                 Msg.TMessageBox("Warning: unable to connect to NOAA", "Solar data", 1500);
             }
             else
             {
+                await savedefaultdata(date); //set blank values in db for today
                 await getLatestSolar(serverName, db_user, db_pass);
                 await updateGeo(serverName, db_user, db_pass, true); //true - update yesterday as well
                 await updateSolar(serverName, db_user, db_pass);
@@ -163,6 +166,42 @@ namespace WSPR_Solar
                 await updateAllProtonandFlare(serverName, db_user, db_pass, false); //update today
             }
 
+        }
+
+        public async Task savedefaultdata(DateTime date)
+        {
+
+            string myConnectionString = "server=" + server + ";user id=" + user + ";password=" + pass + ";database=wspr_sol";
+            MySqlConnection connection = new MySqlConnection(myConnectionString);
+            //date = date.Date;   //set h,m,s to 000
+            string datetime = date.ToString("yyyy-MM-dd");
+            try
+            {
+
+                MySqlCommand command = connection.CreateCommand();
+
+                command.CommandText = "INSERT INTO weather(datetime,Ap,Kp00,Kp03,Kp06,Kp09,Kp12,Kp15,Kp18,Kp21,flux,SSN,Xray,pf00,pf03,pf06,pf09,pf12,pf15,pf18,pf21,";
+                command.CommandText += "fl00,fl03,fl06,fl09,fl12,fl15,fl18,fl21,s00,s03,s06,s09,s12,s15,s18,s21) ";
+                command.CommandText += "VALUES('" + datetime + "', 0,  0,0,0,0,0,0,0,0,  0,0,'0',  '0','0','0','0','0','0','0','0',";
+                command.CommandText += "'0','0','0','0','0','0','0','0',  '0','0','0','0','0','0','0','0')";
+                //command.CommandText += " ON DUPLICATE KEY UPDATE Ap = '" + solar.Ap + "', Kp00 = '" + solar.K00 + "'";
+                //command.CommandText += ", Kp03 = '" + solar.K03 + "', Kp06 = '" + solar.K06 + "', Kp09 = '" + solar.K09 + "'";
+                //command.CommandText += ", Kp12 = '" + solar.K12 + "', Kp15 = '" + solar.K15 + "', Kp18 = '" + solar.K18 + "'";
+                //command.CommandText += ", Kp21 = '" + solar.K21 + "'";
+
+                connection.Open();
+
+
+                command.ExecuteNonQuery();
+
+
+                connection.Close();
+
+            }
+            catch
+            {
+                connection.Close();
+            }
         }
 
         private void Solar_Load(object sender, EventArgs e)
