@@ -43,8 +43,7 @@ namespace WSPR_Solar
 {
     public partial class Solar : Form
     {
-
-        public SolarDB solarDB = new SolarDB();
+      
 
         private string[] cells1 = new string[14];
         private string[] cells2 = new string[14];
