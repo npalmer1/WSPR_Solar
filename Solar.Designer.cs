@@ -57,6 +57,10 @@
             datelabel = new Label();
             label7 = new Label();
             groupBox1 = new GroupBox();
+            RClabel = new Label();
+            SClabel = new Label();
+            GClabel = new Label();
+            label25 = new Label();
             label24 = new Label();
             stormlabel = new Label();
             label23 = new Label();
@@ -167,7 +171,7 @@
             // textBox1
             // 
             textBox1.Font = new Font("Consolas", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            textBox1.Location = new Point(3, 41);
+            textBox1.Location = new Point(32, 41);
             textBox1.Multiline = true;
             textBox1.Name = "textBox1";
             textBox1.ScrollBars = ScrollBars.Vertical;
@@ -177,7 +181,7 @@
             // textBox2
             // 
             textBox2.Font = new Font("Consolas", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            textBox2.Location = new Point(559, 41);
+            textBox2.Location = new Point(596, 41);
             textBox2.Multiline = true;
             textBox2.Name = "textBox2";
             textBox2.ScrollBars = ScrollBars.Vertical;
@@ -187,7 +191,7 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(557, 23);
+            label1.Location = new Point(596, 23);
             label1.Name = "label1";
             label1.Size = new Size(225, 15);
             label1.TabIndex = 3;
@@ -196,7 +200,7 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(3, 23);
+            label2.Location = new Point(32, 23);
             label2.Name = "label2";
             label2.Size = new Size(209, 15);
             label2.TabIndex = 4;
@@ -371,6 +375,10 @@
             // 
             // groupBox1
             // 
+            groupBox1.Controls.Add(RClabel);
+            groupBox1.Controls.Add(SClabel);
+            groupBox1.Controls.Add(GClabel);
+            groupBox1.Controls.Add(label25);
             groupBox1.Controls.Add(label24);
             groupBox1.Controls.Add(stormlabel);
             groupBox1.Controls.Add(label23);
@@ -394,10 +402,46 @@
             groupBox1.Controls.Add(textBox1);
             groupBox1.Location = new Point(26, 44);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(1067, 562);
+            groupBox1.Size = new Size(1125, 562);
             groupBox1.TabIndex = 14;
             groupBox1.TabStop = false;
             groupBox1.Text = "Current solar data from Boulder, CO.";
+            // 
+            // RClabel
+            // 
+            RClabel.AutoSize = true;
+            RClabel.Location = new Point(745, 524);
+            RClabel.Name = "RClabel";
+            RClabel.Size = new Size(17, 15);
+            RClabel.TabIndex = 31;
+            RClabel.Text = "--";
+            // 
+            // SClabel
+            // 
+            SClabel.AutoSize = true;
+            SClabel.Location = new Point(722, 524);
+            SClabel.Name = "SClabel";
+            SClabel.Size = new Size(17, 15);
+            SClabel.TabIndex = 30;
+            SClabel.Text = "--";
+            // 
+            // GClabel
+            // 
+            GClabel.AutoSize = true;
+            GClabel.Location = new Point(699, 524);
+            GClabel.Name = "GClabel";
+            GClabel.Size = new Size(17, 15);
+            GClabel.TabIndex = 29;
+            GClabel.Text = "--";
+            // 
+            // label25
+            // 
+            label25.AutoSize = true;
+            label25.Location = new Point(647, 525);
+            label25.Name = "label25";
+            label25.Size = new Size(47, 15);
+            label25.TabIndex = 28;
+            label25.Text = "Last 3h:";
             // 
             // label24
             // 
@@ -431,7 +475,7 @@
             // 
             hamqslbutton.BackColor = Color.MistyRose;
             hamqslbutton.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            hamqslbutton.Location = new Point(746, 534);
+            hamqslbutton.Location = new Point(821, 535);
             hamqslbutton.Name = "hamqslbutton";
             hamqslbutton.Size = new Size(75, 23);
             hamqslbutton.TabIndex = 23;
@@ -501,7 +545,7 @@
             // 
             label17.AutoSize = true;
             label17.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label17.Location = new Point(746, 517);
+            label17.Location = new Point(817, 518);
             label17.Name = "label17";
             label17.Size = new Size(283, 13);
             label17.TabIndex = 14;
@@ -1110,6 +1154,7 @@
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.SeaShell;
             ClientSize = new Size(1222, 683);
+            Controls.Add(groupBox1);
             Controls.Add(groupBox2);
             Controls.Add(label22);
             Controls.Add(infobutton);
@@ -1120,7 +1165,6 @@
             Controls.Add(label19);
             Controls.Add(label16);
             Controls.Add(Switchbutton);
-            Controls.Add(groupBox1);
             Controls.Add(datelabel);
             Name = "Solar";
             Text = "Solar Data";
@@ -1248,5 +1292,9 @@
         private System.Windows.Forms.Label label23;
         private Label stormlabel;
         private Label label24;
+        private Label RClabel;
+        private Label SClabel;
+        private Label GClabel;
+        private Label label25;
     }
 }

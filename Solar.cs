@@ -117,6 +117,9 @@ namespace WSPR_Solar
         int Glevel = 0;
         int Slevel = 0;
         int Rlevel = 0;
+        int GClevel = 0;       
+        int SClevel = 0;
+        int RClevel = 0;
 
         string SFI = "";
 
@@ -207,7 +210,7 @@ namespace WSPR_Solar
         {
 
             System.Version version = Assembly.GetExecutingAssembly().GetName().Version;
-            string ver = "0.1.2";
+            string ver = "0.1.3";
             this.Text = "WSPR Solar                       V." + ver + "    GNU GPLv3 License";
 
             //solarstartuptimer.Enabled = true;
@@ -648,16 +651,29 @@ namespace WSPR_Solar
                 cells1[1] = "n/a";
             }
 
+            string[] k = new string[8];
+            k[0] = findKplevel(solar.K00);
+            k[1] = findKplevel(solar.K03);
+            k[2] = findKplevel(solar.K06);
+            k[3] = findKplevel(solar.K09);
+            k[4] = findKplevel(solar.K12);
+            k[5] = findKplevel(solar.K15);
+            k[6] = findKplevel(solar.K18);
+            k[7] = findKplevel(solar.K21);
 
-            cells1[2] = solar.K00 + findKplevel(solar.K00);
-            cells1[3] = solar.K03 + findKplevel(solar.K03);
+            cells1[2] = solar.K00 + k[0];
+            cells1[3] = solar.K03 + k[1];
+            cells1[4] = solar.K06 + k[2];
+            cells1[5] = solar.K09 + k[3];
+            cells1[6] = solar.K12 + k[4];
+            cells1[7] = solar.K15 + k[5];
+            cells1[8] = solar.K18 + k[6];
+            cells1[9] = solar.K21 + k[7];
+            if (row == 0)
+            {
+                find_current_G(k);
+            }
 
-            cells1[4] = solar.K06 + findKplevel(solar.K06);
-            cells1[5] = solar.K09 + findKplevel(solar.K09);
-            cells1[6] = solar.K12 + findKplevel(solar.K12);
-            cells1[7] = solar.K15 + findKplevel(solar.K15);
-            cells1[8] = solar.K18 + findKplevel(solar.K18);
-            cells1[9] = solar.K21 + findKplevel(solar.K21);
             if (row == 0) //planetary
             {
                 cells1[10] = solar.flux;
@@ -676,6 +692,37 @@ namespace WSPR_Solar
                 dataGridView1.Rows[row].Cells[i].Value = cells1[i];
             }
 
+        }
+        private void find_current_G(string[] k)
+        {
+            DateTime now = DateTime.Now.ToUniversalTime();            
+            try
+            {
+                int hour = now.Hour;
+                int h = ((hour-3) / 3) * 3;
+                string l = "--";
+                switch (h)
+                {
+                    case 0: { l = k[0]; break; }
+                    case 3: { l = k[1]; break; }
+                    case 6: { l = k[2]; break; }
+                    case 9: { l = k[3]; break; }
+                    case 12: { l = k[4]; break; }
+                    case 15: { l = k[5]; break; }
+                    case 18: { l = k[6]; break; }
+                    case 21: { l = k[7]; break; }
+                }            
+                l = l.Replace("(","");
+                l = l.Replace(")", "");
+                if (l == "")
+                {
+                    l = "--";
+                }
+                GClabel.Text = l;
+            }
+            catch
+            {
+            }
         }
 
         private string findKplevel(string kp)
@@ -1914,10 +1961,9 @@ namespace WSPR_Solar
                 }
                 if (S != "")
                 {
-                    S = "/" + S;
+                    S = "-" + S;
                 }
             }
-
             return S;
         }
       
@@ -2433,26 +2479,53 @@ namespace WSPR_Solar
                     flare.fl15 = (string)Reader["fl15"];
                     flare.fl18 = (string)Reader["fl18"];
                     flare.fl21 = (string)Reader["fl21"];
+                    string[] s = new string[8];
+                    s[0] = findS2(pflux.pf00);
+                    s[1] = findS2(pflux.pf03);
+                    s[2] = findS2(pflux.pf06);
+                    s[3] = findS2(pflux.pf09);
+                    s[4] = findS2(pflux.pf12);
+                    s[5] = findS2(pflux.pf15);
+                    s[6] = findS2(pflux.pf18);
+                    s[7] = findS2(pflux.pf21);
 
                     cells2[0] = date;
-                    cells2[1] = pflux.pf00 + findS2(pflux.pf00);
-                    cells2[2] = pflux.pf03 + findS2(pflux.pf03);
-                    cells2[3] = pflux.pf06 + findS2(pflux.pf06);
-                    cells2[4] = pflux.pf09 + findS2(pflux.pf09);
-                    cells2[5] = pflux.pf12 + findS2(pflux.pf12);
-                    cells2[6] = pflux.pf15 + findS2(pflux.pf15);
-                    cells2[7] = pflux.pf18 + findS2(pflux.pf18);
-                    cells2[8] = pflux.pf21 + findS2(pflux.pf21);
+                    cells2[1] = pflux.pf00 + s[0];
+                    cells2[2] = pflux.pf03 + s[1];
+                    cells2[3] = pflux.pf06 + s[2];
+                    cells2[4] = pflux.pf09 + s[3];
+                    cells2[5] = pflux.pf12 + s[4];
+                    cells2[6] = pflux.pf15 + s[5];
+                    cells2[7] = pflux.pf18 + s[6];
+                    cells2[8] = pflux.pf21 + s[7];
+                    DateTime now = DateTime.Now.ToUniversalTime();
+                    if (dt.Date == now.Date)
+                    {
+                        find_current_S(s);
+                    }
 
+                    string[] f = new string[8];
+                    f[0] = findR2(flare.fl00);
+                    f[1] = findR2(flare.fl03);
+                    f[2] = findR2(flare.fl06);
+                    f[3] = findR2(flare.fl09);
+                    f[4] = findR2(flare.fl12);
+                    f[5] = findR2(flare.fl15);
+                    f[6] = findR2(flare.fl18);
+                    f[7] = findR2(flare.fl21);
                     cells3[0] = "Solar flares:";
-                    cells3[1] = flare.fl00 + findR2(flare.fl00);
-                    cells3[2] = flare.fl03 + findR2(flare.fl03);
-                    cells3[3] = flare.fl06 + findR2(flare.fl06);
-                    cells3[4] = flare.fl09 + findR2(flare.fl09);
-                    cells3[5] = flare.fl12 + findR2(flare.fl12);
-                    cells3[6] = flare.fl15 + findR2(flare.fl15);
-                    cells3[7] = flare.fl18 + findR2(flare.fl18);
-                    cells3[8] = flare.fl21 + findR2(flare.fl21);
+                    cells3[1] = flare.fl00 + f[0];
+                    cells3[2] = flare.fl03 + f[1];
+                    cells3[3] = flare.fl06 + f[2];
+                    cells3[4] = flare.fl09 + f[3];
+                    cells3[5] = flare.fl12 + f[4];
+                    cells3[6] = flare.fl15 + f[5];
+                    cells3[7] = flare.fl18 + f[6];
+                    cells3[8] = flare.fl21 + f[7];
+                    if (dt.Date == now.Date)
+                    {
+                        find_current_R(f);
+                    }
                     if (rcount < rows)
                     {
                         update_grid3(); //add this row to the datagridview
@@ -2469,6 +2542,72 @@ namespace WSPR_Solar
             {                
                 found = false;
                 connection.Close();
+            }
+        }
+
+        private void find_current_S(string[] s)
+        { 
+            DateTime now = DateTime.Now.ToUniversalTime();
+            try
+            {
+                int hour = now.Hour;
+                int h = ((hour-3) / 3) * 3;
+                string pfl = "--";
+                switch (h)
+                {
+                    case 0: { pfl = s[0]; break; }
+                    case 3: { pfl = s[1]; break; }
+                    case 6: { pfl = s[2]; break; }
+                    case 9: { pfl = s[3]; break; }
+                    case 12: { pfl = s[4]; break; }
+                    case 15: { pfl = s[5]; break; }
+                    case 18: { pfl = s[6]; break; }
+                    case 21: { pfl = s[7]; break; }
+                }
+               
+                pfl = pfl.Replace("-", "");
+              
+                if (pfl == "")
+                {
+                    pfl = "--";
+                }             
+                SClabel.Text = pfl;
+            }
+            catch
+            {
+            }
+        }
+
+        private void find_current_R(string[] r)
+        {
+            DateTime now = DateTime.Now.ToUniversalTime();
+            try
+            {
+                int hour = now.Hour;               
+                int h = ((hour -3)/ 3) * 3;
+                string fl = "--";
+                switch (h)
+                {
+                    case 0: { fl = r[0]; break; }
+                    case 3: { fl = r[1]; break; }
+                    case 6: { fl = r[2]; break; }
+                    case 9: { fl = r[3]; break; }
+                    case 12: { fl = r[4]; break; }
+                    case 15: { fl = r[5]; break; }
+                    case 18: { fl = r[6]; break; }
+                    case 21: { fl = r[7]; break; }
+                }              
+                RClabel.Text = fl;
+                fl = fl.Replace("(", "");
+                fl = fl.Replace(")", "");
+                if (fl =="")
+                {
+                    fl = "--";
+                }
+                RClabel.Text = fl;
+            }
+            catch
+            {
             }
         }
         private void update_grid3() //add rows to the datagridview
