@@ -120,6 +120,7 @@ namespace WSPR_Solar
         int GClevel = 0;       
         int SClevel = 0;
         int RClevel = 0;
+        string prevG = "";
 
         string SFI = "";
 
@@ -430,7 +431,9 @@ namespace WSPR_Solar
             dataGridView1.Rows.Add();
             dataGridView1.Rows.Add();
             await findSolar();
-            await findGeo(datetime, "Planetary");
+           
+                await findGeo(datetime, "Planetary");
+          
             await populateGrid(0);
 
             await findGeo(datetime, "Boulder");
@@ -495,6 +498,7 @@ namespace WSPR_Solar
                         solar.K18 = aP[9 + off];
                         solar.K21 = aP[10 + off];
                     }
+                    prevG = solar.K21;
                 }
             }
         }
@@ -698,9 +702,14 @@ namespace WSPR_Solar
             DateTime now = DateTime.Now.ToUniversalTime();            
             try
             {
+                string l = "--";
                 int hour = now.Hour;
                 int h = ((hour-3) / 3) * 3;
-                string l = "--";
+                if (hour <=3)
+                {
+                    h = 1;
+                }
+               
                 switch (h)
                 {
                     case 0: { l = k[0]; break; }
@@ -786,6 +795,11 @@ namespace WSPR_Solar
                 s = "Severe storm poss.";
             }
             else
+            {
+                s = "Unknown";
+            }
+            DateTime now = DateTime.Now.ToUniversalTime();
+            if (now.Hour <3)
             {
                 s = "Unknown";
             }
@@ -2550,9 +2564,13 @@ namespace WSPR_Solar
             DateTime now = DateTime.Now.ToUniversalTime();
             try
             {
+                string pfl = "--";
                 int hour = now.Hour;
                 int h = ((hour-3) / 3) * 3;
-                string pfl = "--";
+                if (hour <=3)
+                {
+                    h = 0;
+                }
                 switch (h)
                 {
                     case 0: { pfl = s[0]; break; }
@@ -2583,9 +2601,13 @@ namespace WSPR_Solar
             DateTime now = DateTime.Now.ToUniversalTime();
             try
             {
+                string fl = "--";
                 int hour = now.Hour;               
                 int h = ((hour -3)/ 3) * 3;
-                string fl = "--";
+                if (hour <= 3)
+                {
+                    h = 0;
+                }
                 switch (h)
                 {
                     case 0: { fl = r[0]; break; }
