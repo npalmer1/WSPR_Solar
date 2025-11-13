@@ -374,6 +374,15 @@ namespace WSPR_Solar
             {
                 await findGeo(yesterday, "Planetary");
                 await saveGeoData(ydt);
+                prevG = findKplevel(solar.K21);
+                if (prevG == "")
+                {
+                    prevG = "--";
+                }
+                if (today.Hour < 3)
+                {
+                    GClabel.Text = prevG;
+                }
             }
 
             await findGeo(datetime, "Planetary");
@@ -705,7 +714,7 @@ namespace WSPR_Solar
                 string l = "--";
                 int hour = now.Hour;
                 int h = ((hour-3) / 3) * 3;
-                if (hour <=3)
+                if (hour <3)
                 {
                     h = 1;
                 }
@@ -2567,7 +2576,7 @@ namespace WSPR_Solar
                 string pfl = "--";
                 int hour = now.Hour;
                 int h = ((hour-3) / 3) * 3;
-                if (hour <=3)
+                if (hour <3)
                 {
                     h = 0;
                 }
@@ -2604,7 +2613,7 @@ namespace WSPR_Solar
                 string fl = "--";
                 int hour = now.Hour;               
                 int h = ((hour -3)/ 3) * 3;
-                if (hour <= 3)
+                if (hour < 3)
                 {
                     h = 0;
                 }
