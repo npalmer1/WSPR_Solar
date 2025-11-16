@@ -1291,25 +1291,29 @@ namespace WSPR_Solar
                     DateTime dt = (DateTime)Reader["datetime"];
                     string date = dt.ToString("yyyy-MM-dd");
 
+                    try
+                    {
+                        rb.s00 = (string)Reader["s00"];
+                        rb.s03 = (string)Reader["s03"];
+                        rb.s06 = (string)Reader["s06"];
+                        rb.s09 = (string)Reader["s09"];
+                        rb.s12 = (string)Reader["s12"];
+                        rb.s15 = (string)Reader["s15"];
+                        rb.s18 = (string)Reader["s18"];
+                        rb.s21 = (string)Reader["s21"];
 
-                    rb.s00 = (string)Reader["s00"];
-                    rb.s03 = (string)Reader["s03"];
-                    rb.s06 = (string)Reader["s06"];
-                    rb.s09 = (string)Reader["s09"];
-                    rb.s12 = (string)Reader["s12"];
-                    rb.s15 = (string)Reader["s15"];
-                    rb.s18 = (string)Reader["s18"];
-                    rb.s21 = (string)Reader["s21"];
 
-                    cells2[0] = "Radio bursts:";
-                    cells2[1] = rb.s00;
-                    cells2[2] = rb.s03;
-                    cells2[3] = rb.s06;
-                    cells2[4] = rb.s09;
-                    cells2[5] = rb.s12;
-                    cells2[6] = rb.s15;
-                    cells2[7] = rb.s18;
-                    cells2[8] = rb.s21;
+                        cells2[0] = "Radio bursts:";
+                        cells2[1] = rb.s00;
+                        cells2[2] = rb.s03;
+                        cells2[3] = rb.s06;
+                        cells2[4] = rb.s09;
+                        cells2[5] = rb.s12;
+                        cells2[6] = rb.s15;
+                        cells2[7] = rb.s18;
+                        cells2[8] = rb.s21;
+                    }
+                    catch { }
 
                     if (rcount < rows)
                     {
