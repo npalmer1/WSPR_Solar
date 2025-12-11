@@ -11,12 +11,12 @@ namespace WSPR_Solar
 {
     internal class MessageClass
     {
+
         public async void TCMessageBox(string text, string caption, int delay, MessageForm mForm)
         {
-            await Task.Run(() =>
-            {
+           
                 runTCMessageBox(text, caption, delay, mForm);
-            });
+          
         }
         public async Task runTCMessageBox(string text, string caption, int delay, MessageForm mForm)
         {
@@ -32,10 +32,9 @@ namespace WSPR_Solar
         }
         public async void TMessageBox(string text, string caption, int delay)
         {
-            await Task.Run(() =>
-            {
+          
                 runTMessageBox(text, caption, delay);
-            });
+          
         }
         public async Task runTMessageBox(string text, string caption, int delay)
         {

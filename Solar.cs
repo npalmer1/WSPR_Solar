@@ -5,6 +5,7 @@ using MathNet.Numerics.RootFinding;
 using Microsoft.VisualBasic;
 using Microsoft.VisualBasic.ApplicationServices;
 using MySql.Data.MySqlClient;
+using Org.BouncyCastle.Asn1.Cms;
 using Org.BouncyCastle.Tls;
 using Security;
 using System;
@@ -210,7 +211,7 @@ namespace WSPR_Solar
         private void Solar_Load(object sender, EventArgs e)
         {
             System.Version version = Assembly.GetExecutingAssembly().GetName().Version;
-            string ver = "0.1.3";
+            string ver = "0.1.4";
             this.Text = "WSPR Solar                       V." + ver + "    GNU GPLv3 License";
 
             //solarstartuptimer.Enabled = true;
@@ -628,17 +629,21 @@ namespace WSPR_Solar
             }
             if (activity_level.Contains("storm"))
             {
-                P = activity_level;
+                P = P + " ...but " + activity_level;
             }           
             else
             {
-                P = P + ", Sun: " + activity_level;
+                P = P + " ...Sun: " + activity_level;
             }
-            if (Glabel.Text.Contains("G") || Rlabel.Text.Contains("R") || Slabel.Text.Contains("S"))
+            if (GClabel.Text.Contains("G") || RClabel.Text.Contains("R") || SClabel.Text.Contains("S") || activity_level.Contains("storm"))
             {
-                P = "unstable/degraded - (storm or blackout)";
+                stormconditionlabel.Text = "Possibly unstable/degraded (storm or blackout)";
+            }          
+            else
+            {
+                stormconditionlabel.Text = "Likely normal - (no storm or blackout)";
             }
-            conditionlabel.Text = F + "Higher HF propagation: " + P;
+                conditionlabel.Text = F + "Higher HF propagation: " + P;
             return P;
         }
 

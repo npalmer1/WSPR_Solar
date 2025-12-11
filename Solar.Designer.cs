@@ -63,7 +63,7 @@
             label25 = new Label();
             label24 = new Label();
             stormlabel = new Label();
-            label23 = new Label();
+            stormconditionlabel = new Label();
             hamqslbutton = new Button();
             hamqslgroupBox = new GroupBox();
             Rlabel = new Label();
@@ -381,7 +381,7 @@
             groupBox1.Controls.Add(label25);
             groupBox1.Controls.Add(label24);
             groupBox1.Controls.Add(stormlabel);
-            groupBox1.Controls.Add(label23);
+            groupBox1.Controls.Add(stormconditionlabel);
             groupBox1.Controls.Add(hamqslbutton);
             groupBox1.Controls.Add(hamqslgroupBox);
             groupBox1.Controls.Add(Rlabel);
@@ -461,15 +461,15 @@
             stormlabel.TabIndex = 26;
             stormlabel.Text = "--";
             // 
-            // label23
+            // stormconditionlabel
             // 
-            label23.AutoSize = true;
-            label23.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label23.Location = new Point(20, 544);
-            label23.Name = "label23";
-            label23.Size = new Size(199, 13);
-            label23.TabIndex = 25;
-            label23.Text = "(depending on storm/blackout levels)";
+            stormconditionlabel.AutoSize = true;
+            stormconditionlabel.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            stormconditionlabel.Location = new Point(20, 544);
+            stormconditionlabel.Name = "stormconditionlabel";
+            stormconditionlabel.Size = new Size(222, 13);
+            stormconditionlabel.TabIndex = 25;
+            stormconditionlabel.Text = "Propagation depends on solar conditions";
             // 
             // hamqslbutton
             // 
@@ -673,7 +673,6 @@
             // flarelistBox
             // 
             flarelistBox.FormattingEnabled = true;
-            flarelistBox.ItemHeight = 15;
             flarelistBox.Items.AddRange(new object[] { "A", "B", "C", "M", "X" });
             flarelistBox.Location = new Point(103, 20);
             flarelistBox.Name = "flarelistBox";
@@ -1289,7 +1288,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn11;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column12;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column15;
-        private System.Windows.Forms.Label label23;
+        private System.Windows.Forms.Label stormconditionlabel;
         private Label stormlabel;
         private Label label24;
         private Label RClabel;
