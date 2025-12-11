@@ -32,9 +32,11 @@ namespace WSPR_Solar
         }
         public async void TMessageBox(string text, string caption, int delay)
         {
-          
+            Task.Run(() =>
+            {
                 runTMessageBox(text, caption, delay);
-          
+
+            });
         }
         public async Task runTMessageBox(string text, string caption, int delay)
         {
