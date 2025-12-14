@@ -44,7 +44,7 @@ namespace WSPR_Solar
 {
     public partial class Solar : Form
     {
-      
+
 
         private string[] cells1 = new string[14];
         private string[] cells2 = new string[14];
@@ -118,7 +118,7 @@ namespace WSPR_Solar
         int Glevel = 0;
         int Slevel = 0;
         int Rlevel = 0;
-        int GClevel = 0;       
+        int GClevel = 0;
         int SClevel = 0;
         int RClevel = 0;
         string prevG = "";
@@ -137,7 +137,7 @@ namespace WSPR_Solar
         string db_user = "admin";
         string db_pass = "wspr";
         string slash = "\\"; //default to Windows
-        string  root = "/";
+        string root = "/";
         int OpSystem = 0; //default windwows
         string dateformat = "yyyy-MM-dd";
 
@@ -211,55 +211,55 @@ namespace WSPR_Solar
         private void Solar_Load(object sender, EventArgs e)
         {
             System.Version version = Assembly.GetExecutingAssembly().GetName().Version;
-            string ver = "0.1.4";
+            string ver = "0.1.5";
             this.Text = "WSPR Solar                       V." + ver + "    GNU GPLv3 License";
 
             //solarstartuptimer.Enabled = true;
             //solarstartuptimer.Start();
-           
-                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-                {
-                    OpSystem = 0; //Windows
-                }
-                else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
-                {
-                    OpSystem = 1; //Linux
-                    slash = "/"; //Linux uses forward slash
-                    root = "/"; //Linux root
-                }
-                else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
-                {
-                    OpSystem = 2; //MacOS
-                    slash = "/"; //MacOS uses forward slash
-                    root = "/"; //MacOS root
-                }
-                else if (OperatingSystem.IsAndroid())
-                {
-                    OpSystem = 3; //Android
-                    slash = "/"; //Android uses forward slash
-                    root = "/"; //Android root
-                }
-                solartimer.Enabled = true;
-                solartimer.Start();
 
-                for (int i = 0; i < dataGridView1.Columns.Count; i++)
-                {
-                    dataGridView1.Columns[i].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-                }
-                for (int i = 0; i < dataGridView2.Columns.Count; i++)
-                {
-                    dataGridView2.Columns[i].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-                }
-                dataGridView1.DefaultCellStyle.Font = new System.Drawing.Font("Segoe UI", 8);
-                dataGridView2.DefaultCellStyle.Font = new System.Drawing.Font("Segoe UI", 8);
-                dataGridView3.DefaultCellStyle.Font = new System.Drawing.Font("Segoe UI", 8);
-                dataGridView3.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                OpSystem = 0; //Windows
+            }
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            {
+                OpSystem = 1; //Linux
+                slash = "/"; //Linux uses forward slash
+                root = "/"; //Linux root
+            }
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+            {
+                OpSystem = 2; //MacOS
+                slash = "/"; //MacOS uses forward slash
+                root = "/"; //MacOS root
+            }
+            else if (OperatingSystem.IsAndroid())
+            {
+                OpSystem = 3; //Android
+                slash = "/"; //Android uses forward slash
+                root = "/"; //Android root
+            }
+            solartimer.Enabled = true;
+            solartimer.Start();
 
-                // Automatically adjust row height to fit content
-                dataGridView3.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
+            for (int i = 0; i < dataGridView1.Columns.Count; i++)
+            {
+                dataGridView1.Columns[i].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            }
+            for (int i = 0; i < dataGridView2.Columns.Count; i++)
+            {
+                dataGridView2.Columns[i].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            }
+            dataGridView1.DefaultCellStyle.Font = new System.Drawing.Font("Segoe UI", 8);
+            dataGridView2.DefaultCellStyle.Font = new System.Drawing.Font("Segoe UI", 8);
+            dataGridView3.DefaultCellStyle.Font = new System.Drawing.Font("Segoe UI", 8);
+            dataGridView3.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
 
-                setConfig(serverName, db_user, db_pass);
-          
+            // Automatically adjust row height to fit content
+            dataGridView3.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
+
+            setConfig(serverName, db_user, db_pass);
+
         }
 
         private bool getUserandPassword()
@@ -440,9 +440,9 @@ namespace WSPR_Solar
             dataGridView1.Rows.Add();
             dataGridView1.Rows.Add();
             await findSolar();
-           
-                await findGeo(datetime, "Planetary");
-          
+
+            await findGeo(datetime, "Planetary");
+
             await populateGrid(0);
 
             await findGeo(datetime, "Boulder");
@@ -451,7 +451,7 @@ namespace WSPR_Solar
 
         public async Task findGeo(string datetime, string source)
         {
-          
+
             bool found = false;
 
             if (datetime[9] == '0')
@@ -588,7 +588,7 @@ namespace WSPR_Solar
                 {
                     solar.Xray = Xray;
                 }
-                SFI = solar.flux;              
+                SFI = solar.flux;
             }
         }
 
@@ -596,9 +596,9 @@ namespace WSPR_Solar
         {
             int t;
             string P = "";
-            string F = "SFI: " + flux +" - ";
+            string F = "SFI: " + flux + " - ";
             int.TryParse(flux, out t);
-           
+
             if (t < 70)
             {
                 P = "poor";
@@ -630,7 +630,7 @@ namespace WSPR_Solar
             if (activity_level.Contains("storm"))
             {
                 P = P + " ...but " + activity_level;
-            }           
+            }
             else
             {
                 P = P + " ...Sun: " + activity_level;
@@ -638,12 +638,12 @@ namespace WSPR_Solar
             if (GClabel.Text.Contains("G") || RClabel.Text.Contains("R") || SClabel.Text.Contains("S") || activity_level.Contains("storm"))
             {
                 stormconditionlabel.Text = "Possibly unstable/degraded (storm or blackout)";
-            }          
+            }
             else
             {
                 stormconditionlabel.Text = "Likely normal - (no storm or blackout)";
             }
-                conditionlabel.Text = F + "Higher HF propagation: " + P;
+            conditionlabel.Text = F + "Higher HF propagation: " + P;
             return P;
         }
 
@@ -659,7 +659,7 @@ namespace WSPR_Solar
                 double A = Convert.ToDouble(solar.Ap);
                 string L = find_activity_level(A);
                 activity_level = L.ToLower();
-                
+
                 cells1[1] = L;
             }
             else //if Boulder
@@ -712,17 +712,17 @@ namespace WSPR_Solar
         }
         private void find_current_G(string[] k)
         {
-            DateTime now = DateTime.Now.ToUniversalTime();            
+            DateTime now = DateTime.Now.ToUniversalTime();
             try
             {
                 string l = "--";
                 int hour = now.Hour;
-                int h = ((hour-3) / 3) * 3;
-                if (hour <3)
+                int h = ((hour - 3) / 3) * 3;
+                if (hour < 3)
                 {
                     h = 1;
                 }
-               
+
                 switch (h)
                 {
                     case 0: { l = k[0]; break; }
@@ -733,8 +733,8 @@ namespace WSPR_Solar
                     case 15: { l = k[5]; break; }
                     case 18: { l = k[6]; break; }
                     case 21: { l = k[7]; break; }
-                }            
-                l = l.Replace("(","");
+                }
+                l = l.Replace("(", "");
                 l = l.Replace(")", "");
                 if (l == "")
                 {
@@ -812,7 +812,7 @@ namespace WSPR_Solar
                 s = "Unknown";
             }
             DateTime now = DateTime.Now.ToUniversalTime();
-            if (now.Hour <3)
+            if (now.Hour < 3)
             {
                 s = "Unknown";
             }
@@ -838,7 +838,7 @@ namespace WSPR_Solar
                     try
                     {
                         results = client.DownloadString(ftpUrl);
-                       
+
                     }
                     catch (WebException ex)
                     {
@@ -883,10 +883,10 @@ namespace WSPR_Solar
             {
                 using (HttpClient client = new HttpClient())
                 {
-                  
+
                     try
                     {
-                       results = client.GetAsync(Url).Result.Content.ReadAsStringAsync().Result;                       
+                        results = client.GetAsync(Url).Result.Content.ReadAsStringAsync().Result;
 
                     }
                     catch (WebException ex)
@@ -1334,7 +1334,7 @@ namespace WSPR_Solar
             }
             catch
             {
-                Msg.TMessageBox("Error reading burst data from database", "Solar data", 2000);  
+                Msg.TMessageBox("Error reading burst data from database", "Solar data", 2000);
                 found = false;
                 connection.Close();
             }
@@ -1586,10 +1586,10 @@ namespace WSPR_Solar
                 }
                 MySqlDataReader Reader;
                 Reader = command.ExecuteReader();
-           
+
                 DateTime Today = DateTime.Now.ToUniversalTime();
                 string today = Today.ToString("yyyy-MM-dd");
-           
+
                 while (Reader.Read())
                 {
                     found = true;
@@ -1655,7 +1655,7 @@ namespace WSPR_Solar
             {
                 Msg.TMessageBox("Error reading data from database", "Solar data", 2000);
                 found = false;
-               
+
                 connection.Close();
             }
         }
@@ -1997,7 +1997,7 @@ namespace WSPR_Solar
             }
             return S;
         }
-      
+
 
         private string findR2(string C)
         {
@@ -2018,7 +2018,7 @@ namespace WSPR_Solar
                 {
                     for (int i = 0; i < F.Count(); i++)
                     {
-                        
+
                         char c = F[i][0];
                         S = F[i].Substring(1);
                         double t = 0;
@@ -2058,9 +2058,9 @@ namespace WSPR_Solar
                                 }
                                 x = r;
                             }
-                           
+
                         }
-                      
+
                     }
                 }
                 else
@@ -2286,10 +2286,10 @@ namespace WSPR_Solar
             {
                 stormlabel.Text = "--";
             }
-                findConditions(SFI);
+            findConditions(SFI);
         }
 
-        public async Task updateProtonandFlare(string server, string user, string pass, bool yesterday, int h)
+        /*public async Task updateProtonandFlare(string server, string user, string pass, bool yesterday, int h)
         {
 
             satErr = false;
@@ -2330,7 +2330,7 @@ namespace WSPR_Solar
             {
                 stormlabels();
             }
-        }
+        }*/
 
         public async Task SavePFdata(DateTime date)
         {
@@ -2479,7 +2479,7 @@ namespace WSPR_Solar
                         if (C != "")
                         { and = " AND "; }
                     }
-                   
+
                     command.CommandText = "SELECT * FROM weather WHERE " + D + and + C + order;
                 }
                 MySqlDataReader Reader;
@@ -2570,21 +2570,21 @@ namespace WSPR_Solar
 
             }
             catch
-            {                
+            {
                 found = false;
                 connection.Close();
             }
         }
 
         private void find_current_S(string[] s)
-        { 
+        {
             DateTime now = DateTime.Now.ToUniversalTime();
             try
             {
                 string pfl = "--";
                 int hour = now.Hour;
-                int h = ((hour-3) / 3) * 3;
-                if (hour <3)
+                int h = ((hour - 3) / 3) * 3;
+                if (hour < 3)
                 {
                     h = 0;
                 }
@@ -2599,13 +2599,13 @@ namespace WSPR_Solar
                     case 18: { pfl = s[6]; break; }
                     case 21: { pfl = s[7]; break; }
                 }
-               
+
                 pfl = pfl.Replace("-", "");
-              
+
                 if (pfl == "")
                 {
                     pfl = "--";
-                }             
+                }
                 SClabel.Text = pfl;
             }
             catch
@@ -2619,8 +2619,8 @@ namespace WSPR_Solar
             try
             {
                 string fl = "--";
-                int hour = now.Hour;               
-                int h = ((hour -3)/ 3) * 3;
+                int hour = now.Hour;
+                int h = ((hour - 3) / 3) * 3;
                 if (hour < 3)
                 {
                     h = 0;
@@ -2635,11 +2635,11 @@ namespace WSPR_Solar
                     case 15: { fl = r[5]; break; }
                     case 18: { fl = r[6]; break; }
                     case 21: { fl = r[7]; break; }
-                }              
+                }
                 RClabel.Text = fl;
                 fl = fl.Replace("(", "");
                 fl = fl.Replace(")", "");
-                if (fl =="")
+                if (fl == "")
                 {
                     fl = "--";
                 }
@@ -2971,8 +2971,9 @@ namespace WSPR_Solar
             {
                 OpenBrowser(url);
             }
-            catch { 
-            
+            catch
+            {
+
                 Msg.TMessageBox("No Internet connection", "Info", 2000);
             }
         }
@@ -3136,7 +3137,7 @@ namespace WSPR_Solar
             await solartimer_action();
         }
 
-      
+
         private async Task solartimer_action()
         {
             timercount++;
@@ -3169,7 +3170,7 @@ namespace WSPR_Solar
 
             if (timercount == 7)  //35 mins
             {
-                
+
                 await updateSolar(server, user, pass);
             }
             if (timercount == 11) //55 mins
@@ -3190,6 +3191,47 @@ namespace WSPR_Solar
         private void conditionlabel_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void linksbutton1_Click(object sender, EventArgs e)
+        {
+
+            if (stopUrl)
+            {
+                Msg.TMessageBox("No Internet connection", "Info", 2000);
+                return;
+            }
+            string url = "https://www.qsl.net/4/4x4xm//Books-and-Articles/Understanding-Solar-Indices-Ian-Poole-G3YWX-QST-September-2002.pdf";
+            //if (await Msg.IsUrlReachable(url))
+            try
+            {
+                OpenBrowser(url);
+            }
+            catch
+            {
+
+                Msg.TMessageBox("No Internet connection", "Info", 2000);
+            }
+        }
+
+        private void linksbutton2_Click(object sender, EventArgs e)
+        {
+            if (stopUrl)
+            {
+                Msg.TMessageBox("No Internet connection", "Info", 2000);
+                return;
+            }
+            string url = "https://rsgb.org/main/technical/propagation/";
+            //if (await Msg.IsUrlReachable(url))
+            try
+            {
+                OpenBrowser(url);
+            }
+            catch
+            {
+
+                Msg.TMessageBox("No Internet connection", "Info", 2000);
+            }
         }
     }
 

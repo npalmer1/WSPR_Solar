@@ -137,6 +137,8 @@
             sqlCommandBuilder1 = new Microsoft.Data.SqlClient.SqlCommandBuilder();
             solartimer = new System.Windows.Forms.Timer(components);
             solarstartuptimer = new System.Windows.Forms.Timer(components);
+            linksbutton1 = new Button();
+            linksbutton2 = new Button();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             groupBox1.SuspendLayout();
             groupBox2.SuspendLayout();
@@ -1052,7 +1054,7 @@
             // 
             label18.AutoSize = true;
             label18.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label18.Location = new Point(610, 625);
+            label18.Location = new Point(571, 632);
             label18.Name = "label18";
             label18.Size = new Size(453, 13);
             label18.TabIndex = 15;
@@ -1100,16 +1102,16 @@
             // label5
             // 
             label5.AutoSize = true;
-            label5.Location = new Point(611, 640);
+            label5.Location = new Point(571, 647);
             label5.Name = "label5";
-            label5.Size = new Size(540, 15);
+            label5.Size = new Size(537, 15);
             label5.TabIndex = 19;
-            label5.Text = "Radiation storms: S1 minor, S2 moderate, S3 strong, S4 severe, S5 extreme (Pflux >= 10 MeV particles)";
+            label5.Text = "Radiation storms: S1 minor, S2 moderate, S3 strong, S4 severe, S5 extreme (Pflux >=10 MeV particles)";
             // 
             // label8
             // 
             label8.AutoSize = true;
-            label8.Location = new Point(610, 655);
+            label8.Location = new Point(570, 662);
             label8.Name = "label8";
             label8.Size = new Size(459, 15);
             label8.TabIndex = 20;
@@ -1119,9 +1121,9 @@
             // 
             infobutton.BackColor = Color.MistyRose;
             infobutton.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            infobutton.Location = new Point(1115, 608);
+            infobutton.Location = new Point(1140, 610);
             infobutton.Name = "infobutton";
-            infobutton.Size = new Size(82, 23);
+            infobutton.Size = new Size(70, 23);
             infobutton.TabIndex = 21;
             infobutton.Text = "NOAA Info";
             infobutton.UseVisualStyleBackColor = false;
@@ -1147,12 +1149,39 @@
             solarstartuptimer.Interval = 5000;
             solarstartuptimer.Tick += solarstartuptimer_Tick;
             // 
+            // linksbutton1
+            // 
+            linksbutton1.BackColor = Color.MistyRose;
+            linksbutton1.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            linksbutton1.Location = new Point(1140, 668);
+            linksbutton1.Name = "linksbutton1";
+            linksbutton1.Size = new Size(70, 23);
+            linksbutton1.TabIndex = 23;
+            linksbutton1.Text = "Links";
+            linksbutton1.UseVisualStyleBackColor = false;
+            linksbutton1.Click += linksbutton1_Click;
+            // 
+            // linksbutton2
+            // 
+            linksbutton2.BackColor = Color.MistyRose;
+            linksbutton2.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            linksbutton2.Location = new Point(1140, 639);
+            linksbutton2.Margin = new Padding(0);
+            linksbutton2.Name = "linksbutton2";
+            linksbutton2.Size = new Size(70, 23);
+            linksbutton2.TabIndex = 32;
+            linksbutton2.Text = "Indices";
+            linksbutton2.UseVisualStyleBackColor = false;
+            linksbutton2.Click += linksbutton2_Click;
+            // 
             // Solar
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.SeaShell;
-            ClientSize = new Size(1222, 683);
+            ClientSize = new Size(1222, 699);
+            Controls.Add(linksbutton2);
+            Controls.Add(linksbutton1);
             Controls.Add(groupBox1);
             Controls.Add(groupBox2);
             Controls.Add(label22);
@@ -1295,5 +1324,7 @@
         private Label SClabel;
         private Label GClabel;
         private Label label25;
+        private Button linksbutton1;
+        private Button linksbutton2;
     }
 }
