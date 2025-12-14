@@ -1153,11 +1153,11 @@
             // 
             linksbutton1.BackColor = Color.MistyRose;
             linksbutton1.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            linksbutton1.Location = new Point(1140, 668);
+            linksbutton1.Location = new Point(1140, 639);
             linksbutton1.Name = "linksbutton1";
             linksbutton1.Size = new Size(70, 23);
             linksbutton1.TabIndex = 23;
-            linksbutton1.Text = "Links";
+            linksbutton1.Text = "Indices";
             linksbutton1.UseVisualStyleBackColor = false;
             linksbutton1.Click += linksbutton1_Click;
             // 
@@ -1165,12 +1165,12 @@
             // 
             linksbutton2.BackColor = Color.MistyRose;
             linksbutton2.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            linksbutton2.Location = new Point(1140, 639);
+            linksbutton2.Location = new Point(1140, 667);
             linksbutton2.Margin = new Padding(0);
             linksbutton2.Name = "linksbutton2";
             linksbutton2.Size = new Size(70, 23);
             linksbutton2.TabIndex = 32;
-            linksbutton2.Text = "Indices";
+            linksbutton2.Text = "Links";
             linksbutton2.UseVisualStyleBackColor = false;
             linksbutton2.Click += linksbutton2_Click;
             // 
