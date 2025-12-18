@@ -211,7 +211,7 @@ namespace WSPR_Solar
         private void Solar_Load(object sender, EventArgs e)
         {
             System.Version version = Assembly.GetExecutingAssembly().GetName().Version;
-            string ver = "0.1.5";
+            string ver = "0.1.6";
             this.Text = "WSPR Solar                       V." + ver + "    GNU GPLv3 License";
 
             //solarstartuptimer.Enabled = true;
@@ -638,6 +638,10 @@ namespace WSPR_Solar
             if (GClabel.Text.Contains("G") || RClabel.Text.Contains("R") || SClabel.Text.Contains("S") || activity_level.Contains("storm"))
             {
                 stormconditionlabel.Text = "Possibly unstable/degraded (storm or blackout)";
+            }
+            else if (Glabel.Text.Contains("G") || Rlabel.Text.Contains("R") || Slabel.Text.Contains("S"))
+            {
+                stormconditionlabel.Text = "Likely normal, but storm or blackout reported earlier";
             }
             else
             {
