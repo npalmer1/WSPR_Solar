@@ -211,7 +211,7 @@ namespace WSPR_Solar
         private void Solar_Load(object sender, EventArgs e)
         {
             System.Version version = Assembly.GetExecutingAssembly().GetName().Version;
-            string ver = "0.1.6";
+            string ver = "0.1.7";
             this.Text = "WSPR Solar                       V." + ver + "    GNU GPLv3 License";
 
             //solarstartuptimer.Enabled = true;
