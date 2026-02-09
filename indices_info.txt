@@ -1,0 +1,8 @@
+Ap index: 0-7 quiet, 8-15 unsettled, 16-29 active, 30-49 minor storm, 50-99 major storm, 100-400  severe storm
+
+SFI: <70 poor, 70-99 poor to fair, 100-129 fair, 130-149 good, 150-199 very good, 200+ outstanding
+conditions for propagation at higher HF frequencies (higher MUF)
+
+Geomagnetic storms: G1 minor, G2 moderate, G3 strong, G4 severe, G5 extreme (Kp 5-9)
+Radiation storms: S1 minor, S2 moderate, S3 strong, S4 severe, S5 extreme (Pflux >=10 MeV particles)
+Radio blackout: R1 minor, R2 moderate, R3 strong, R4 severe, R5 extreme (flares > M1)

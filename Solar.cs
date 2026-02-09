@@ -187,7 +187,7 @@ namespace WSPR_Solar
                 command.CommandText = "INSERT INTO weather(datetime,Ap,Kp00,Kp03,Kp06,Kp09,Kp12,Kp15,Kp18,Kp21,flux,SSN,Xray,pf00,pf03,pf06,pf09,pf12,pf15,pf18,pf21,";
                 command.CommandText += "fl00,fl03,fl06,fl09,fl12,fl15,fl18,fl21,s00,s03,s06,s09,s12,s15,s18,s21) ";
                 command.CommandText += "VALUES('" + datetime + "', 0,  0,0,0,0,0,0,0,0,  0,0,'0',  '0','0','0','0','0','0','0','0',";
-                command.CommandText += "'0','0','0','0','0','0','0','0',  '0','0','0','0','0','0','0','0')";
+                command.CommandText += "'0','0','0','0','0','0','0','0', '0','0','0','0','0','0','0','0')";
                 //command.CommandText += " ON DUPLICATE KEY UPDATE Ap = '" + solar.Ap + "', Kp00 = '" + solar.K00 + "'";
                 //command.CommandText += ", Kp03 = '" + solar.K03 + "', Kp06 = '" + solar.K06 + "', Kp09 = '" + solar.K09 + "'";
                 //command.CommandText += ", Kp12 = '" + solar.K12 + "', Kp15 = '" + solar.K15 + "', Kp18 = '" + solar.K18 + "'";
@@ -211,7 +211,7 @@ namespace WSPR_Solar
         private void Solar_Load(object sender, EventArgs e)
         {
             System.Version version = Assembly.GetExecutingAssembly().GetName().Version;
-            string ver = "0.1.7";
+            string ver = "0.1.8";
             this.Text = "WSPR Solar                       V." + ver + "    GNU GPLv3 License";
 
             //solarstartuptimer.Enabled = true;
@@ -987,7 +987,7 @@ namespace WSPR_Solar
             st.Clear();
             st2.Clear();
 
-            if (results.Contains("RB") || results.Contains("RSP"))
+            if (results.Contains("RB") || results.Contains("RSP") || results.Contains("RNS"))
             {
                 int index = 0;
                 using var reader = new StringReader(results);
@@ -1129,6 +1129,10 @@ namespace WSPR_Solar
         }
         private void findBurstTimeSlot(string S, DateTime t)
         {
+            if (S == null)
+            {
+                S = "";
+            }
             string nl = "";
             try
             {
@@ -1244,7 +1248,23 @@ namespace WSPR_Solar
             int i = 0;
             bool found = false;
             string myConnectionString = "server=" + server + ";user id=" + user + ";password=" + pass + ";database=wspr_sol";
-
+            rb.s00 = "";
+            rb.s03 = "";
+            rb.s06 = "";
+            rb.s09 = "";
+            rb.s12 = "";
+            rb.s15 = "";
+            rb.s18 = "";
+            rb.s21 = "";
+            cells2[0] = "Radio bursts:";
+            cells2[1] = rb.s00;
+            cells2[2] = rb.s03;
+            cells2[3] = rb.s06;
+            cells2[4] = rb.s09;
+            cells2[5] = rb.s12;
+            cells2[6] = rb.s15;
+            cells2[7] = rb.s18;
+            cells2[8] = rb.s21;
 
             MySqlConnection connection = new MySqlConnection(myConnectionString);
 
@@ -1292,36 +1312,52 @@ namespace WSPR_Solar
                 int rows = table_count();
                 int rcount = 0;
                 int rowinsert = 2;
-
+                string B = "";
                 while (Reader.Read())
                 {
+                    rb.s00 = "";
+                    rb.s03 = "";
+                    rb.s06 = "";
+                    rb.s09 = "";
+                    rb.s12 = "";
+                    rb.s15 = "";
+                    rb.s18 = "";
+                    rb.s21 = "";
                     found = true;
                     DateTime dt = (DateTime)Reader["datetime"];
                     string date = dt.ToString("yyyy-MM-dd");
 
                     try
                     {
-                        rb.s00 = (string)Reader["s00"];
-                        rb.s03 = (string)Reader["s03"];
-                        rb.s06 = (string)Reader["s06"];
-                        rb.s09 = (string)Reader["s09"];
-                        rb.s12 = (string)Reader["s12"];
-                        rb.s15 = (string)Reader["s15"];
-                        rb.s18 = (string)Reader["s18"];
-                        rb.s21 = (string)Reader["s21"];
+                        B = (string)Reader["s00"];
+                        if (B != null) { rb.s00 = B;}
+                        B = (string)Reader["s03"];
+                        if (B != null) { rb.s03 = B; }
+                        B = (string)Reader["s06"];
+                        if (B != null) { rb.s06 = B; }
+                        B = (string)Reader["s09"];
+                        if (B != null) { rb.s09 = B; }
+                        B = (string)Reader["s12"];
+                        if (B != null) { rb.s12 = B; }
+                        B = (string)Reader["s15"];
+                        if (B != null) { rb.s15 = B; }
+                        B = (string)Reader["s18"];
+                        if (B != null) { rb.s18 = B; }
+                        B = (string)Reader["s21"];
+                        if (B != null) { rb.s21 = B; }
 
-
-                        cells2[0] = "Radio bursts:";
-                        cells2[1] = rb.s00;
-                        cells2[2] = rb.s03;
-                        cells2[3] = rb.s06;
-                        cells2[4] = rb.s09;
-                        cells2[5] = rb.s12;
-                        cells2[6] = rb.s15;
-                        cells2[7] = rb.s18;
-                        cells2[8] = rb.s21;
+                       
                     }
                     catch { }
+                    cells2[0] = "Radio bursts:";
+                    cells2[1] = rb.s00;
+                    cells2[2] = rb.s03;
+                    cells2[3] = rb.s06;
+                    cells2[4] = rb.s09;
+                    cells2[5] = rb.s12;
+                    cells2[6] = rb.s15;
+                    cells2[7] = rb.s18;
+                    cells2[8] = rb.s21;
 
                     if (rcount < rows)
                     {
@@ -1356,7 +1392,14 @@ namespace WSPR_Solar
 
             for (int i = 0; i < columns; i++)
             {
-                row.Cells[i].Value = cells2[i];
+                if (cells1[i] != null)
+                {
+                    row.Cells[i].Value = cells2[i];
+                }
+                else
+                {
+                    row.Cells[i].Value = "";
+                }
             }
 
 
@@ -1365,7 +1408,7 @@ namespace WSPR_Solar
                 if (dataGridView3.Rows[rinsert].Cells[0].Value != null)
                 {
                     string s = dataGridView3.Rows[rinsert].Cells[0].Value.ToString();
-                    if (s.Contains("Radio burst"))
+                    if (Burstbutton.Text == "Hide bursts")
                     {
                         dataGridView3.Rows.RemoveAt(rinsert);
                     }
@@ -1500,14 +1543,15 @@ namespace WSPR_Solar
             string myConnectionString = "server=" + server + ";user id=" + user + ";password=" + pass + ";database=wspr_sol";
             MySqlConnection connection = new MySqlConnection(myConnectionString);
 
-            rb.s00 = Truncate(rb.s00, 100);
-            rb.s03 = Truncate(rb.s03, 100);
-            rb.s06 = Truncate(rb.s06, 100);
-            rb.s09 = Truncate(rb.s09, 100);
-            rb.s12 = Truncate(rb.s12, 100);
-            rb.s15 = Truncate(rb.s15, 100);
-            rb.s18 = Truncate(rb.s18, 100);
-            rb.s21 = Truncate(rb.s21, 100);
+            int t = 200;
+            rb.s00 = Truncate(rb.s00, t);
+            rb.s03 = Truncate(rb.s03, t);
+            rb.s06 = Truncate(rb.s06, t);
+            rb.s09 = Truncate(rb.s09, t);
+            rb.s12 = Truncate(rb.s12, t);
+            rb.s15 = Truncate(rb.s15, t);
+            rb.s18 = Truncate(rb.s18, t);
+            rb.s21 = Truncate(rb.s21, t);
 
             string datetime = date.ToString("yyyy-MM-dd");
             try
