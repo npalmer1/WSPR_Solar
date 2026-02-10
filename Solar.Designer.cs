@@ -449,7 +449,7 @@
             BurstgroupBox.Size = new Size(834, 113);
             BurstgroupBox.TabIndex = 32;
             BurstgroupBox.TabStop = false;
-            BurstgroupBox.Text = "Summary of radio bursts today";
+            BurstgroupBox.Text = "Summary of significant radio bursts today";
             BurstgroupBox.Visible = false;
             // 
             // label26
