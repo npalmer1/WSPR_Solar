@@ -37,6 +37,7 @@ using static System.Net.Mime.MediaTypeNames;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.Button;
 using static WSPR_Solar.Solar;
+using Application = System.Windows.Forms.Application;
 
 
 
@@ -3286,8 +3287,12 @@ namespace WSPR_Solar
 
         private void Solar_HelpRequested(object sender, HelpEventArgs hlpevent)
         {
+            string exeFolder = Application.StartupPath;
             helpform.rtf = "C:\\WSPR_Sked\\About_WS_Solar_v1.rtf";
-           
+            if (!File.Exists(helpform.rtf))
+            {
+                helpform.rtf = exeFolder + "\\About_WS_Solar_v1.rtf";
+            }
             if (File.Exists(helpform.rtf))
             {
                 helpform.Show();
