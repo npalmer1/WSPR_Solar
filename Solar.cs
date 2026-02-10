@@ -144,6 +144,8 @@ namespace WSPR_Solar
         string activity_level = "";
 
         public SolarIndexes solar = new SolarIndexes();
+
+        Help helpform = new Help();
         public Solar()
         {
             InitializeComponent();
@@ -211,7 +213,7 @@ namespace WSPR_Solar
         private void Solar_Load(object sender, EventArgs e)
         {
             System.Version version = Assembly.GetExecutingAssembly().GetName().Version;
-            string ver = "0.1.8";
+            string ver = "0.1.9";
             this.Text = "WSPR Solar                       V." + ver + "    GNU GPLv3 License";
 
             //solarstartuptimer.Enabled = true;
@@ -1330,7 +1332,7 @@ namespace WSPR_Solar
                     try
                     {
                         B = (string)Reader["s00"];
-                        if (B != null) { rb.s00 = B;}
+                        if (B != null) { rb.s00 = B; }
                         B = (string)Reader["s03"];
                         if (B != null) { rb.s03 = B; }
                         B = (string)Reader["s06"];
@@ -1346,7 +1348,7 @@ namespace WSPR_Solar
                         B = (string)Reader["s21"];
                         if (B != null) { rb.s21 = B; }
 
-                       
+
                     }
                     catch { }
                     cells2[0] = "Radio bursts:";
@@ -1406,7 +1408,7 @@ namespace WSPR_Solar
             if (dataGridView3.Rows.Count > rinsert)
             {
                 if (dataGridView3.Rows[rinsert].Cells[0].Value != null)
-                {                    
+                {
                     string b = dataGridView3.Rows[rinsert].Cells[0].Value.ToString();
                     if (b.Contains("Radio burst"))
                     {
@@ -3279,6 +3281,20 @@ namespace WSPR_Solar
             {
 
                 Msg.TMessageBox("No Internet connection", "Info", 2000);
+            }
+        }
+
+        private void Solar_HelpRequested(object sender, HelpEventArgs hlpevent)
+        {
+            helpform.rtf = "C:\\WSPR_Sked\\About_WS_Solar_v1.rtf";
+           
+            if (File.Exists(helpform.rtf))
+            {
+                helpform.Show();
+            }
+            else
+            {
+                Msg.TMessageBox(helpform.rtf+" not found", "Help file", 3000);
             }
         }
     }

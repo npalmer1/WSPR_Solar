@@ -139,6 +139,7 @@
             solarstartuptimer = new System.Windows.Forms.Timer(components);
             linksbutton1 = new Button();
             linksbutton2 = new Button();
+            label23 = new Label();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             groupBox1.SuspendLayout();
             groupBox2.SuspendLayout();
@@ -1174,12 +1175,22 @@
             linksbutton2.UseVisualStyleBackColor = false;
             linksbutton2.Click += linksbutton2_Click;
             // 
+            // label23
+            // 
+            label23.AutoSize = true;
+            label23.Location = new Point(535, 0);
+            label23.Name = "label23";
+            label23.Size = new Size(93, 15);
+            label23.TabIndex = 33;
+            label23.Text = "Press F1 for help";
+            // 
             // Solar
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.SeaShell;
             ClientSize = new Size(1222, 699);
+            Controls.Add(label23);
             Controls.Add(linksbutton2);
             Controls.Add(linksbutton1);
             Controls.Add(groupBox1);
@@ -1198,6 +1209,7 @@
             Text = "Solar Data";
             Activated += Solar_Activated;
             Load += Solar_Load;
+            HelpRequested += Solar_HelpRequested;
             Enter += Solar_Enter;
             ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
             groupBox1.ResumeLayout(false);
@@ -1326,5 +1338,6 @@
         private Label label25;
         private Button linksbutton1;
         private Button linksbutton2;
+        private Label label23;
     }
 }
