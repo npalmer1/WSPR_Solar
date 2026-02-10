@@ -213,6 +213,7 @@ namespace WSPR_Solar
             }
         }
 
+
         private void Solar_Load(object sender, EventArgs e)
         {
             System.Version version = Assembly.GetExecutingAssembly().GetName().Version;
