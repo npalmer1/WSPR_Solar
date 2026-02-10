@@ -1398,7 +1398,7 @@ namespace WSPR_Solar
                 }
                 else
                 {
-                    row.Cells[i].Value = "";
+                    row.Cells[i].Value = " ";
                 }
             }
 
@@ -1406,9 +1406,9 @@ namespace WSPR_Solar
             if (dataGridView3.Rows.Count > rinsert)
             {
                 if (dataGridView3.Rows[rinsert].Cells[0].Value != null)
-                {
-                    string s = dataGridView3.Rows[rinsert].Cells[0].Value.ToString();
-                    if (Burstbutton.Text == "Hide bursts")
+                {                    
+                    string b = dataGridView3.Rows[rinsert].Cells[0].Value.ToString();
+                    if (b.Contains("Radio burst"))
                     {
                         dataGridView3.Rows.RemoveAt(rinsert);
                     }
