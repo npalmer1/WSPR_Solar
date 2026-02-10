@@ -5,6 +5,7 @@ using MathNet.Numerics.RootFinding;
 using Microsoft.VisualBasic;
 using Microsoft.VisualBasic.ApplicationServices;
 using MySql.Data.MySqlClient;
+using Mysqlx.Crud;
 using Org.BouncyCastle.Asn1.Cms;
 using Org.BouncyCastle.Tls;
 using Security;
@@ -171,6 +172,7 @@ namespace WSPR_Solar
                 await updateSolar(serverName, db_user, db_pass);
                 await updateAllProtonandFlare(serverName, db_user, db_pass, true); //update yesterday
                 await updateAllProtonandFlare(serverName, db_user, db_pass, false); //update today
+
             }
 
         }
@@ -214,7 +216,7 @@ namespace WSPR_Solar
         private void Solar_Load(object sender, EventArgs e)
         {
             System.Version version = Assembly.GetExecutingAssembly().GetName().Version;
-            string ver = "0.1.9";
+            string ver = "0.1.10";
             this.Text = "WSPR Solar                       V." + ver + "    GNU GPLv3 License";
 
             //solarstartuptimer.Enabled = true;
@@ -261,8 +263,13 @@ namespace WSPR_Solar
             // Automatically adjust row height to fit content
             dataGridView3.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
 
-            setConfig(serverName, db_user, db_pass);
+            BurstdataGridView.DefaultCellStyle.Font = new System.Drawing.Font("Segoe UI", 8);
+            BurstdataGridView.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
 
+            // Automatically adjust row height to fit content
+            BurstdataGridView.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
+
+            setConfig(serverName, db_user, db_pass);
         }
 
         private bool getUserandPassword()
@@ -412,6 +419,7 @@ namespace WSPR_Solar
 
             await SaveBurstdata(date); //today
             await find_burst_data(false, "", "");
+            findBurstStorms();
         }
 
 
@@ -1374,6 +1382,7 @@ namespace WSPR_Solar
                 Reader.Close();
                 connection.Close();
 
+
             }
             catch
             {
@@ -1398,6 +1407,7 @@ namespace WSPR_Solar
                 if (cells1[i] != null)
                 {
                     row.Cells[i].Value = cells2[i];
+
                 }
                 else
                 {
@@ -1422,6 +1432,179 @@ namespace WSPR_Solar
             }
 
         }
+
+
+        private void findBurstStorms()
+        {
+            BurstdataGridView.Rows.Clear();
+            int columns = dataGridView3.ColumnCount;
+            if (dataGridView3.Rows[2].Cells[0].Value != null)
+            {
+                string cell = "";
+                for (int i = 1; i < columns; i++)
+                {
+                    if (dataGridView3.Rows[2].Cells[i].Value != null)
+                    {
+                        cell = dataGridView3.Rows[2].Cells[i].Value.ToString();
+
+                        ParseBurstStorms(cell, i - 1);
+                    }
+                }
+            }
+            //BurstgroupBox.Visible = true;
+            BurstgroupBox.BringToFront();
+            string B = "";
+            for (int b = 0; b < columns; b++)
+            {   
+                B = bd.band[b] + Environment.NewLine + bd.Level[b];
+                BurstdataGridView.Rows[0].Cells[b].Value = B;
+            }
+
+
+        }
+        struct BurstData()
+        {
+            public string[] Level = new string[8]; //levels for each time period
+            public string[] band = new string[8]; //bands for each time period
+        }
+        BurstData bd = new BurstData();
+        private void ParseBurstStorms(string cell, int period)
+        {
+            string line;
+            //string level = "";
+
+            int Level = 0;
+            string band = "";
+            string LStr = "";
+
+
+            using (StringReader reader = new StringReader(cell))
+            {
+                int dur = 0;
+
+                while ((line = reader.ReadLine()) != null)
+                {
+
+                    if (line.StartsWith("RSP"))
+                    {
+                        string[] S = line.Split("/");
+                        string[] t = S[1].Split("-");
+                        dur = 0;
+                        if (t.Count() > 0)
+                        {
+                            try
+                            {
+                                int from = Convert.ToInt32(t[0]);
+                                int to = Convert.ToInt32(t[1]);
+                                dur = to - from;
+                                if (dur == 0)
+                                {
+                                    dur = 1;
+                                }
+                            }
+                            catch { dur = 0; }
+
+
+                            if (line.EndsWith("/1"))
+                            {
+                                if (dur > 15 && Level < 1)
+                                {
+                                    LStr = "Weak";
+                                    Level = 1;
+                                }
+                            }
+                            else if (line.EndsWith("/2"))
+                            {
+                                if (dur > 15 && Level < 2)
+                                {
+                                    LStr = "Moderate";
+                                    Level = 2;
+                                }
+                            }
+                            else if (line.EndsWith("/3"))
+                            {
+                                if (dur > 15 && Level < 3)
+                                {
+                                    LStr = "Severe";
+                                    Level = 3;
+                                }
+                            }
+                            else if (line.EndsWith("/4"))
+                            {
+                                if (dur > 15 && Level < 4)
+                                {
+                                    LStr = "Extreme";
+                                    Level = 4;
+                                }
+                            }
+                            if (line.Contains("III") || (line.Contains("VI")))
+                            {
+                                if (dur > 15 && !band.Contains("W"))
+                                {
+                                    band = band + "W"; //wideband VLF - 1GHz
+                                }
+                            }
+                            else if (line.Contains("II") || line.Contains("V"))
+                            {
+                                if (dur > 15 && !band.Contains("T"))
+                                {
+                                    band = band + "T"; //25-200MHz
+                                }
+                            }
+                            else if (line.Contains("I"))
+                            {
+                                if (dur > 15 && !band.Contains("V"))
+                                {
+                                    band = band + "V"; //VHF
+                                }
+                            }
+                            else if (line.Contains("IV"))
+                            {
+                                if (dur > 15 && !band.Contains("G"))
+                                {
+                                    band = band + "G"; //25MHz-2GHz
+                                }
+                            }
+                            else if (line.Contains("CTM"))
+                            {
+                                if (dur > 15 && !band.Contains("W"))
+                                {
+                                    band = band + "W"; //25MHz-2GHz
+                                }
+                            }
+
+                        }
+                    }
+
+                }
+
+            }
+            if (band.Contains("W"))
+            {
+                bd.band[period] = "Wideband";
+            }
+            else if (band.Contains("G"))
+            { bd.band[period] = "25MHz-2GHz"; }
+            else if (band.Contains("T"))
+            { bd.band[period] = "25-200MHz"; }
+            else if (band.Contains("V"))
+            { bd.band[period] = "VHF"; }
+            else
+            {
+                bd.band[period] = "";
+            }
+            bd.Level[period] = LStr;
+
+
+            //string levelstr = "Noise levels: " + levels[1].ToString() + " mins moderate, " + levels[2].ToString() + " mins strong,  " + levels[3].ToString() + " mins extreme";
+            //string bandstr = "Noise bands: " + bands[0].ToString() + bands[4].ToString() + " mins wideband, " + bands[1].ToString() + bands[3].ToString() + " 25-200MHz, " + bands[2].ToString() + " mins VHF";
+            //string test = "";
+
+        }
+
+
+
+
 
         private async void forceUpdatebutton_Click_1(object sender, EventArgs e)
         {
@@ -2230,6 +2413,10 @@ namespace WSPR_Solar
             if (!yesterday)
             {
                 stormlabels();
+            }
+            if (!yesterday)
+            {
+                updateBursts(server, user, pass);
             }
 
         }
@@ -3311,7 +3498,7 @@ namespace WSPR_Solar
                 return;
             }
             string url = "https://www.sws.bom.gov.au/";
-          
+
             try
             {
                 OpenBrowser(url);
@@ -3320,6 +3507,22 @@ namespace WSPR_Solar
             {
 
                 Msg.TMessageBox("No Internet connection", "Info", 2000);
+            }
+        }
+
+        private void Burstgridbutton_Click(object sender, EventArgs e)
+        {
+            if (Burstgridbutton.Text == "Radio bursts")
+            {
+                BurstgroupBox.Visible = true;
+                BurstgroupBox.BringToFront();
+                Burstgridbutton.Text = "Hide bursts";
+            }
+             else
+             {
+                BurstgroupBox.Visible = false;
+                Burstgridbutton.Text = "Radio bursts";
+
             }
         }
     }

@@ -57,6 +57,18 @@
             datelabel = new Label();
             label7 = new Label();
             groupBox1 = new GroupBox();
+            Burstgridbutton = new Button();
+            BurstgroupBox = new GroupBox();
+            label26 = new Label();
+            BurstdataGridView = new DataGridView();
+            Col1 = new DataGridViewTextBoxColumn();
+            Col2 = new DataGridViewTextBoxColumn();
+            Col3 = new DataGridViewTextBoxColumn();
+            Col4 = new DataGridViewTextBoxColumn();
+            Col5 = new DataGridViewTextBoxColumn();
+            Col6 = new DataGridViewTextBoxColumn();
+            Col7 = new DataGridViewTextBoxColumn();
+            Col8 = new DataGridViewTextBoxColumn();
             RClabel = new Label();
             SClabel = new Label();
             GClabel = new Label();
@@ -143,6 +155,8 @@
             AusSWSbutton = new Button();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             groupBox1.SuspendLayout();
+            BurstgroupBox.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)BurstdataGridView).BeginInit();
             groupBox2.SuspendLayout();
             EventsgroupBox.SuspendLayout();
             groupBox4.SuspendLayout();
@@ -379,6 +393,8 @@
             // 
             // groupBox1
             // 
+            groupBox1.Controls.Add(Burstgridbutton);
+            groupBox1.Controls.Add(BurstgroupBox);
             groupBox1.Controls.Add(RClabel);
             groupBox1.Controls.Add(SClabel);
             groupBox1.Controls.Add(GClabel);
@@ -410,6 +426,103 @@
             groupBox1.TabIndex = 14;
             groupBox1.TabStop = false;
             groupBox1.Text = "Current solar data from Boulder, CO.";
+            // 
+            // Burstgridbutton
+            // 
+            Burstgridbutton.BackColor = Color.MistyRose;
+            Burstgridbutton.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            Burstgridbutton.Location = new Point(772, 534);
+            Burstgridbutton.Name = "Burstgridbutton";
+            Burstgridbutton.Size = new Size(85, 23);
+            Burstgridbutton.TabIndex = 33;
+            Burstgridbutton.Text = "Radio bursts";
+            Burstgridbutton.UseVisualStyleBackColor = false;
+            Burstgridbutton.Click += Burstgridbutton_Click;
+            // 
+            // BurstgroupBox
+            // 
+            BurstgroupBox.BackColor = Color.LemonChiffon;
+            BurstgroupBox.Controls.Add(label26);
+            BurstgroupBox.Controls.Add(BurstdataGridView);
+            BurstgroupBox.Location = new Point(251, 317);
+            BurstgroupBox.Name = "BurstgroupBox";
+            BurstgroupBox.Size = new Size(834, 113);
+            BurstgroupBox.TabIndex = 32;
+            BurstgroupBox.TabStop = false;
+            BurstgroupBox.Text = "Radio Bursts today";
+            BurstgroupBox.Visible = false;
+            // 
+            // label26
+            // 
+            label26.AutoSize = true;
+            label26.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            label26.Location = new Point(8, 94);
+            label26.Name = "label26";
+            label26.Size = new Size(346, 13);
+            label26.TabIndex = 1;
+            label26.Text = "Note: \"wideband\" may be any range of freqencies from VLF to SHF";
+            // 
+            // BurstdataGridView
+            // 
+            BurstdataGridView.BackgroundColor = SystemColors.Info;
+            BurstdataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            BurstdataGridView.Columns.AddRange(new DataGridViewColumn[] { Col1, Col2, Col3, Col4, Col5, Col6, Col7, Col8 });
+            BurstdataGridView.Location = new Point(8, 22);
+            BurstdataGridView.Name = "BurstdataGridView";
+            BurstdataGridView.ReadOnly = true;
+            BurstdataGridView.RowHeadersVisible = false;
+            BurstdataGridView.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
+            BurstdataGridView.RowTemplate.Height = 50;
+            BurstdataGridView.Size = new Size(809, 69);
+            BurstdataGridView.TabIndex = 0;
+            // 
+            // Col1
+            // 
+            Col1.HeaderText = "00-03";
+            Col1.Name = "Col1";
+            Col1.ReadOnly = true;
+            // 
+            // Col2
+            // 
+            Col2.HeaderText = "03-06";
+            Col2.Name = "Col2";
+            Col2.ReadOnly = true;
+            // 
+            // Col3
+            // 
+            Col3.HeaderText = "06-09";
+            Col3.Name = "Col3";
+            Col3.ReadOnly = true;
+            // 
+            // Col4
+            // 
+            Col4.HeaderText = "09-12";
+            Col4.Name = "Col4";
+            Col4.ReadOnly = true;
+            // 
+            // Col5
+            // 
+            Col5.HeaderText = "12-15";
+            Col5.Name = "Col5";
+            Col5.ReadOnly = true;
+            // 
+            // Col6
+            // 
+            Col6.HeaderText = "15-18";
+            Col6.Name = "Col6";
+            Col6.ReadOnly = true;
+            // 
+            // Col7
+            // 
+            Col7.HeaderText = "18-21";
+            Col7.Name = "Col7";
+            Col7.ReadOnly = true;
+            // 
+            // Col8
+            // 
+            Col8.HeaderText = "21-00";
+            Col8.Name = "Col8";
+            Col8.ReadOnly = true;
             // 
             // RClabel
             // 
@@ -479,7 +592,7 @@
             // 
             hamqslbutton.BackColor = Color.MistyRose;
             hamqslbutton.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            hamqslbutton.Location = new Point(821, 535);
+            hamqslbutton.Location = new Point(942, 535);
             hamqslbutton.Name = "hamqslbutton";
             hamqslbutton.Size = new Size(75, 23);
             hamqslbutton.TabIndex = 23;
@@ -638,7 +751,7 @@
             Burstbutton.Name = "Burstbutton";
             Burstbutton.Size = new Size(92, 23);
             Burstbutton.TabIndex = 23;
-            Burstbutton.Text = "Show bursts";
+            Burstbutton.Text = "Hide bursts";
             Burstbutton.UseVisualStyleBackColor = true;
             Burstbutton.Visible = false;
             Burstbutton.Click += Burstbutton_Click_1;
@@ -1228,6 +1341,9 @@
             ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
             groupBox1.ResumeLayout(false);
             groupBox1.PerformLayout();
+            BurstgroupBox.ResumeLayout(false);
+            BurstgroupBox.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)BurstdataGridView).EndInit();
             groupBox2.ResumeLayout(false);
             groupBox2.PerformLayout();
             EventsgroupBox.ResumeLayout(false);
@@ -1354,5 +1470,17 @@
         private Button linksbutton2;
         private Label label23;
         private Button AusSWSbutton;
+        private GroupBox BurstgroupBox;
+        private DataGridView BurstdataGridView;
+        private DataGridViewTextBoxColumn Col1;
+        private DataGridViewTextBoxColumn Col2;
+        private DataGridViewTextBoxColumn Col3;
+        private DataGridViewTextBoxColumn Col4;
+        private DataGridViewTextBoxColumn Col5;
+        private DataGridViewTextBoxColumn Col6;
+        private DataGridViewTextBoxColumn Col7;
+        private DataGridViewTextBoxColumn Col8;
+        private Button Burstgridbutton;
+        private Label label26;
     }
 }
