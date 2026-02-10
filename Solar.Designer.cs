@@ -140,6 +140,7 @@
             linksbutton1 = new Button();
             linksbutton2 = new Button();
             label23 = new Label();
+            AusSWSbutton = new Button();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             groupBox1.SuspendLayout();
             groupBox2.SuspendLayout();
@@ -1122,7 +1123,7 @@
             // 
             infobutton.BackColor = Color.MistyRose;
             infobutton.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            infobutton.Location = new Point(1140, 610);
+            infobutton.Location = new Point(1064, 610);
             infobutton.Name = "infobutton";
             infobutton.Size = new Size(70, 23);
             infobutton.TabIndex = 21;
@@ -1184,12 +1185,25 @@
             label23.TabIndex = 33;
             label23.Text = "Press F1 for help";
             // 
+            // AusSWSbutton
+            // 
+            AusSWSbutton.BackColor = Color.MistyRose;
+            AusSWSbutton.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            AusSWSbutton.Location = new Point(1140, 610);
+            AusSWSbutton.Name = "AusSWSbutton";
+            AusSWSbutton.Size = new Size(70, 23);
+            AusSWSbutton.TabIndex = 34;
+            AusSWSbutton.Text = "Aus SWS";
+            AusSWSbutton.UseVisualStyleBackColor = false;
+            AusSWSbutton.Click += AusSWSbutton_Click;
+            // 
             // Solar
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.SeaShell;
             ClientSize = new Size(1222, 699);
+            Controls.Add(AusSWSbutton);
             Controls.Add(label23);
             Controls.Add(linksbutton2);
             Controls.Add(linksbutton1);
@@ -1339,5 +1353,6 @@
         private Button linksbutton1;
         private Button linksbutton2;
         private Label label23;
+        private Button AusSWSbutton;
     }
 }

@@ -3299,7 +3299,27 @@ namespace WSPR_Solar
             }
             else
             {
-                Msg.TMessageBox(helpform.rtf+" not found", "Help file", 3000);
+                Msg.TMessageBox(helpform.rtf + " not found", "Help file", 3000);
+            }
+        }
+
+        private void AusSWSbutton_Click(object sender, EventArgs e)
+        {
+            if (stopUrl)
+            {
+                Msg.TMessageBox("No Internet connection", "Info", 2000);
+                return;
+            }
+            string url = "https://www.sws.bom.gov.au/";
+          
+            try
+            {
+                OpenBrowser(url);
+            }
+            catch
+            {
+
+                Msg.TMessageBox("No Internet connection", "Info", 2000);
             }
         }
     }
