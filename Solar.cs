@@ -217,7 +217,7 @@ namespace WSPR_Solar
         private void Solar_Load(object sender, EventArgs e)
         {
             System.Version version = Assembly.GetExecutingAssembly().GetName().Version;
-            string ver = "0.1.10";
+            string ver = "0.1.11";
             this.Text = "WSPR Solar                       V." + ver + "    GNU GPLv3 License";
 
             //solarstartuptimer.Enabled = true;
@@ -259,6 +259,7 @@ namespace WSPR_Solar
             dataGridView1.DefaultCellStyle.Font = new System.Drawing.Font("Segoe UI", 8);
             dataGridView2.DefaultCellStyle.Font = new System.Drawing.Font("Segoe UI", 8);
             dataGridView3.DefaultCellStyle.Font = new System.Drawing.Font("Segoe UI", 8);
+            BurstdataGridView.DefaultCellStyle.Font = new System.Drawing.Font("Segoe UI", 8);
             dataGridView3.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
 
             // Automatically adjust row height to fit content
@@ -1456,8 +1457,8 @@ namespace WSPR_Solar
             BurstgroupBox.BringToFront();
             string B = "";
             for (int b = 0; b < columns; b++)
-            {   
-                B = bd.band[b] + Environment.NewLine + bd.Level[b];
+            {
+                B = bd.span[b] + Environment.NewLine + bd.band[b] + Environment.NewLine + bd.Level[b];
                 BurstdataGridView.Rows[0].Cells[b].Value = B;
             }
 
@@ -1467,6 +1468,7 @@ namespace WSPR_Solar
         {
             public string[] Level = new string[8]; //levels for each time period
             public string[] band = new string[8]; //bands for each time period
+            public string[] span = new string[8]; //duration for each time period
         }
         BurstData bd = new BurstData();
         private void ParseBurstStorms(string cell, int period)
@@ -1476,12 +1478,14 @@ namespace WSPR_Solar
 
             int Level = 0;
             string band = "";
+            string l1band = "";
             string LStr = "";
-
+            int overallDur = 0;
 
             using (StringReader reader = new StringReader(cell))
             {
                 int dur = 0;
+
 
                 while ((line = reader.ReadLine()) != null)
                 {
@@ -1495,9 +1499,13 @@ namespace WSPR_Solar
                         {
                             try
                             {
-                                int from = Convert.ToInt32(t[0]);
-                                int to = Convert.ToInt32(t[1]);
-                                dur = to - from;
+                                t[0] = t[0].Insert(2, ":");
+                                t[1] = t[1].Insert(2, ":");
+                                DateTime from = Convert.ToDateTime(t[0]);
+                                //int to = Convert.ToInt32(t[1]);
+                                DateTime to = Convert.ToDateTime(t[1]);
+                                dur = (int)Math.Abs((from - to).TotalMinutes);
+
                                 if (dur == 0)
                                 {
                                     dur = 1;
@@ -1508,7 +1516,8 @@ namespace WSPR_Solar
 
                             if (line.EndsWith("/1"))
                             {
-                                if (dur > 15 && Level < 1)
+                                overallDur = overallDur + dur;
+                                if ((dur > 10 || overallDur > 10) && Level < 1)
                                 {
                                     LStr = "Weak";
                                     Level = 1;
@@ -1516,7 +1525,8 @@ namespace WSPR_Solar
                             }
                             else if (line.EndsWith("/2"))
                             {
-                                if (dur > 15 && Level < 2)
+                                overallDur = overallDur + dur;
+                                if ((dur > 10) && Level < 2)
                                 {
                                     LStr = "Moderate";
                                     Level = 2;
@@ -1524,7 +1534,8 @@ namespace WSPR_Solar
                             }
                             else if (line.EndsWith("/3"))
                             {
-                                if (dur > 15 && Level < 3)
+                                overallDur = overallDur + dur;
+                                if ((dur > 10) && Level < 3)
                                 {
                                     LStr = "Severe";
                                     Level = 3;
@@ -1532,7 +1543,8 @@ namespace WSPR_Solar
                             }
                             else if (line.EndsWith("/4"))
                             {
-                                if (dur > 15 && Level < 4)
+                                overallDur = overallDur + dur;
+                                if ((dur > 10) && Level < 4)
                                 {
                                     LStr = "Extreme";
                                     Level = 4;
@@ -1540,35 +1552,40 @@ namespace WSPR_Solar
                             }
                             if (line.Contains("III") || (line.Contains("VI")))
                             {
-                                if (dur > 15 && !band.Contains("W"))
+                                if (!l1band.Contains("W")) { l1band = "W"; }
+                                if ((dur > 10 || overallDur > 10) && !band.Contains("W"))
                                 {
                                     band = band + "W"; //wideband VLF - 1GHz
                                 }
                             }
                             else if (line.Contains("II") || line.Contains("V"))
                             {
-                                if (dur > 15 && !band.Contains("T"))
+                                if (!l1band.Contains("T")) { l1band = "T"; }
+                                if ((dur > 10 || overallDur > 10) && !band.Contains("T"))
                                 {
                                     band = band + "T"; //25-200MHz
                                 }
                             }
                             else if (line.Contains("I"))
                             {
-                                if (dur > 15 && !band.Contains("V"))
+                                if (!l1band.Contains("V")) { l1band = "V"; }
+                                if ((dur > 10 || overallDur > 10) && !band.Contains("V"))
                                 {
                                     band = band + "V"; //VHF
                                 }
                             }
                             else if (line.Contains("IV"))
                             {
-                                if (dur > 15 && !band.Contains("G"))
+                                if (!l1band.Contains("G")) { l1band = "G"; }
+                                if ((dur > 10 || overallDur > 10) && !band.Contains("G"))
                                 {
                                     band = band + "G"; //25MHz-2GHz
                                 }
                             }
                             else if (line.Contains("CTM"))
                             {
-                                if (dur > 15 && !band.Contains("W"))
+                                if (!l1band.Contains("W")) { l1band = "W"; }
+                                if ((dur > 10 || overallDur > 10) && !band.Contains("W"))
                                 {
                                     band = band + "W"; //25MHz-2GHz
                                 }
@@ -1579,6 +1596,28 @@ namespace WSPR_Solar
 
                 }
 
+            }
+            if (LStr == "" && overallDur > 1)
+            {
+                LStr = "Insignificant";
+            }
+            if (Level == 1)
+            {
+                LStr = "Weak";
+                if (l1band.Contains("W"))
+                {
+                    bd.band[period] = "Wideband";
+                }
+                else if (l1band.Contains("G"))
+                { bd.band[period] = "25MHz-2GHz"; }
+                else if (l1band.Contains("T"))
+                { bd.band[period] = "25-200MHz"; }
+                else if (l1band.Contains("V"))
+                { bd.band[period] = "VHF"; }
+                else
+                {
+                    bd.band[period] = "";
+                }
             }
             if (band.Contains("W"))
             {
@@ -1595,6 +1634,10 @@ namespace WSPR_Solar
                 bd.band[period] = "";
             }
             bd.Level[period] = LStr;
+            if (overallDur > 2)
+            {
+                bd.span[period] = overallDur.ToString() + " mins";
+            }
 
 
             //string levelstr = "Noise levels: " + levels[1].ToString() + " mins moderate, " + levels[2].ToString() + " mins strong,  " + levels[3].ToString() + " mins extreme";
@@ -3519,12 +3562,17 @@ namespace WSPR_Solar
                 BurstgroupBox.BringToFront();
                 Burstgridbutton.Text = "Hide bursts";
             }
-             else
-             {
+            else
+            {
                 BurstgroupBox.Visible = false;
                 Burstgridbutton.Text = "Radio bursts";
 
             }
+        }
+
+        private void BurstgroupBox_Enter(object sender, EventArgs e)
+        {
+
         }
     }
 

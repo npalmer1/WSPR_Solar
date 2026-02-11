@@ -59,6 +59,9 @@
             groupBox1 = new GroupBox();
             Burstgridbutton = new Button();
             BurstgroupBox = new GroupBox();
+            label29 = new Label();
+            label28 = new Label();
+            label27 = new Label();
             label26 = new Label();
             BurstdataGridView = new DataGridView();
             Col1 = new DataGridViewTextBoxColumn();
@@ -211,7 +214,7 @@
             label1.AutoSize = true;
             label1.Location = new Point(596, 23);
             label1.Name = "label1";
-            label1.Size = new Size(225, 15);
+            label1.Size = new Size(216, 13);
             label1.TabIndex = 3;
             label1.Text = "Solar and Geophysical activity (yesterday)";
             // 
@@ -220,7 +223,7 @@
             label2.AutoSize = true;
             label2.Location = new Point(32, 23);
             label2.Name = "label2";
-            label2.Size = new Size(209, 15);
+            label2.Size = new Size(201, 13);
             label2.TabIndex = 4;
             label2.Text = "Geomagnetic data (yesterday + today)";
             // 
@@ -368,7 +371,7 @@
             label6.AutoSize = true;
             label6.Location = new Point(32, 417);
             label6.Name = "label6";
-            label6.Size = new Size(174, 15);
+            label6.Size = new Size(170, 13);
             label6.TabIndex = 10;
             label6.Text = "Current solar geomagnetic data";
             // 
@@ -420,6 +423,8 @@
             groupBox1.Controls.Add(label1);
             groupBox1.Controls.Add(textBox2);
             groupBox1.Controls.Add(textBox1);
+            groupBox1.FlatStyle = FlatStyle.Popup;
+            groupBox1.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
             groupBox1.Location = new Point(26, 44);
             groupBox1.Name = "groupBox1";
             groupBox1.Size = new Size(1125, 562);
@@ -442,21 +447,57 @@
             // BurstgroupBox
             // 
             BurstgroupBox.BackColor = Color.LemonChiffon;
+            BurstgroupBox.Controls.Add(label29);
+            BurstgroupBox.Controls.Add(label28);
+            BurstgroupBox.Controls.Add(label27);
             BurstgroupBox.Controls.Add(label26);
             BurstgroupBox.Controls.Add(BurstdataGridView);
-            BurstgroupBox.Location = new Point(251, 317);
+            BurstgroupBox.FlatStyle = FlatStyle.Popup;
+            BurstgroupBox.ForeColor = SystemColors.MenuText;
+            BurstgroupBox.Location = new Point(143, 305);
             BurstgroupBox.Name = "BurstgroupBox";
-            BurstgroupBox.Size = new Size(834, 113);
+            BurstgroupBox.Size = new Size(924, 125);
             BurstgroupBox.TabIndex = 32;
             BurstgroupBox.TabStop = false;
             BurstgroupBox.Text = "Summary of significant radio bursts today";
             BurstgroupBox.Visible = false;
+            BurstgroupBox.Enter += BurstgroupBox_Enter;
+            // 
+            // label29
+            // 
+            label29.AutoSize = true;
+            label29.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            label29.Location = new Point(16, 58);
+            label29.Name = "label29";
+            label29.Size = new Size(86, 13);
+            label29.TabIndex = 4;
+            label29.Text = "Bands affected:";
+            // 
+            // label28
+            // 
+            label28.AutoSize = true;
+            label28.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            label28.Location = new Point(67, 71);
+            label28.Name = "label28";
+            label28.Size = new Size(35, 13);
+            label28.TabIndex = 3;
+            label28.Text = "Level:";
+            // 
+            // label27
+            // 
+            label27.AutoSize = true;
+            label27.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            label27.Location = new Point(19, 45);
+            label27.Name = "label27";
+            label27.Size = new Size(83, 13);
+            label27.TabIndex = 2;
+            label27.Text = "Total duration:";
             // 
             // label26
             // 
             label26.AutoSize = true;
             label26.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label26.Location = new Point(8, 94);
+            label26.Location = new Point(6, 100);
             label26.Name = "label26";
             label26.Size = new Size(346, 13);
             label26.TabIndex = 1;
@@ -467,13 +508,13 @@
             BurstdataGridView.BackgroundColor = SystemColors.Info;
             BurstdataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             BurstdataGridView.Columns.AddRange(new DataGridViewColumn[] { Col1, Col2, Col3, Col4, Col5, Col6, Col7, Col8 });
-            BurstdataGridView.Location = new Point(8, 22);
+            BurstdataGridView.Location = new Point(107, 22);
             BurstdataGridView.Name = "BurstdataGridView";
             BurstdataGridView.ReadOnly = true;
             BurstdataGridView.RowHeadersVisible = false;
             BurstdataGridView.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
             BurstdataGridView.RowTemplate.Height = 50;
-            BurstdataGridView.Size = new Size(809, 69);
+            BurstdataGridView.Size = new Size(809, 70);
             BurstdataGridView.TabIndex = 0;
             // 
             // Col1
@@ -529,7 +570,7 @@
             RClabel.AutoSize = true;
             RClabel.Location = new Point(745, 524);
             RClabel.Name = "RClabel";
-            RClabel.Size = new Size(17, 15);
+            RClabel.Size = new Size(15, 13);
             RClabel.TabIndex = 31;
             RClabel.Text = "--";
             // 
@@ -538,7 +579,7 @@
             SClabel.AutoSize = true;
             SClabel.Location = new Point(722, 524);
             SClabel.Name = "SClabel";
-            SClabel.Size = new Size(17, 15);
+            SClabel.Size = new Size(15, 13);
             SClabel.TabIndex = 30;
             SClabel.Text = "--";
             // 
@@ -547,7 +588,7 @@
             GClabel.AutoSize = true;
             GClabel.Location = new Point(699, 524);
             GClabel.Name = "GClabel";
-            GClabel.Size = new Size(17, 15);
+            GClabel.Size = new Size(15, 13);
             GClabel.TabIndex = 29;
             GClabel.Text = "--";
             // 
@@ -556,7 +597,7 @@
             label25.AutoSize = true;
             label25.Location = new Point(647, 525);
             label25.Name = "label25";
-            label25.Size = new Size(47, 15);
+            label25.Size = new Size(46, 13);
             label25.TabIndex = 28;
             label25.Text = "Last 3h:";
             // 
@@ -565,7 +606,7 @@
             label24.AutoSize = true;
             label24.Location = new Point(531, 543);
             label24.Name = "label24";
-            label24.Size = new Size(25, 15);
+            label24.Size = new Size(24, 13);
             label24.TabIndex = 27;
             label24.Text = "Ap:";
             // 
@@ -574,7 +615,7 @@
             stormlabel.AutoSize = true;
             stormlabel.Location = new Point(562, 543);
             stormlabel.Name = "stormlabel";
-            stormlabel.Size = new Size(17, 15);
+            stormlabel.Size = new Size(15, 13);
             stormlabel.TabIndex = 26;
             stormlabel.Text = "--";
             // 
@@ -617,7 +658,7 @@
             Rlabel.AutoSize = true;
             Rlabel.Location = new Point(608, 525);
             Rlabel.Name = "Rlabel";
-            Rlabel.Size = new Size(17, 15);
+            Rlabel.Size = new Size(15, 13);
             Rlabel.TabIndex = 19;
             Rlabel.Text = "--";
             // 
@@ -626,7 +667,7 @@
             Slabel.AutoSize = true;
             Slabel.Location = new Point(585, 525);
             Slabel.Name = "Slabel";
-            Slabel.Size = new Size(17, 15);
+            Slabel.Size = new Size(15, 13);
             Slabel.TabIndex = 18;
             Slabel.Text = "--";
             // 
@@ -635,7 +676,7 @@
             Glabel.AutoSize = true;
             Glabel.Location = new Point(562, 525);
             Glabel.Name = "Glabel";
-            Glabel.Size = new Size(17, 15);
+            Glabel.Size = new Size(15, 13);
             Glabel.TabIndex = 17;
             Glabel.Text = "--";
             // 
@@ -644,7 +685,7 @@
             label21.AutoSize = true;
             label21.Location = new Point(464, 525);
             label21.Name = "label21";
-            label21.Size = new Size(95, 15);
+            label21.Size = new Size(93, 13);
             label21.TabIndex = 16;
             label21.Text = "Storms reported:";
             // 
@@ -653,7 +694,7 @@
             conditionlabel.AutoSize = true;
             conditionlabel.Location = new Point(20, 525);
             conditionlabel.Name = "conditionlabel";
-            conditionlabel.Size = new Size(22, 15);
+            conditionlabel.Size = new Size(19, 13);
             conditionlabel.TabIndex = 15;
             conditionlabel.Text = "---";
             conditionlabel.Click += conditionlabel_Click;
@@ -1482,5 +1523,8 @@
         private DataGridViewTextBoxColumn Col8;
         private Button Burstgridbutton;
         private Label label26;
+        private Label label29;
+        private Label label28;
+        private Label label27;
     }
 }
