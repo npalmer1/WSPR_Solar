@@ -144,6 +144,8 @@ namespace WSPR_Solar
         string dateformat = "yyyy-MM-dd";
 
         string activity_level = "";
+        string current_burst_level = "";
+        string current_burst_band = "";
 
         public SolarIndexes solar = new SolarIndexes();
 
@@ -1454,6 +1456,7 @@ namespace WSPR_Solar
                 }
             }
             //BurstgroupBox.Visible = true;
+            findcurrentBurst();
             BurstgroupBox.BringToFront();
             string B = "";
             for (int b = 0; b < columns; b++)
@@ -1461,7 +1464,7 @@ namespace WSPR_Solar
                 B = bd.span[b] + Environment.NewLine + bd.band[b] + Environment.NewLine + bd.Level[b];
                 BurstdataGridView.Rows[0].Cells[b].Value = B;
             }
-
+            
 
         }
         struct BurstData()
@@ -1471,6 +1474,7 @@ namespace WSPR_Solar
             public string[] span = new string[8]; //duration for each time period
         }
         BurstData bd = new BurstData();
+
         private void ParseBurstStorms(string cell, int period)
         {
             string line;
@@ -1597,9 +1601,13 @@ namespace WSPR_Solar
                 }
 
             }
-            if (LStr == "" && overallDur > 1)
+            if (LStr == "" && overallDur > 0)
             {
                 LStr = "Insignificant";
+            }
+            else if (LStr == "" && overallDur < 1)
+            {
+                LStr = "None/insignificant";
             }
             if (Level == 1)
             {
@@ -1632,19 +1640,108 @@ namespace WSPR_Solar
             else
             {
                 bd.band[period] = "";
-            }
+            }           
             bd.Level[period] = LStr;
             if (overallDur > 2)
             {
                 bd.span[period] = overallDur.ToString() + " mins";
             }
-
-
-            //string levelstr = "Noise levels: " + levels[1].ToString() + " mins moderate, " + levels[2].ToString() + " mins strong,  " + levels[3].ToString() + " mins extreme";
-            //string bandstr = "Noise bands: " + bands[0].ToString() + bands[4].ToString() + " mins wideband, " + bands[1].ToString() + bands[3].ToString() + " 25-200MHz, " + bands[2].ToString() + " mins VHF";
-            //string test = "";
+            int p = findHour();
+            if (p < period)        
+            {
+                bd.Level[period] = "";
+                bd.band[period] = "";
+                bd.span[period] = "";
+            }
 
         }
+
+        private int findHour()
+        {
+            DateTime now = DateTime.Now.ToUniversalTime();
+            int hour = now.Hour;
+            int p = 0;
+            if (hour >= 0 && hour < 3)
+            {
+                p = 0;
+            }
+            else if (hour >= 3 && hour < 6)
+            {
+                p = 1;
+            }
+            else if (hour >= 6 && hour < 9)
+            {
+                p = 2;
+            }
+            else if (hour >= 9 && hour < 12)
+            {
+                p = 3;
+            }
+            else if (hour >= 12 && hour < 15)
+            {
+                p = 4;
+            }
+            else if (hour >= 15 && hour < 18)
+            {
+                p = 5;
+            }
+            else if (hour >= 18 && hour < 21)
+            {
+                p = 6;
+            }
+            else if (hour >= 21)
+            {
+                p = 7;
+
+            }
+            else
+            {
+                p = -1;
+            }
+                return p;
+        }
+        private void findcurrentBurst()
+        {
+           
+            DateTime now = DateTime.Now.ToUniversalTime();
+            int hour = now.Hour;
+            int p = findHour();
+          
+           if (p <0)
+            {
+                current_burst_band = "";
+                current_burst_level = "";
+                return;
+            }
+            string B = "";
+            string O = "";
+           
+            string N = bd.Level[p].ToUpper();
+          
+            if (N.Contains("INSIGNIFICANT") || N.Contains("NONE"))
+            {
+                Burstwarninglabel.Text = "---";
+                return;
+            }
+            if (!N.Contains("WEAK") && N != "")
+            {
+                if (bd.band[p].ToUpper().Contains("WIDEBAND"))
+                {
+                    B = "wideband";
+                    O = "";
+                }
+                else
+                {
+                    O = "affecting " + bd.band[p];
+                    B = "";
+                }
+
+                Burstwarninglabel.Text = "Reception may be affected by " + bd.Level[p].ToLower() + " " + B + " radio bursts " + O;
+            }
+                
+
+        }
+      
 
 
 
@@ -3570,10 +3667,6 @@ namespace WSPR_Solar
             }
         }
 
-        private void BurstgroupBox_Enter(object sender, EventArgs e)
-        {
-
-        }
     }
 
 }

@@ -29,8 +29,8 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
-            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
             getLatestbutton = new Button();
             forceUpdatebutton = new Button();
             textBox1 = new TextBox();
@@ -156,6 +156,7 @@
             linksbutton2 = new Button();
             label23 = new Label();
             AusSWSbutton = new Button();
+            Burstwarninglabel = new Label();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             groupBox1.SuspendLayout();
             BurstgroupBox.SuspendLayout();
@@ -396,6 +397,7 @@
             // 
             // groupBox1
             // 
+            groupBox1.Controls.Add(Burstwarninglabel);
             groupBox1.Controls.Add(Burstgridbutton);
             groupBox1.Controls.Add(BurstgroupBox);
             groupBox1.Controls.Add(RClabel);
@@ -427,7 +429,7 @@
             groupBox1.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
             groupBox1.Location = new Point(26, 44);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(1125, 562);
+            groupBox1.Size = new Size(1125, 579);
             groupBox1.TabIndex = 14;
             groupBox1.TabStop = false;
             groupBox1.Text = "Current solar data from Boulder, CO.";
@@ -461,7 +463,6 @@
             BurstgroupBox.TabStop = false;
             BurstgroupBox.Text = "Summary of significant radio bursts today";
             BurstgroupBox.Visible = false;
-            BurstgroupBox.Enter += BurstgroupBox_Enter;
             // 
             // label29
             // 
@@ -946,14 +947,14 @@
             // 
             dataGridView3.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.ColumnHeader;
             dataGridView3.BackgroundColor = SystemColors.GradientInactiveCaption;
-            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle1.BackColor = SystemColors.Control;
-            dataGridViewCellStyle1.Font = new Font("Segoe UI", 9F);
-            dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
-            dataGridView3.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle3.BackColor = SystemColors.Control;
+            dataGridViewCellStyle3.Font = new Font("Segoe UI", 9F);
+            dataGridViewCellStyle3.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle3.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle3.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = DataGridViewTriState.True;
+            dataGridView3.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
             dataGridView3.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridView3.Columns.AddRange(new DataGridViewColumn[] { dataGridViewTextBoxColumn12, dataGridViewTextBoxColumn14, dataGridViewTextBoxColumn15, dataGridViewTextBoxColumn16, dataGridViewTextBoxColumn17, dataGridViewTextBoxColumn18, dataGridViewTextBoxColumn19, dataGridViewTextBoxColumn20, dataGridViewTextBoxColumn21 });
             dataGridView3.Location = new Point(5, 59);
@@ -1100,14 +1101,14 @@
             // 
             dataGridView2.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.ColumnHeader;
             dataGridView2.BackgroundColor = Color.Lavender;
-            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle2.BackColor = SystemColors.Control;
-            dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F);
-            dataGridViewCellStyle2.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle2.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
-            dataGridView2.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle4.BackColor = SystemColors.Control;
+            dataGridViewCellStyle4.Font = new Font("Segoe UI", 9F);
+            dataGridViewCellStyle4.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle4.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle4.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle4.WrapMode = DataGridViewTriState.True;
+            dataGridView2.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle4;
             dataGridView2.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridView2.Columns.AddRange(new DataGridViewColumn[] { dataGridViewTextBoxColumn1, dataGridViewTextBoxColumn2, dataGridViewTextBoxColumn3, dataGridViewTextBoxColumn4, dataGridViewTextBoxColumn5, dataGridViewTextBoxColumn6, dataGridViewTextBoxColumn7, dataGridViewTextBoxColumn8, dataGridViewTextBoxColumn9, dataGridViewTextBoxColumn10, dataGridViewTextBoxColumn11, Column12, Column15 });
             dataGridView2.Location = new Point(40, 61);
@@ -1210,7 +1211,7 @@
             // 
             label18.AutoSize = true;
             label18.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label18.Location = new Point(571, 632);
+            label18.Location = new Point(581, 655);
             label18.Name = "label18";
             label18.Size = new Size(453, 13);
             label18.TabIndex = 15;
@@ -1220,7 +1221,7 @@
             // 
             label16.AutoSize = true;
             label16.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label16.Location = new Point(26, 608);
+            label16.Location = new Point(12, 634);
             label16.Name = "label16";
             label16.Size = new Size(563, 13);
             label16.TabIndex = 14;
@@ -1249,7 +1250,7 @@
             // 
             label20.AutoSize = true;
             label20.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label20.Location = new Point(26, 648);
+            label20.Location = new Point(12, 674);
             label20.Name = "label20";
             label20.Size = new Size(514, 26);
             label20.TabIndex = 18;
@@ -1258,7 +1259,7 @@
             // label5
             // 
             label5.AutoSize = true;
-            label5.Location = new Point(571, 647);
+            label5.Location = new Point(581, 670);
             label5.Name = "label5";
             label5.Size = new Size(537, 15);
             label5.TabIndex = 19;
@@ -1267,7 +1268,7 @@
             // label8
             // 
             label8.AutoSize = true;
-            label8.Location = new Point(570, 662);
+            label8.Location = new Point(580, 685);
             label8.Name = "label8";
             label8.Size = new Size(459, 15);
             label8.TabIndex = 20;
@@ -1277,7 +1278,7 @@
             // 
             infobutton.BackColor = Color.MistyRose;
             infobutton.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            infobutton.Location = new Point(1064, 610);
+            infobutton.Location = new Point(1064, 629);
             infobutton.Name = "infobutton";
             infobutton.Size = new Size(70, 23);
             infobutton.TabIndex = 21;
@@ -1289,7 +1290,7 @@
             // 
             label22.AutoSize = true;
             label22.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label22.Location = new Point(26, 625);
+            label22.Location = new Point(12, 651);
             label22.Name = "label22";
             label22.Size = new Size(218, 13);
             label22.TabIndex = 22;
@@ -1309,7 +1310,7 @@
             // 
             linksbutton1.BackColor = Color.MistyRose;
             linksbutton1.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            linksbutton1.Location = new Point(1140, 639);
+            linksbutton1.Location = new Point(1140, 658);
             linksbutton1.Name = "linksbutton1";
             linksbutton1.Size = new Size(70, 23);
             linksbutton1.TabIndex = 23;
@@ -1321,7 +1322,7 @@
             // 
             linksbutton2.BackColor = Color.MistyRose;
             linksbutton2.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            linksbutton2.Location = new Point(1140, 667);
+            linksbutton2.Location = new Point(1140, 686);
             linksbutton2.Margin = new Padding(0);
             linksbutton2.Name = "linksbutton2";
             linksbutton2.Size = new Size(70, 23);
@@ -1343,7 +1344,7 @@
             // 
             AusSWSbutton.BackColor = Color.MistyRose;
             AusSWSbutton.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            AusSWSbutton.Location = new Point(1140, 610);
+            AusSWSbutton.Location = new Point(1140, 629);
             AusSWSbutton.Name = "AusSWSbutton";
             AusSWSbutton.Size = new Size(70, 23);
             AusSWSbutton.TabIndex = 34;
@@ -1351,12 +1352,21 @@
             AusSWSbutton.UseVisualStyleBackColor = false;
             AusSWSbutton.Click += AusSWSbutton_Click;
             // 
+            // Burstwarninglabel
+            // 
+            Burstwarninglabel.AutoSize = true;
+            Burstwarninglabel.Location = new Point(20, 560);
+            Burstwarninglabel.Name = "Burstwarninglabel";
+            Burstwarninglabel.Size = new Size(19, 13);
+            Burstwarninglabel.TabIndex = 34;
+            Burstwarninglabel.Text = "---";
+            // 
             // Solar
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.SeaShell;
-            ClientSize = new Size(1222, 699);
+            ClientSize = new Size(1222, 712);
             Controls.Add(AusSWSbutton);
             Controls.Add(label23);
             Controls.Add(linksbutton2);
@@ -1526,5 +1536,6 @@
         private Label label29;
         private Label label28;
         private Label label27;
+        private Label Burstwarninglabel;
     }
 }
