@@ -29,8 +29,8 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
-            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
             getLatestbutton = new Button();
             forceUpdatebutton = new Button();
             textBox1 = new TextBox();
@@ -57,6 +57,9 @@
             datelabel = new Label();
             label7 = new Label();
             groupBox1 = new GroupBox();
+            currentBurstlabel = new Label();
+            label30 = new Label();
+            Burstwarninglabel = new Label();
             Burstgridbutton = new Button();
             BurstgroupBox = new GroupBox();
             label29 = new Label();
@@ -156,7 +159,6 @@
             linksbutton2 = new Button();
             label23 = new Label();
             AusSWSbutton = new Button();
-            Burstwarninglabel = new Label();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             groupBox1.SuspendLayout();
             BurstgroupBox.SuspendLayout();
@@ -397,6 +399,8 @@
             // 
             // groupBox1
             // 
+            groupBox1.Controls.Add(currentBurstlabel);
+            groupBox1.Controls.Add(label30);
             groupBox1.Controls.Add(Burstwarninglabel);
             groupBox1.Controls.Add(Burstgridbutton);
             groupBox1.Controls.Add(BurstgroupBox);
@@ -433,6 +437,33 @@
             groupBox1.TabIndex = 14;
             groupBox1.TabStop = false;
             groupBox1.Text = "Current solar data from Boulder, CO.";
+            // 
+            // currentBurstlabel
+            // 
+            currentBurstlabel.AutoSize = true;
+            currentBurstlabel.Location = new Point(562, 560);
+            currentBurstlabel.Name = "currentBurstlabel";
+            currentBurstlabel.Size = new Size(15, 13);
+            currentBurstlabel.TabIndex = 36;
+            currentBurstlabel.Text = "--";
+            // 
+            // label30
+            // 
+            label30.AutoSize = true;
+            label30.Location = new Point(441, 560);
+            label30.Name = "label30";
+            label30.Size = new Size(114, 13);
+            label30.TabIndex = 35;
+            label30.Text = "Current radio bursts:";
+            // 
+            // Burstwarninglabel
+            // 
+            Burstwarninglabel.AutoSize = true;
+            Burstwarninglabel.Location = new Point(20, 560);
+            Burstwarninglabel.Name = "Burstwarninglabel";
+            Burstwarninglabel.Size = new Size(19, 13);
+            Burstwarninglabel.TabIndex = 34;
+            Burstwarninglabel.Text = "---";
             // 
             // Burstgridbutton
             // 
@@ -947,14 +978,14 @@
             // 
             dataGridView3.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.ColumnHeader;
             dataGridView3.BackgroundColor = SystemColors.GradientInactiveCaption;
-            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle3.BackColor = SystemColors.Control;
-            dataGridViewCellStyle3.Font = new Font("Segoe UI", 9F);
-            dataGridViewCellStyle3.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle3.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle3.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle3.WrapMode = DataGridViewTriState.True;
-            dataGridView3.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle1.BackColor = SystemColors.Control;
+            dataGridViewCellStyle1.Font = new Font("Segoe UI", 9F);
+            dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
+            dataGridView3.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             dataGridView3.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridView3.Columns.AddRange(new DataGridViewColumn[] { dataGridViewTextBoxColumn12, dataGridViewTextBoxColumn14, dataGridViewTextBoxColumn15, dataGridViewTextBoxColumn16, dataGridViewTextBoxColumn17, dataGridViewTextBoxColumn18, dataGridViewTextBoxColumn19, dataGridViewTextBoxColumn20, dataGridViewTextBoxColumn21 });
             dataGridView3.Location = new Point(5, 59);
@@ -1101,14 +1132,14 @@
             // 
             dataGridView2.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.ColumnHeader;
             dataGridView2.BackgroundColor = Color.Lavender;
-            dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle4.BackColor = SystemColors.Control;
-            dataGridViewCellStyle4.Font = new Font("Segoe UI", 9F);
-            dataGridViewCellStyle4.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle4.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle4.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle4.WrapMode = DataGridViewTriState.True;
-            dataGridView2.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle2.BackColor = SystemColors.Control;
+            dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F);
+            dataGridViewCellStyle2.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle2.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
+            dataGridView2.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
             dataGridView2.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridView2.Columns.AddRange(new DataGridViewColumn[] { dataGridViewTextBoxColumn1, dataGridViewTextBoxColumn2, dataGridViewTextBoxColumn3, dataGridViewTextBoxColumn4, dataGridViewTextBoxColumn5, dataGridViewTextBoxColumn6, dataGridViewTextBoxColumn7, dataGridViewTextBoxColumn8, dataGridViewTextBoxColumn9, dataGridViewTextBoxColumn10, dataGridViewTextBoxColumn11, Column12, Column15 });
             dataGridView2.Location = new Point(40, 61);
@@ -1352,15 +1383,6 @@
             AusSWSbutton.UseVisualStyleBackColor = false;
             AusSWSbutton.Click += AusSWSbutton_Click;
             // 
-            // Burstwarninglabel
-            // 
-            Burstwarninglabel.AutoSize = true;
-            Burstwarninglabel.Location = new Point(20, 560);
-            Burstwarninglabel.Name = "Burstwarninglabel";
-            Burstwarninglabel.Size = new Size(19, 13);
-            Burstwarninglabel.TabIndex = 34;
-            Burstwarninglabel.Text = "---";
-            // 
             // Solar
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -1537,5 +1559,7 @@
         private Label label28;
         private Label label27;
         private Label Burstwarninglabel;
+        private Label currentBurstlabel;
+        private Label label30;
     }
 }

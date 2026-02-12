@@ -423,7 +423,7 @@ namespace WSPR_Solar
 
             await SaveBurstdata(date); //today
             await find_burst_data(false, "", "");
-            findBurstStorms();
+           
         }
 
 
@@ -886,6 +886,10 @@ namespace WSPR_Solar
                 }
                 reader.Close();
             }
+            else
+            {
+                Msg.TMessageBox("Unable to reach NOAA geomagnetic data", "Solar data", 1500);
+            }
         }
 
 
@@ -984,6 +988,7 @@ namespace WSPR_Solar
                 Msg.TMessageBox("Unable to reach NOAA radio burst data", "Solar data", 1000);
             }
         }
+
         List<string> st = new List<string>();
         List<string> st2 = new List<string>();
         public async Task findBurst()
@@ -1385,7 +1390,7 @@ namespace WSPR_Solar
                 }
                 Reader.Close();
                 connection.Close();
-
+                findBurstStorms();
 
             }
             catch
@@ -1438,34 +1443,45 @@ namespace WSPR_Solar
         }
 
 
-        private void findBurstStorms()
+        private bool findBurstStorms()
         {
             BurstdataGridView.Rows.Clear();
             int columns = dataGridView3.ColumnCount;
-            if (dataGridView3.Rows[2].Cells[0].Value != null)
+            int rows = dataGridView3.RowCount;
+            if (rows > 1)
             {
-                string cell = "";
-                for (int i = 1; i < columns; i++)
+                try
                 {
-                    if (dataGridView3.Rows[2].Cells[i].Value != null)
+                    if (dataGridView3.Rows[2].Cells[0].Value != null)
                     {
-                        cell = dataGridView3.Rows[2].Cells[i].Value.ToString();
+                        string cell = "";
+                        for (int i = 1; i < columns; i++)
+                        {
+                            if (dataGridView3.Rows[2].Cells[i].Value != null)
+                            {
+                                cell = dataGridView3.Rows[2].Cells[i].Value.ToString();
 
-                        ParseBurstStorms(cell, i - 1);
+                                ParseBurstStorms(cell, i - 1);
+                            }
+                        }
+                    }
+                    //BurstgroupBox.Visible = true;
+                    findcurrentBurst();
+                    BurstgroupBox.BringToFront();
+                    string B = "";
+                    for (int b = 0; b < columns; b++)
+                    {
+                        B = bd.span[b] + Environment.NewLine + bd.band[b] + Environment.NewLine + bd.Level[b];
+                        BurstdataGridView.Rows[0].Cells[b].Value = B;
                     }
                 }
+                catch { }
+                return true;
             }
-            //BurstgroupBox.Visible = true;
-            findcurrentBurst();
-            BurstgroupBox.BringToFront();
-            string B = "";
-            for (int b = 0; b < columns; b++)
+            else
             {
-                B = bd.span[b] + Environment.NewLine + bd.band[b] + Environment.NewLine + bd.Level[b];
-                BurstdataGridView.Rows[0].Cells[b].Value = B;
+                return false;
             }
-            
-
         }
         struct BurstData()
         {
@@ -1642,7 +1658,7 @@ namespace WSPR_Solar
                 bd.band[period] = "";
             }           
             bd.Level[period] = LStr;
-            if (overallDur > 2)
+            if (overallDur > 0)
             {
                 bd.span[period] = overallDur.ToString() + " mins";
             }
@@ -1717,27 +1733,40 @@ namespace WSPR_Solar
             string O = "";
            
             string N = bd.Level[p].ToUpper();
-          
+
             if (N.Contains("INSIGNIFICANT") || N.Contains("NONE"))
             {
                 Burstwarninglabel.Text = "---";
-                return;
-            }
-            if (!N.Contains("WEAK") && N != "")
-            {
-                if (bd.band[p].ToUpper().Contains("WIDEBAND"))
-                {
-                    B = "wideband";
-                    O = "";
-                }
-                else
-                {
-                    O = "affecting " + bd.band[p];
-                    B = "";
-                }
 
-                Burstwarninglabel.Text = "Reception may be affected by " + bd.Level[p].ToLower() + " " + B + " radio bursts " + O;
             }
+            else
+            {
+                if (!N.Contains("WEAK") && N != "")
+                {
+                    if (bd.band[p].ToUpper().Contains("WIDEBAND"))
+                    {
+                        B = "wideband";
+                        O = "";
+                    }
+                    else
+                    {
+                        O = "affecting " + bd.band[p];
+                        B = "";
+                    }
+
+                    Burstwarninglabel.Text = "Reception may be affected by " + bd.Level[p].ToLower() + " " + B + " radio bursts " + O;
+                }
+            }
+           
+            if (bd.Level[p].ToUpper().Contains("NONE"))
+            {
+                currentBurstlabel.Text = bd.Level[p].ToLower() + " bursts";
+            }
+            else
+            {
+                currentBurstlabel.Text = "some " + bd.Level[p] + " " + bd.band[p] + " bursts";
+            }
+
                 
 
         }
@@ -3082,7 +3111,14 @@ namespace WSPR_Solar
                 return;
             }
 
-            using HttpClient client = new HttpClient();
+            bool ok = false;
+            ok = await Msg.IsUrlReachable(url);
+            if (!ok) 
+            { 
+                Msg.TMessageBox("Unable to reach NOAA", "GOES data ", 1500); return;
+            }
+
+                using HttpClient client = new HttpClient();
             string satno = "";
             try
             {
@@ -3527,7 +3563,11 @@ namespace WSPR_Solar
 
             }
 
-            await checkNOAA();
+            bool check = await checkNOAA();
+            if (!check) 
+            { 
+                Msg.TMessageBox("Unable to reach NOAA", "NOAA data", 1500); 
+            }
 
 
             if (timercount == 8)    //40 mins
@@ -3655,9 +3695,16 @@ namespace WSPR_Solar
         {
             if (Burstgridbutton.Text == "Radio bursts")
             {
-                BurstgroupBox.Visible = true;
-                BurstgroupBox.BringToFront();
-                Burstgridbutton.Text = "Hide bursts";
+                if (findBurstStorms()) 
+                { 
+                    BurstgroupBox.Visible = true;
+                    BurstgroupBox.BringToFront();
+                    Burstgridbutton.Text = "Hide bursts";
+                }
+                else
+                {                    
+                    Msg.TMessageBox("Try again in a moment ...", "Radio bursts", 2000);
+                }
             }
             else
             {
