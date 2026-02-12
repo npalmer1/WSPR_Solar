@@ -531,9 +531,9 @@
             label26.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
             label26.Location = new Point(6, 100);
             label26.Name = "label26";
-            label26.Size = new Size(346, 13);
+            label26.Size = new Size(348, 13);
             label26.TabIndex = 1;
-            label26.Text = "Note: \"wideband\" may be any range of freqencies from VLF to SHF";
+            label26.Text = "Note: \"wideband\" may be any range of freqencies from VLF to UHF";
             // 
             // BurstdataGridView
             // 
