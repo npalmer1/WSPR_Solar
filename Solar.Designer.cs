@@ -159,6 +159,8 @@
             linksbutton2 = new Button();
             label23 = new Label();
             AusSWSbutton = new Button();
+            label31 = new Label();
+            label32 = new Label();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             groupBox1.SuspendLayout();
             BurstgroupBox.SuspendLayout();
@@ -480,6 +482,8 @@
             // BurstgroupBox
             // 
             BurstgroupBox.BackColor = Color.LemonChiffon;
+            BurstgroupBox.Controls.Add(label32);
+            BurstgroupBox.Controls.Add(label31);
             BurstgroupBox.Controls.Add(label29);
             BurstgroupBox.Controls.Add(label28);
             BurstgroupBox.Controls.Add(label27);
@@ -487,9 +491,9 @@
             BurstgroupBox.Controls.Add(BurstdataGridView);
             BurstgroupBox.FlatStyle = FlatStyle.Popup;
             BurstgroupBox.ForeColor = SystemColors.MenuText;
-            BurstgroupBox.Location = new Point(143, 305);
+            BurstgroupBox.Location = new Point(99, 252);
             BurstgroupBox.Name = "BurstgroupBox";
-            BurstgroupBox.Size = new Size(924, 125);
+            BurstgroupBox.Size = new Size(1020, 145);
             BurstgroupBox.TabIndex = 32;
             BurstgroupBox.TabStop = false;
             BurstgroupBox.Text = "Summary of significant radio bursts today";
@@ -499,7 +503,7 @@
             // 
             label29.AutoSize = true;
             label29.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label29.Location = new Point(16, 58);
+            label29.Location = new Point(34, 56);
             label29.Name = "label29";
             label29.Size = new Size(86, 13);
             label29.TabIndex = 4;
@@ -509,7 +513,7 @@
             // 
             label28.AutoSize = true;
             label28.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label28.Location = new Point(67, 71);
+            label28.Location = new Point(85, 69);
             label28.Name = "label28";
             label28.Size = new Size(35, 13);
             label28.TabIndex = 3;
@@ -519,7 +523,7 @@
             // 
             label27.AutoSize = true;
             label27.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label27.Location = new Point(19, 45);
+            label27.Location = new Point(37, 43);
             label27.Name = "label27";
             label27.Size = new Size(83, 13);
             label27.TabIndex = 2;
@@ -529,7 +533,7 @@
             // 
             label26.AutoSize = true;
             label26.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label26.Location = new Point(6, 100);
+            label26.Location = new Point(6, 118);
             label26.Name = "label26";
             label26.Size = new Size(348, 13);
             label26.TabIndex = 1;
@@ -540,13 +544,13 @@
             BurstdataGridView.BackgroundColor = SystemColors.Info;
             BurstdataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             BurstdataGridView.Columns.AddRange(new DataGridViewColumn[] { Col1, Col2, Col3, Col4, Col5, Col6, Col7, Col8 });
-            BurstdataGridView.Location = new Point(107, 22);
+            BurstdataGridView.Location = new Point(126, 21);
             BurstdataGridView.Name = "BurstdataGridView";
             BurstdataGridView.ReadOnly = true;
             BurstdataGridView.RowHeadersVisible = false;
             BurstdataGridView.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
             BurstdataGridView.RowTemplate.Height = 50;
-            BurstdataGridView.Size = new Size(809, 70);
+            BurstdataGridView.Size = new Size(883, 94);
             BurstdataGridView.TabIndex = 0;
             // 
             // Col1
@@ -554,48 +558,56 @@
             Col1.HeaderText = "00-03";
             Col1.Name = "Col1";
             Col1.ReadOnly = true;
+            Col1.Width = 110;
             // 
             // Col2
             // 
             Col2.HeaderText = "03-06";
             Col2.Name = "Col2";
             Col2.ReadOnly = true;
+            Col2.Width = 110;
             // 
             // Col3
             // 
             Col3.HeaderText = "06-09";
             Col3.Name = "Col3";
             Col3.ReadOnly = true;
+            Col3.Width = 110;
             // 
             // Col4
             // 
             Col4.HeaderText = "09-12";
             Col4.Name = "Col4";
             Col4.ReadOnly = true;
+            Col4.Width = 110;
             // 
             // Col5
             // 
             Col5.HeaderText = "12-15";
             Col5.Name = "Col5";
             Col5.ReadOnly = true;
+            Col5.Width = 110;
             // 
             // Col6
             // 
             Col6.HeaderText = "15-18";
             Col6.Name = "Col6";
             Col6.ReadOnly = true;
+            Col6.Width = 110;
             // 
             // Col7
             // 
             Col7.HeaderText = "18-21";
             Col7.Name = "Col7";
             Col7.ReadOnly = true;
+            Col7.Width = 110;
             // 
             // Col8
             // 
             Col8.HeaderText = "21-00";
             Col8.Name = "Col8";
             Col8.ReadOnly = true;
+            Col8.Width = 110;
             // 
             // RClabel
             // 
@@ -1383,6 +1395,24 @@
             AusSWSbutton.UseVisualStyleBackColor = false;
             AusSWSbutton.Click += AusSWSbutton_Click;
             // 
+            // label31
+            // 
+            label31.AutoSize = true;
+            label31.Location = new Point(27, 81);
+            label31.Name = "label31";
+            label31.Size = new Size(93, 13);
+            label31.TabIndex = 5;
+            label31.Text = "Short bursts no.:";
+            // 
+            // label32
+            // 
+            label32.AutoSize = true;
+            label32.Location = new Point(34, 96);
+            label32.Name = "label32";
+            label32.Size = new Size(86, 13);
+            label32.TabIndex = 6;
+            label32.Text = "Long burst no.:";
+            // 
             // Solar
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -1545,14 +1575,6 @@
         private Button AusSWSbutton;
         private GroupBox BurstgroupBox;
         private DataGridView BurstdataGridView;
-        private DataGridViewTextBoxColumn Col1;
-        private DataGridViewTextBoxColumn Col2;
-        private DataGridViewTextBoxColumn Col3;
-        private DataGridViewTextBoxColumn Col4;
-        private DataGridViewTextBoxColumn Col5;
-        private DataGridViewTextBoxColumn Col6;
-        private DataGridViewTextBoxColumn Col7;
-        private DataGridViewTextBoxColumn Col8;
         private Button Burstgridbutton;
         private Label label26;
         private Label label29;
@@ -1561,5 +1583,15 @@
         private Label Burstwarninglabel;
         private Label currentBurstlabel;
         private Label label30;
+        private DataGridViewTextBoxColumn Col1;
+        private DataGridViewTextBoxColumn Col2;
+        private DataGridViewTextBoxColumn Col3;
+        private DataGridViewTextBoxColumn Col4;
+        private DataGridViewTextBoxColumn Col5;
+        private DataGridViewTextBoxColumn Col6;
+        private DataGridViewTextBoxColumn Col7;
+        private DataGridViewTextBoxColumn Col8;
+        private Label label32;
+        private Label label31;
     }
 }
