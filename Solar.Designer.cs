@@ -62,6 +62,8 @@
             Burstwarninglabel = new Label();
             Burstgridbutton = new Button();
             BurstgroupBox = new GroupBox();
+            label32 = new Label();
+            label31 = new Label();
             label29 = new Label();
             label28 = new Label();
             label27 = new Label();
@@ -159,8 +161,6 @@
             linksbutton2 = new Button();
             label23 = new Label();
             AusSWSbutton = new Button();
-            label31 = new Label();
-            label32 = new Label();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             groupBox1.SuspendLayout();
             BurstgroupBox.SuspendLayout();
@@ -498,6 +498,24 @@
             BurstgroupBox.TabStop = false;
             BurstgroupBox.Text = "Summary of significant radio bursts today";
             BurstgroupBox.Visible = false;
+            // 
+            // label32
+            // 
+            label32.AutoSize = true;
+            label32.Location = new Point(34, 96);
+            label32.Name = "label32";
+            label32.Size = new Size(86, 13);
+            label32.TabIndex = 6;
+            label32.Text = "Long burst no.:";
+            // 
+            // label31
+            // 
+            label31.AutoSize = true;
+            label31.Location = new Point(32, 81);
+            label31.Name = "label31";
+            label31.Size = new Size(88, 13);
+            label31.TabIndex = 5;
+            label31.Text = "Short burst no.:";
             // 
             // label29
             // 
@@ -1394,24 +1412,6 @@
             AusSWSbutton.Text = "Aus SWS";
             AusSWSbutton.UseVisualStyleBackColor = false;
             AusSWSbutton.Click += AusSWSbutton_Click;
-            // 
-            // label31
-            // 
-            label31.AutoSize = true;
-            label31.Location = new Point(27, 81);
-            label31.Name = "label31";
-            label31.Size = new Size(93, 13);
-            label31.TabIndex = 5;
-            label31.Text = "Short bursts no.:";
-            // 
-            // label32
-            // 
-            label32.AutoSize = true;
-            label32.Location = new Point(34, 96);
-            label32.Name = "label32";
-            label32.Size = new Size(86, 13);
-            label32.TabIndex = 6;
-            label32.Text = "Long burst no.:";
             // 
             // Solar
             // 
