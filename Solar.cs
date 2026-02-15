@@ -31,6 +31,7 @@ using System.Text;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 using System.Windows.Forms;
@@ -650,13 +651,19 @@ namespace WSPR_Solar
             {
                 P = P + " ...Sun: " + activity_level;
             }
-            if (GClabel.Text.Contains("G") || RClabel.Text.Contains("R") || SClabel.Text.Contains("S") || activity_level.Contains("storm"))
+            if (GClabel.Text.Contains("G") || RClabel.Text.Contains("R") || SClabel.Text.Contains("S"))
             {
-                stormconditionlabel.Text = "Possibly unstable/degraded (storm or blackout)";
+                string S = findStormLevel(activity_level, GClabel.Text, RClabel.Text, SClabel.Text, false);
+                stormconditionlabel.Text = S;
+            }
+            else if (activity_level.Contains("storm"))
+            {
+                stormconditionlabel.Text = "Possibly unstable/degraded ("+activity_level+")";
             }
             else if (Glabel.Text.Contains("G") || Rlabel.Text.Contains("R") || Slabel.Text.Contains("S"))
             {
-                stormconditionlabel.Text = "Likely normal, but storm or blackout reported earlier";
+                string S = findStormLevel(activity_level, Glabel.Text, Rlabel.Text, Slabel.Text, true);
+                stormconditionlabel.Text = S;
             }
             else
             {
@@ -664,6 +671,93 @@ namespace WSPR_Solar
             }
             conditionlabel.Text = F + "Higher HF propagation: " + P;
             return P;
+        }
+
+        private string findStormLevel(string activity, string G, string R, string S, bool previous)
+        {
+            string s = "";
+            string r = "";
+            int level = 0;
+            int Alevel = 0;   
+            if (G.Contains("1") || (R.Contains("1")) || S.Contains("1"))
+            {
+                level = 1;  //minor
+            }
+            else if (G.Contains("2") || (R.Contains("2")) || S.Contains("2"))
+            {
+                level = 2;  //moderate
+            }
+            else if (G.Contains("3") || (R.Contains("3")) || S.Contains("3"))
+            {
+                level = 3;  //strong
+            }
+            else if (G.Contains("4") || (R.Contains("4")) || S.Contains("4"))
+            {
+                level = 4;  //severe
+            }
+            else if (G.Contains("5") || (R.Contains("5")) || S.Contains("5"))
+            {
+                level = 5;  //extreme
+            }          
+            if (activity.Contains("minor") )
+            {
+               Alevel = 1;
+            }           
+            else if (activity.Contains("major") )
+            {
+                Alevel = 2;
+            }           
+            else if (activity.Contains("severe"))
+            {
+                Alevel = 3;
+            }
+
+            if (level ==1 || Alevel == 1)
+            {                
+                s = "minor";
+                r = "Possibly slightly unstable/degraded (" + s + " storm or blackout)";
+                if (previous)
+                {
+                    r = "Likely normal, but " + s + " storm or blackout reported earlier";
+                }
+            }
+            else if (level == 2 && Alevel <2)
+            {
+                s = "moderate";
+                r = "Possibly moderately unstable/degraded (" + s + " storm or blackout)";
+                if (previous)
+                {
+                    r = "Likely normal, but " + s + " storm or blackout reported earlier";
+                }
+            }
+            else if (level == 3 || Alevel ==2)
+            {
+                s = "strong";
+                r = "Possibly quite unstable/degraded (" + s + " storm or blackout)";
+                if (previous)
+                {
+                    r = "Likely returning to normal (" + s + " storm or blackout reported earlier)";
+                }
+            }
+            else if (level == 4 || Alevel == 3)
+            {
+                s = "severe";
+                r = "Likely severely unstable/degraded (" + s + " storm or blackout)";
+                if (previous)
+                {
+                    r = "Likely returning to normal (" + s + " storm or blackout reported earlier)";
+                }
+            }
+            else if (level == 5)
+            {
+                s = "extreme";
+                r = "Likely extremely unstable/degraded (" + s + " storm or blackout)";
+                if (previous)
+                {
+                    r = "Likely normal/disturbed, " + s + " storm or blackout reported earlier";
+                }
+            }             
+            return r;            
         }
 
         private async Task populateGrid(int row)
@@ -1824,7 +1918,7 @@ namespace WSPR_Solar
 
             if (N.Contains("INSIGNIFICANT") || N.Contains("NONE"))
             {
-                Burstwarninglabel.Text = "---";
+                Burstwarninglabel.Text = "No significant radio bursts";
 
             }
             else
