@@ -1600,8 +1600,10 @@ namespace WSPR_Solar
             int overallDur = 0;
             int RBRcount = 0;
             int RBRHFcount = 0;
+            int RBRUcount = 0;
             int RNScount = 0;
             int RNSHFcount = 0;
+            int RNSUcount = 0;
 
             using (StringReader reader = new StringReader(cell))
             {
@@ -1721,11 +1723,15 @@ namespace WSPR_Solar
                         {
                             f = Convert.ToInt32(S[2]);
                         }
-                        if (f > 30)
+                        if (f > 30 && f <300)
                         {
                             RBRcount++;
                         }
-                        else if (f <= 30 && f> 0)
+                        else if (f >= 300)
+                        {
+                            RBRUcount++;
+                        }
+                        else if (f <= 30 && f > 0)
                         {
                             RBRHFcount++;
                         }
@@ -1738,11 +1744,15 @@ namespace WSPR_Solar
                         {
                             f = Convert.ToInt32(S[2]);
                         }
-                        if (f > 30)
+                        if (f > 30 && f < 300)
                         {
                             RNScount++;
                         }
-                        else if (f <= 30 && f> 0)
+                        else if (f >= 300)
+                        {
+                            RNSUcount++;
+                        }
+                        else if (f <= 30 && f > 0)
                         {
                             RNSHFcount++;
                         }
@@ -1802,18 +1812,22 @@ namespace WSPR_Solar
                     bd.span[period] = overallDur.ToString() + " mins";
                 }
 
-                if (RBRcount > 0)
+                if (RBRcount > 0 || RBRHFcount >0 || RBRUcount >0)
                 {
                     if (RBRHFcount > 0)
                     {
                         bd.rbr[period] = (RBRcount + RBRHFcount).ToString() + " short HF/VHF";
+                    }
+                    else if (RBRUcount > 0)
+                    {
+                        bd.rbr[period] = (RBRUcount).ToString() + " short UHF";
                     }
                     else
                     {
                         bd.rbr[period] = RBRcount.ToString() + " short VHF";
                     }
                 }
-                else if (RBRHFcount > 0 && RBRcount < 1)
+                else if (RBRHFcount > 0 && RBRcount < 1 && RBRUcount <1)
                 {
                     bd.rbr[period] = RBRHFcount.ToString() + " short HF";
                 }
@@ -1822,18 +1836,22 @@ namespace WSPR_Solar
                     bd.rbr[period] = "";
                 }
 
-                if (RNScount > 0)
+                if (RNScount > 0 || RNSHFcount >0 || RNSUcount >0)
                 {
                     if (RNSHFcount > 0)
                     {
                         bd.rns[period] = (RNScount + RNSHFcount).ToString() + " long HF/VHF";
+                    }
+                    else if (RNSUcount > 0)
+                    {
+                        bd.rns[period] = (RNSUcount).ToString() + " long UHF";
                     }
                     else
                     {
                         bd.rns[period] = RNScount.ToString() + " long VHF";
                     }
                 }
-                else if (RNSHFcount > 0 && RNScount < 1)
+                else if (RNSHFcount > 0 && RNScount < 1 && RNSUcount <1)
                 {
                     bd.rns[period] = RNSHFcount.ToString() + " long HF";
                 }
