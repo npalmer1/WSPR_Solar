@@ -221,7 +221,7 @@ namespace WSPR_Solar
         private void Solar_Load(object sender, EventArgs e)
         {
             System.Version version = Assembly.GetExecutingAssembly().GetName().Version;
-            string ver = "0.1.13";
+            string ver = "0.1.14";
             this.Text = "WSPR Solar                       V." + ver + "    GNU GPLv3 License";
 
             //solarstartuptimer.Enabled = true;
@@ -1568,7 +1568,7 @@ namespace WSPR_Solar
                     for (int b = 0; b < columns-1; b++)
                     {
                         B = "";
-                        string s = "/";
+                        string s = "min/";
                         if (bd.RSPspan[b] == "")
                         {
                             s = "";
@@ -1580,10 +1580,21 @@ namespace WSPR_Solar
                             B = B + bd.RSPspan[b] + s + bd.RSPband[b] + Environment.NewLine;
                         }
 
-                        B = B + bd.rbrSpan[b] + " " + bd.rbrLevel[b] + Environment.NewLine;
-                        B = B + bd.rnsSpan[b] + " " + bd.rnsLevel[b];
+                        string min = "";
+                        if (bd.rbrSpan[b] != "")
+                        {
+                            min = "min ";
+                        }
+                        B = B + bd.rbrSpan[b] + min + " " + bd.rbrLevel[b] + Environment.NewLine;
+                        min = "";
+                        if (bd.rnsSpan[b] != "")
+                        {
+                            min = "min ";
+                        }
+                        B = B + bd.rnsSpan[b] + min+ " " + bd.rnsLevel[b];
                         BurstdataGridView.Rows[0].Cells[b].Value = B;
                     }
+                  
                     findcurrentBurst();
                 }
                 catch {
@@ -1715,7 +1726,7 @@ namespace WSPR_Solar
                                 rspDur = rspDur + dur;
                                 if ((dur > 3) && Level < 3)
                                 {
-                                    LStr = "Severe";
+                                    LStr = "Strong";
                                     Level = 3;
                                 }
                             }
@@ -1724,8 +1735,17 @@ namespace WSPR_Solar
                                 rspDur = rspDur + dur;
                                 if ((dur > 3) && Level < 4)
                                 {
-                                    LStr = "Extreme";
+                                    LStr = "Severe";
                                     Level = 4;
+                                }
+                            }
+                            else if (line.EndsWith("/5"))
+                            {
+                                rspDur = rspDur + dur;
+                                if ((dur > 3) && Level < 5)
+                                {
+                                    LStr = "Extreme";
+                                    Level = 5;
                                 }
                             }
                             if (line.Contains("III") || (line.Contains("VI")))
@@ -1863,7 +1883,7 @@ namespace WSPR_Solar
                 bd.RSPlevel[period] = LStr;
                 if (rspDur > 5)
                 {
-                    bd.RSPspan[period] = rspDur.ToString() + "mins";
+                    bd.RSPspan[period] = rspDur.ToString(); // + "mins";
                 }
                 else
                 {
@@ -1871,7 +1891,7 @@ namespace WSPR_Solar
                 }
                 if (rbrDur > 0)
                 {
-                    bd.rbrSpan[period] = rbrDur.ToString() + "mins";
+                    bd.rbrSpan[period] = rbrDur.ToString(); // + "mins";
                     if (rbrLevel > 0)
                     {
                         bd.rbrLevel[period] = findIntensity(rbrLevel);
@@ -1885,7 +1905,7 @@ namespace WSPR_Solar
                 }
                 if (rnsDur > 0)
                 {
-                    bd.rnsSpan[period] = rnsDur.ToString() + "mins";
+                    bd.rnsSpan[period] = rnsDur.ToString(); // + "mins";
                     if (rnsLevel > 0)
                     {
                         bd.rnsLevel[period] = findIntensity(rnsLevel);
@@ -1993,7 +2013,6 @@ namespace WSPR_Solar
 
         private void findcurrentBurst()
         {
-
             DateTime now = DateTime.Now.ToUniversalTime();
             int hour = now.Hour;
             int p = findHour();
@@ -2036,9 +2055,13 @@ namespace WSPR_Solar
                     {
                         RSP = 3;
                     }
-                    else if (r.ToLower().Contains("extreme"))
+                    else if (r.ToLower().Contains("very strong"))
                     {
                         RSP = 4;
+                    }
+                    else if (r.ToLower().Contains("extreme"))
+                    {
+                        RSP = 5;
                     }
 
                     if (bd.RSPband[p].ToLower().Contains("wideband"))
@@ -2074,7 +2097,7 @@ namespace WSPR_Solar
                 }
                 else if (bd.rbrLevel[p].ToLower().Contains("extreme"))
                 {
-                    RBR = 4;
+                    RBR = 5;
                 }
 
                 if (bd.rnsLevel[p].ToLower().Contains("very low"))
@@ -2089,17 +2112,18 @@ namespace WSPR_Solar
                 {
                     RNS = 2;
                 }
-                else if (bd.rnsLevel[p].ToLower().Contains("high"))
-                {
-                    RNS = 3;
-                }
+               
                 else if (bd.rnsLevel[p].ToLower().Contains("very high"))
                 {
                     RNS = 4;
                 }
+                else if (bd.rnsLevel[p].ToLower().Contains("high"))
+                {
+                    RNS = 3;
+                }
                 else if (bd.rnsLevel[p].ToLower().Contains("extreme"))
                 {
-                    RNS = 4;
+                    RNS = 5;
                 }
 
                 if (RSP >= RBR)
@@ -2131,7 +2155,11 @@ namespace WSPR_Solar
                 {
                     RLevel = "strong";
                 }
-                else if (totalLevel >= 4)
+                else if (totalLevel ==4)
+                {
+                    RLevel = "very strong";
+                }
+                else if (totalLevel >= 5)
                 {
                     RLevel = "extreme";
 
@@ -2159,7 +2187,7 @@ namespace WSPR_Solar
                 {
                     O = "No significant radio bursts at present";
                 }
-                string P = findPreviousBurst();
+                string P = findPreviousBurst(p);
                 if (P != "" && O.Contains("No significant"))
                 {
                     O = O + ", but " + P + " bursts reported earlier";
@@ -2168,7 +2196,176 @@ namespace WSPR_Solar
             catch { }
             Burstwarninglabel.Text = O;
         }
-        private string findPreviousBurst()
+
+
+        private int findMaxBurst(int p)
+        {
+
+
+            if (p < 0)
+            {
+                current_burst_band = "";
+                current_burst_level = "";
+                return 0;
+            }
+  
+            int RSP = 0;
+            int RNS = 0;
+            int RBR = 0;
+            int totalLevel = 0;           
+
+            string r = bd.RSPlevel[p].ToLower();
+            try
+            {
+                if ((r.Contains("insignificant") || r.Contains("none")) && (bd.rbrLevel[p] == "" && bd.rnsLevel[p] == ""))
+                {
+                  
+                    RSP = 0;
+                }
+                else
+                {
+                    if (r.Contains("weak"))
+                    {
+                        RSP = 1;
+                    }
+                    else if (r.Contains("moderate"))
+                    {
+                        RSP = 2;
+                    }
+                    else if (r.Contains("strong"))
+                    {
+                        RSP = 3;
+                    }
+                    else if (r.ToLower().Contains("very strong"))
+                    {
+                        RSP = 4;
+                    }
+                    else if (r.ToLower().Contains("extreme"))
+                    {
+                        RSP = 5;
+                    }
+
+                }
+                if (bd.rbrLevel[p].ToLower().Contains("very low"))
+                {
+                    RBR = 0;
+                }
+                else if (bd.rbrLevel[p].ToLower().Contains("low"))
+                {
+                    RBR = 1;
+                }
+                else if (bd.rbrLevel[p].ToLower().Contains("moderate"))
+                {
+                    RBR = 2;
+                }
+                else if (bd.rbrLevel[p].ToLower().Contains("high"))
+                {
+                    RBR = 3;
+                }
+                else if (bd.rbrLevel[p].ToLower().Contains("very high"))
+                {
+                    RBR = 4;
+                }
+                else if (bd.rbrLevel[p].ToLower().Contains("extreme"))
+                {
+                    RBR = 5;
+                }
+
+                if (bd.rnsLevel[p].ToLower().Contains("very low"))
+                {
+                    RNS = 0;
+                }
+                else if (bd.rnsLevel[p].ToLower().Contains("low"))
+                {
+                    RNS = 1;
+                }
+                else if (bd.rnsLevel[p].ToLower().Contains("moderate"))
+                {
+                    RNS = 2;
+                }
+
+                else if (bd.rnsLevel[p].ToLower().Contains("very high"))
+                {
+                    RNS = 4;
+                }
+                else if (bd.rnsLevel[p].ToLower().Contains("high"))
+                {
+                    RNS = 3;
+                }
+                else if (bd.rnsLevel[p].ToLower().Contains("extreme"))
+                {
+                    RNS = 5;
+                }
+
+                if (RSP >= RBR)
+                {
+                    totalLevel = RSP;
+                }
+                else
+                {
+                    totalLevel = RBR;
+                }
+                if (totalLevel < RNS)
+                {
+                    totalLevel = RNS;
+                }
+                return totalLevel;
+            
+            }
+            catch { return 0; }
+        }
+
+        private string findPreviousBurst(int p)
+        {
+            string S = "";
+            int maxlevel = 0;
+            int level = 0;
+            try
+            {
+                if (p <1)
+                { return ""; }
+
+                for (int i = 0; i < p; i++)
+                {
+                    level = findMaxBurst(i);
+                    if (level > maxlevel)
+                    {
+                        maxlevel = level;
+                    }
+
+                }
+                
+                    if (maxlevel == 0)
+                    {
+                        S = "";
+                    }
+                    else if (maxlevel == 1)
+                    {
+                        S = "weak";
+                    }
+                    else if (maxlevel == 2)
+                    {
+                        S = "moderate";
+                    }
+                    else if (maxlevel == 3)
+                    {
+                        S = "strong";
+                    }
+                    else if (maxlevel >= 4)
+                    {
+                        S = "very strong";
+                    }
+                else if (maxlevel >= 5)
+                {
+                    S = "extreme";
+                }
+
+            }
+            catch { }
+            return S;
+        }
+
+        /*private string findPreviousBurst()
         {
             string S = "";
             int level = 0;
@@ -2210,7 +2407,7 @@ namespace WSPR_Solar
                                     level = 3;
                                 }
                             }
-                           
+
                         }
                     }
                     if (level == 0)
@@ -2237,7 +2434,8 @@ namespace WSPR_Solar
             }
             catch { }
             return S;
-        }
+        }*/
+
         private void findcurrentBurst_OLD()
         {
 
