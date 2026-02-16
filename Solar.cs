@@ -1102,7 +1102,7 @@ namespace WSPR_Solar
             st.Clear();
             st2.Clear();
 
-            if (results.Contains("RB") || results.Contains("RSP") || results.Contains("RNS"))
+            if (results.Contains("RBR") || results.Contains("RSP") || results.Contains("RNS"))
             {
                 int index = 0;
                 using var reader = new StringReader(results);
@@ -1562,10 +1562,10 @@ namespace WSPR_Solar
                         }
                     }
                     //BurstgroupBox.Visible = true;
-                    findcurrentBurst();
+                   
                     BurstgroupBox.BringToFront();
                     string B = "";
-                    for (int b = 0; b < columns; b++)
+                    for (int b = 0; b < columns-1; b++)
                     {
                         B = "";
                         string s = "/";
@@ -1584,8 +1584,11 @@ namespace WSPR_Solar
                         B = B + bd.rnsSpan[b] + " " + bd.rnsLevel[b];
                         BurstdataGridView.Rows[0].Cells[b].Value = B;
                     }
+                    findcurrentBurst();
                 }
-                catch { }
+                catch {
+                    Msg.TMessageBox("Test", "", 2000);
+                }
                 return true;
             }
             else
@@ -1692,7 +1695,7 @@ namespace WSPR_Solar
                             if (line.EndsWith("/1"))
                             {
                                 rspDur = rspDur + dur;
-                                if (dur > 6  && Level < 1)
+                                if (dur > 3  && Level < 1)
                                 {
                                     LStr = "Weak";
                                     Level = 1;
@@ -1701,7 +1704,7 @@ namespace WSPR_Solar
                             else if (line.EndsWith("/2"))
                             {
                                 rspDur = rspDur + dur;
-                                if ((dur > 6) && Level < 2)
+                                if ((dur > 3) && Level < 2)
                                 {
                                     LStr = "Moderate";
                                     Level = 2;
@@ -1710,7 +1713,7 @@ namespace WSPR_Solar
                             else if (line.EndsWith("/3"))
                             {
                                 rspDur = rspDur + dur;
-                                if ((dur > 6) && Level < 3)
+                                if ((dur > 3) && Level < 3)
                                 {
                                     LStr = "Severe";
                                     Level = 3;
@@ -1719,7 +1722,7 @@ namespace WSPR_Solar
                             else if (line.EndsWith("/4"))
                             {
                                 rspDur = rspDur + dur;
-                                if ((dur > 6) && Level < 4)
+                                if ((dur > 3) && Level < 4)
                                 {
                                     LStr = "Extreme";
                                     Level = 4;
@@ -1728,7 +1731,7 @@ namespace WSPR_Solar
                             if (line.Contains("III") || (line.Contains("VI")))
                             {
                                 if (!l1band.Contains("W")) { l1band = "W"; }
-                                if ((dur > 6 || rspDur > 10) && !band.Contains("W"))
+                                if ((dur > 3 || rspDur > 10) && !band.Contains("W"))
                                 {
                                     band = band + "W"; //wideband VLF - 1GHz
                                 }
@@ -1736,7 +1739,7 @@ namespace WSPR_Solar
                             else if (line.Contains("II") || line.Contains("V"))
                             {
                                 if (!l1band.Contains("T")) { l1band = "T"; }
-                                if ((dur > 6 || rspDur > 10) && !band.Contains("T"))
+                                if ((dur > 3 || rspDur > 10) && !band.Contains("T"))
                                 {
                                     band = band + "T"; //25-200MHz
                                 }
@@ -1744,7 +1747,7 @@ namespace WSPR_Solar
                             else if (line.Contains("I"))
                             {
                                 if (!l1band.Contains("V")) { l1band = "V"; }
-                                if ((dur > 6 || rspDur > 10) && !band.Contains("V"))
+                                if ((dur > 3 || rspDur > 10) && !band.Contains("V"))
                                 {
                                     band = band + "V"; //VHF
                                 }
@@ -1752,7 +1755,7 @@ namespace WSPR_Solar
                             else if (line.Contains("IV"))
                             {
                                 if (!l1band.Contains("G")) { l1band = "G"; }
-                                if ((dur > 6 || rspDur > 10) && !band.Contains("G"))
+                                if ((dur > 3 || rspDur > 10) && !band.Contains("G"))
                                 {
                                     band = band + "G"; //25MHz-2GHz
                                 }
@@ -1760,7 +1763,7 @@ namespace WSPR_Solar
                             else if (line.Contains("CTM"))
                             {
                                 if (!l1band.Contains("W")) { l1band = "W"; }
-                                if ((dur > 6 || rspDur > 10) && !band.Contains("W"))
+                                if ((dur > 3 || rspDur > 10) && !band.Contains("W"))
                                 {
                                     band = band + "W"; //25MHz-2GHz
                                 }
@@ -2011,218 +2014,228 @@ namespace WSPR_Solar
             string RLevel = "";
 
             string r = bd.RSPlevel[p].ToLower();
-            if ((r.Contains("insignificant") || r.Contains("none")) && (bd.rbrLevel[p] == "" && bd.rnsLevel[p] == ""))
+            try
             {
-                Burstwarninglabel.Text = "No significant radio bursts";
-                RLevel = "none";
-                RSP = 0;
-            }
-            else
-            {
-                if (r.Contains("weak"))
+                if ((r.Contains("insignificant") || r.Contains("none")) && (bd.rbrLevel[p] == "" && bd.rnsLevel[p] == ""))
                 {
-                    RSP = 1;
-                }
-                else if (r.Contains("moderate"))
-                {
-                    RSP = 2;
-                }
-                else if (r.Contains("strong"))
-                {
-                    RSP = 3;
-                }
-                else if (r.Contains("extreme"))
-                {
-                    RSP = 4;
-                }
-                if (bd.RSPband[p].ToUpper().Contains("WIDEBAND"))
-                {
-                    B = "wideband";
-
+                    Burstwarninglabel.Text = "No significant radio bursts";
+                    RLevel = "none";
+                    RSP = 0;
                 }
                 else
                 {
-                    B = bd.RSPband[p];
+                    if (r.Contains("weak"))
+                    {
+                        RSP = 1;
+                    }
+                    else if (r.Contains("moderate"))
+                    {
+                        RSP = 2;
+                    }
+                    else if (r.Contains("strong"))
+                    {
+                        RSP = 3;
+                    }
+                    else if (r.ToLower().Contains("extreme"))
+                    {
+                        RSP = 4;
+                    }
+
+                    if (bd.RSPband[p].ToLower().Contains("wideband"))
+                    {
+                        B = "wideband";
+
+                    }
+                    else
+                    {
+                        B = bd.RSPband[p];
+                    }
+
                 }
-
-            }
-            if (bd.rbrLevel[p].Contains("very low"))
-            {
-                RBR = 0;
-            }
-            else if (bd.rbrLevel[p].Contains("low"))
-            {
-                RBR = 1;
-            }
-            else if (bd.rbrLevel[p].Contains("moderate"))
-            {
-                RBR = 2;
-            }
-            else if (bd.rbrLevel[p].Contains("high"))
-            {
-                RBR = 3;
-            }
-            else if (bd.rbrLevel[p].Contains("very high"))
-            {
-                RBR = 4;
-            }
-            else if (bd.rbrLevel[p].Contains("extreme"))
-            {
-                RBR = 4;
-            }
-
-            if (bd.rnsLevel[p].Contains("very low"))
-            {
-                RNS = 0;
-            }
-            else if (bd.rnsLevel[p].Contains("low"))
-            {
-                RNS = 1;
-            }
-            else if (bd.rnsLevel[p].Contains("moderate"))
-            {
-                RNS = 2;
-            }
-            else if (bd.rnsLevel[p].Contains("high"))
-            {
-                RNS = 3;
-            }
-            else if (bd.rnsLevel[p].Contains("very high"))
-            {
-                RNS = 4;
-            }
-            else if (bd.rnsLevel[p].Contains("extreme"))
-            {
-                RNS = 4;
-            }
-
-            if (RSP >= RBR)
-            {
-                totalLevel = RSP;
-            }
-            else
-            {
-                totalLevel = RBR;
-            }
-            if (totalLevel < RNS)
-            {
-                totalLevel = RNS;
-            }
-            
-            if (totalLevel == 0)
-            {
-                RLevel = "none";
-            }
-            else if (totalLevel == 1)
-            {
-                RLevel = "weak";
-            }
-            else if (totalLevel == 2)
-            {
-                RLevel = "moderate";
-            }
-            else if (totalLevel == 3)
-            {
-                RLevel = "strong";
-            }
-            else if (totalLevel >= 4)
-            {
-                RLevel = "extreme";
-
-            }
-            string R = "";
-            if (RSP >0)
-            {
-                R = RLevel + " " + B + " radio sweep";
-            }
-            
-            if (RBR > 0 && RBR > RNS)
-            {
-                O = "short " + RLevel + " radio burst(s)";
-            }
-            if (RNS >0 && RNS >= RBR)
-            {
-                if (R.Contains("radio sweep"))
+                if (bd.rbrLevel[p].ToLower().Contains("very low"))
                 {
-                    R = " and " +R;
+                    RBR = 0;
                 }
-                O = "longer " + RLevel + " radio noise storm(s)"+R;
+                else if (bd.rbrLevel[p].ToLower().Contains("low"))
+                {
+                    RBR = 1;
+                }
+                else if (bd.rbrLevel[p].ToLower().Contains("moderate"))
+                {
+                    RBR = 2;
+                }
+                else if (bd.rbrLevel[p].ToLower().Contains("high"))
+                {
+                    RBR = 3;
+                }
+                else if (bd.rbrLevel[p].ToLower().Contains("very high"))
+                {
+                    RBR = 4;
+                }
+                else if (bd.rbrLevel[p].ToLower().Contains("extreme"))
+                {
+                    RBR = 4;
+                }
+
+                if (bd.rnsLevel[p].ToLower().Contains("very low"))
+                {
+                    RNS = 0;
+                }
+                else if (bd.rnsLevel[p].ToLower().Contains("low"))
+                {
+                    RNS = 1;
+                }
+                else if (bd.rnsLevel[p].ToLower().Contains("moderate"))
+                {
+                    RNS = 2;
+                }
+                else if (bd.rnsLevel[p].ToLower().Contains("high"))
+                {
+                    RNS = 3;
+                }
+                else if (bd.rnsLevel[p].ToLower().Contains("very high"))
+                {
+                    RNS = 4;
+                }
+                else if (bd.rnsLevel[p].ToLower().Contains("extreme"))
+                {
+                    RNS = 4;
+                }
+
+                if (RSP >= RBR)
+                {
+                    totalLevel = RSP;
+                }
+                else
+                {
+                    totalLevel = RBR;
+                }
+                if (totalLevel < RNS)
+                {
+                    totalLevel = RNS;
+                }
+
+                if (totalLevel == 0)
+                {
+                    RLevel = "none";
+                }
+                else if (totalLevel == 1)
+                {
+                    RLevel = "weak";
+                }
+                else if (totalLevel == 2)
+                {
+                    RLevel = "moderate";
+                }
+                else if (totalLevel == 3)
+                {
+                    RLevel = "strong";
+                }
+                else if (totalLevel >= 4)
+                {
+                    RLevel = "extreme";
+
+                }
+                string R = "";
+                if (RSP > 0)
+                {
+                    R = RLevel + " " + B + " radio sweep";
+                }
+
+                if (RBR > 0 && RBR > RNS)
+                {
+                    O = "short " + RLevel + " radio burst(s)";
+                }
+                if (RNS > 0 && RNS >= RBR)
+                {
+                    if (R.ToLower().Contains("radio sweep"))
+                    {
+                        R = " and " + R;
+                    }
+                    O = "longer " + RLevel + " radio noise storm(s)" + R;
+                }
+                O = "Reception may be affected by " + O;
+                if (RSP == 0 && RBR == 0 && RNS == 0)
+                {
+                    O = "No significant radio bursts at present";
+                }
+                string P = findPreviousBurst();
+                if (P != "" && O.Contains("No significant"))
+                {
+                    O = O + ", but " + P + " bursts reported earlier";
+                }
             }
-            O = "Reception may be affected by " + O;
-            if (RSP ==0 && RBR == 0 && RNS == 0)
-            {
-                O = "No significant radio bursts at present";
-            }
-            string P = findPreviousBurst();
-            if (P != "" && O.Contains("No significant"))
-            {
-                O = O + ", but " + P + " bursts reported earlier";
-            }
+            catch { }
             Burstwarninglabel.Text = O;
         }
         private string findPreviousBurst()
         {
             string S = "";
             int level = 0;
-            if (BurstdataGridView.Rows.Count > 0)
+            try
             {
-                int cols = BurstdataGridView.Columns.Count;
-                for (int i = 0; i < cols; i++)
+                if (BurstdataGridView.Rows.Count > 0)
                 {
-                    if (BurstdataGridView.Rows[1].Cells[i].Value != null)
+                    int cols = BurstdataGridView.Columns.Count;
+                    for (int i = 0; i < cols; i++)
                     {
-                        S = BurstdataGridView.Rows[1].Cells[i].Value.ToString();
-                        if (S.Contains("weak"))
+                        if (BurstdataGridView.Rows[0].Cells[i].Value != null)
                         {
-                            if (level < 1)
+                            S = BurstdataGridView.Rows[0].Cells[i].Value.ToString();
+                            if (S.ToLower().Contains("weak") || S.ToLower().Contains("low"))
                             {
-                                level = 1;
+                                if (level < 1)
+                                {
+                                    level = 1;
+                                }
                             }
-                        }
-                        else if (S.Contains("moderate"))
-                        {
-                            if (level < 2)
+                            else if (S.ToLower().Contains("moderate"))
                             {
-                                level = 2;
-                            }                            
-                        }
-                        else if (S.Contains("strong"))
-                        {
-                            if (level < 3)
-                            {
-                                level = 3;
+                                if (level < 2)
+                                {
+                                    level = 2;
+                                }
                             }
-                        }
-                        else if (S.Contains("extreme"))
-                        {
-                            if (level < 4)
+                            else if (S.ToLower().Contains("extreme") || S.ToLower().Contains("very high"))
                             {
-                                level = 4;
+                                if (level < 4)
+                                {
+                                    level = 4;
+                                }
                             }
-                        }                        
+                            else if (S.ToLower().Contains("strong") || S.ToLower().Contains("high"))
+                            {
+                                if (level < 3)
+                                {
+                                    level = 3;
+                                }
+                            }
+                           
+                        }
+                    }
+                    if (level == 0)
+                    {
+                        S = "";
+                    }
+                    else if (level == 1)
+                    {
+                        S = "weak";
+                    }
+                    else if (level == 2)
+                    {
+                        S = "moderate";
+                    }
+                    else if (level == 3)
+                    {
+                        S = "strong";
+                    }
+                    else if (level >= 4)
+                    {
+                        S = "extreme";
                     }
                 }
-                if (level == 0)
-                {
-                    S = "";
-                }
-                else if (level == 1)
-                {
-                    S = "weak";
-                }
-                else if (level == 2)
-                {
-                    S= "moderate";
-                }
-                else if (level == 3)
-                {
-                    S = "strong";
-                }
-                else if (level >= 4)
-                {
-                    S = "extreme";
-                }
             }
+            catch { }
             return S;
         }
         private void findcurrentBurst_OLD()
@@ -2245,16 +2258,16 @@ namespace WSPR_Solar
             string RNS = bd.rnsSpan[p];
             string RBR = bd.rbrSpan[p];
 
-            if ((RSP.Contains("INSIGNIFICANT") || RSP.Contains("NONE")) )
+            if ((RSP.ToLower().Contains("insignificant") || RSP.ToLower().Contains("none")) )
             {
                 Burstwarninglabel.Text = "No significant radio bursts";
 
             }
             else
             {
-                if (!RSP.Contains("WEAK") && RSP != "")
+                if (!RSP.ToLower().Contains("weak") && RSP != "")
                 {
-                    if (bd.RSPband[p].ToUpper().Contains("WIDEBAND"))
+                    if (bd.RSPband[p].ToLower().Contains("wideband"))
                     {
                         B = "wideband";
                         O = "";
@@ -2269,7 +2282,7 @@ namespace WSPR_Solar
                 }
             }
 
-            if (bd.RSPlevel[p].ToUpper().Contains("NONE"))
+            if (bd.RSPlevel[p].ToLower().Contains("none"))
             {
                 currentBurstlabel.Text = bd.RSPlevel[p].ToLower() + " bursts";
             }
