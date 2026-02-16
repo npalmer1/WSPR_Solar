@@ -65,7 +65,6 @@
             label32 = new Label();
             label31 = new Label();
             label29 = new Label();
-            label28 = new Label();
             label27 = new Label();
             label26 = new Label();
             BurstdataGridView = new DataGridView();
@@ -485,67 +484,57 @@
             BurstgroupBox.Controls.Add(label32);
             BurstgroupBox.Controls.Add(label31);
             BurstgroupBox.Controls.Add(label29);
-            BurstgroupBox.Controls.Add(label28);
             BurstgroupBox.Controls.Add(label27);
             BurstgroupBox.Controls.Add(label26);
             BurstgroupBox.Controls.Add(BurstdataGridView);
             BurstgroupBox.FlatStyle = FlatStyle.Popup;
             BurstgroupBox.ForeColor = SystemColors.MenuText;
-            BurstgroupBox.Location = new Point(99, 252);
+            BurstgroupBox.Location = new Point(25, 252);
             BurstgroupBox.Name = "BurstgroupBox";
-            BurstgroupBox.Size = new Size(1020, 145);
+            BurstgroupBox.Size = new Size(1062, 145);
             BurstgroupBox.TabIndex = 32;
             BurstgroupBox.TabStop = false;
             BurstgroupBox.Text = "Summary of significant radio bursts today";
             BurstgroupBox.Visible = false;
+         
             // 
             // label32
             // 
             label32.AutoSize = true;
-            label32.Location = new Point(34, 96);
+            label32.Location = new Point(6, 84);
             label32.Name = "label32";
-            label32.Size = new Size(86, 13);
+            label32.Size = new Size(162, 13);
             label32.TabIndex = 6;
-            label32.Text = "Long burst no.:";
+            label32.Text = "Long burst duration/intensity:";
             // 
             // label31
             // 
             label31.AutoSize = true;
-            label31.Location = new Point(32, 81);
+            label31.Location = new Point(4, 70);
             label31.Name = "label31";
-            label31.Size = new Size(88, 13);
+            label31.Size = new Size(164, 13);
             label31.TabIndex = 5;
-            label31.Text = "Short burst no.:";
+            label31.Text = "Short burst duration/intensity:";
             // 
             // label29
             // 
             label29.AutoSize = true;
             label29.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label29.Location = new Point(34, 56);
+            label29.Location = new Point(55, 56);
             label29.Name = "label29";
-            label29.Size = new Size(86, 13);
+            label29.Size = new Size(113, 13);
             label29.TabIndex = 4;
-            label29.Text = "Bands affected:";
-            // 
-            // label28
-            // 
-            label28.AutoSize = true;
-            label28.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label28.Location = new Point(85, 69);
-            label28.Name = "label28";
-            label28.Size = new Size(35, 13);
-            label28.TabIndex = 3;
-            label28.Text = "Level:";
+            label29.Text = "Bands affected/level:";
             // 
             // label27
             // 
             label27.AutoSize = true;
             label27.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label27.Location = new Point(37, 43);
+            label27.Location = new Point(44, 43);
             label27.Name = "label27";
-            label27.Size = new Size(83, 13);
+            label27.Size = new Size(125, 13);
             label27.TabIndex = 2;
-            label27.Text = "Total duration:";
+            label27.Text = "Swept bursts duration:";
             // 
             // label26
             // 
@@ -562,7 +551,7 @@
             BurstdataGridView.BackgroundColor = SystemColors.Info;
             BurstdataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             BurstdataGridView.Columns.AddRange(new DataGridViewColumn[] { Col1, Col2, Col3, Col4, Col5, Col6, Col7, Col8 });
-            BurstdataGridView.Location = new Point(126, 21);
+            BurstdataGridView.Location = new Point(171, 21);
             BurstdataGridView.Name = "BurstdataGridView";
             BurstdataGridView.ReadOnly = true;
             BurstdataGridView.RowHeadersVisible = false;
@@ -1578,7 +1567,6 @@
         private Button Burstgridbutton;
         private Label label26;
         private Label label29;
-        private Label label28;
         private Label label27;
         private Label Burstwarninglabel;
         private Label currentBurstlabel;

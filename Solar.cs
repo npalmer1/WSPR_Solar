@@ -25,6 +25,7 @@ using System.Net.NetworkInformation;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using System.Runtime.InteropServices.Marshalling;
 using System.Security.Cryptography;
 using System.Security.Policy;
 using System.Text;
@@ -220,7 +221,7 @@ namespace WSPR_Solar
         private void Solar_Load(object sender, EventArgs e)
         {
             System.Version version = Assembly.GetExecutingAssembly().GetName().Version;
-            string ver = "0.1.12";
+            string ver = "0.1.13";
             this.Text = "WSPR Solar                       V." + ver + "    GNU GPLv3 License";
 
             //solarstartuptimer.Enabled = true;
@@ -658,7 +659,7 @@ namespace WSPR_Solar
             }
             else if (activity_level.Contains("storm"))
             {
-                stormconditionlabel.Text = "Possibly unstable/degraded ("+activity_level+")";
+                stormconditionlabel.Text = "Possibly unstable/degraded (" + activity_level + ")";
             }
             else if (Glabel.Text.Contains("G") || Rlabel.Text.Contains("R") || Slabel.Text.Contains("S"))
             {
@@ -678,7 +679,7 @@ namespace WSPR_Solar
             string s = "";
             string r = "";
             int level = 0;
-            int Alevel = 0;   
+            int Alevel = 0;
             if (G.Contains("1") || (R.Contains("1")) || S.Contains("1"))
             {
                 level = 1;  //minor
@@ -698,22 +699,22 @@ namespace WSPR_Solar
             else if (G.Contains("5") || (R.Contains("5")) || S.Contains("5"))
             {
                 level = 5;  //extreme
-            }          
-            if (activity.Contains("minor") )
+            }
+            if (activity.Contains("minor"))
             {
-               Alevel = 1;
-            }           
-            else if (activity.Contains("major") )
+                Alevel = 1;
+            }
+            else if (activity.Contains("major"))
             {
                 Alevel = 2;
-            }           
+            }
             else if (activity.Contains("severe"))
             {
                 Alevel = 3;
             }
 
-            if (level ==1 || Alevel == 1)
-            {                
+            if (level == 1 || Alevel == 1)
+            {
                 s = "minor";
                 r = "Possibly slightly unstable/degraded (" + s + " storm or blackout)";
                 if (previous)
@@ -721,7 +722,7 @@ namespace WSPR_Solar
                     r = "Likely normal, but " + s + " storm or blackout reported earlier";
                 }
             }
-            else if (level == 2 && Alevel <2)
+            else if (level == 2 && Alevel < 2)
             {
                 s = "moderate";
                 r = "Possibly moderately unstable/degraded (" + s + " storm or blackout)";
@@ -730,7 +731,7 @@ namespace WSPR_Solar
                     r = "Likely normal, but " + s + " storm or blackout reported earlier";
                 }
             }
-            else if (level == 3 || Alevel ==2)
+            else if (level == 3 || Alevel == 2)
             {
                 s = "strong";
                 r = "Possibly quite unstable/degraded (" + s + " storm or blackout)";
@@ -756,8 +757,8 @@ namespace WSPR_Solar
                 {
                     r = "Likely normal/disturbed, " + s + " storm or blackout reported earlier";
                 }
-            }             
-            return r;            
+            }
+            return r;
         }
 
         private async Task populateGrid(int row)
@@ -1137,19 +1138,20 @@ namespace WSPR_Solar
                                     {
                                         i = 1;
                                     }
-                                    time = S[2 + i];
+                                    time = S[1 + i];
                                     timend = "";
-                                    if (S[2 + i].Contains("///"))
+                                    if (S[1 + i].Contains("///"))
                                     {
-                                        time = S[1 + i];
+                                        time = "?";
                                     }
-                                    if (S[2 + i].Contains("///"))
+
+                                    else if (S[3 + i] != "" && !S[3 + i].Contains("///"))
                                     {
-                                        timend = S[3 + i];
+                                        timend = timend = S[3 + i];
                                     }
                                     else
                                     {
-                                        timend = "";
+                                        timend = "?";
                                     }
                                     rburst = S[6 + i];
                                     part = S[8 + i];
@@ -1565,8 +1567,21 @@ namespace WSPR_Solar
                     string B = "";
                     for (int b = 0; b < columns; b++)
                     {
-                        B = bd.span[b] + Environment.NewLine + bd.band[b] + Environment.NewLine + bd.Level[b];
-                        B = B + Environment.NewLine + bd.rbr[b] + Environment.NewLine + bd.rns[b];
+                        B = "";
+                        string s = "/";
+                        if (bd.RSPspan[b] == "")
+                        {
+                            s = "";
+                            B = B + bd.RSPlevel[b] + Environment.NewLine + Environment.NewLine;
+                        }
+                        else
+                        {
+                            B = bd.RSPlevel[b] + Environment.NewLine;
+                            B = B + bd.RSPspan[b] + s + bd.RSPband[b] + Environment.NewLine;
+                        }
+
+                        B = B + bd.rbrSpan[b] + " " + bd.rbrLevel[b] + Environment.NewLine;
+                        B = B + bd.rnsSpan[b] + " " + bd.rnsLevel[b];
                         BurstdataGridView.Rows[0].Cells[b].Value = B;
                     }
                 }
@@ -1578,13 +1593,35 @@ namespace WSPR_Solar
                 return false;
             }
         }
+
+        private void groupBox1_Paint(object sender, PaintEventArgs e)
+        {
+            System.Windows.Forms.GroupBox box = (System.Windows.Forms.GroupBox)sender;
+            e.Graphics.Clear(this.BackColor);
+
+            Size textSize = TextRenderer.MeasureText(box.Text, box.Font);
+            Rectangle borderRect = new Rectangle(
+                0,
+                textSize.Height / 2,
+                box.Width - 1,
+                box.Height - textSize.Height / 2 - 1
+            );
+
+            using (Pen pen = new Pen(Color.Red, 2))
+            {
+                e.Graphics.DrawRectangle(pen, borderRect);
+            }
+        }
+
         struct BurstData()
         {
-            public string[] Level = new string[8]; //levels for each time period
-            public string[] band = new string[8]; //bands for each time period
-            public string[] span = new string[8]; //duration for each time period
-            public string[] rbr = new string[8]; //rbs vhf burst type for each time period
-            public string[] rns = new string[8]; //rnr vhf burst type for each time period
+            public string[] RSPlevel = new string[8]; //levels for each time period
+            public string[] RSPband = new string[8]; //bands for each time period
+            public string[] RSPspan = new string[8]; //duration for each time period
+            public string[] rbrSpan = new string[8]; //rbs time period
+            public string[] rnsSpan = new string[8]; //rnr time period
+            public string[] rbrLevel = new string[8]; //rbs intensity
+            public string[] rnsLevel = new string[8]; //rnr intensity
         }
         BurstData bd = new BurstData();
 
@@ -1597,13 +1634,13 @@ namespace WSPR_Solar
             string band = "";
             string l1band = "";
             string LStr = "";
-            int overallDur = 0;
-            int RBRcount = 0;
-            int RBRHFcount = 0;
-            int RBRUcount = 0;
-            int RNScount = 0;
-            int RNSHFcount = 0;
-            int RNSUcount = 0;
+            int rspDur = 0;
+            int rbrDur = 0;
+            int rnsDur = 0;
+            int rbrLevel = 0;
+            int rnsLevel = 0;
+
+            int SFU = 0;
 
             using (StringReader reader = new StringReader(cell))
             {
@@ -1613,19 +1650,18 @@ namespace WSPR_Solar
                 while ((line = reader.ReadLine()) != null)
                 {
                     string[] S = line.Split("/");
-                    if (line.StartsWith("RSP"))
+                    string[] t = S[1].Split("-");
+                    dur = 0;
+                    if (line.StartsWith("RSP") || line.StartsWith("RNS") || line.StartsWith("RBR"))
                     {
-
-                        string[] t = S[1].Split("-");
-                        dur = 0;
-                        if (t.Count() > 0)
+                        try
                         {
-                            try
+
+                            if (t.Count() > 1 && t[0] != "?" && t[1] != "?" && t[0] != "" && t[1] != "")
                             {
                                 t[0] = t[0].Insert(2, ":");
                                 t[1] = t[1].Insert(2, ":");
                                 DateTime from = Convert.ToDateTime(t[0]);
-                                //int to = Convert.ToInt32(t[1]);
                                 DateTime to = Convert.ToDateTime(t[1]);
                                 dur = (int)Math.Abs((from - to).TotalMinutes);
 
@@ -1634,13 +1670,29 @@ namespace WSPR_Solar
                                     dur = 1;
                                 }
                             }
-                            catch { dur = 0; }
+                            else
+                            {
+                                dur = 1;
+                            }
+                        }
+                        catch { dur = 0; }
+                    }
+                    else
+                    {
+                        dur = 0; return;
+                    }
+
+                    if (line.StartsWith("RSP")) //sweep frequency radio burst - duration and frequency range indicate severity
+                    {
+                        if (S.Count() > 0)
+                        {
+
 
 
                             if (line.EndsWith("/1"))
                             {
-                                overallDur = overallDur + dur;
-                                if ((dur > 7 || overallDur > 10) && Level < 1)
+                                rspDur = rspDur + dur;
+                                if (dur > 6  && Level < 1)
                                 {
                                     LStr = "Weak";
                                     Level = 1;
@@ -1648,7 +1700,7 @@ namespace WSPR_Solar
                             }
                             else if (line.EndsWith("/2"))
                             {
-                                overallDur = overallDur + dur;
+                                rspDur = rspDur + dur;
                                 if ((dur > 6) && Level < 2)
                                 {
                                     LStr = "Moderate";
@@ -1657,7 +1709,7 @@ namespace WSPR_Solar
                             }
                             else if (line.EndsWith("/3"))
                             {
-                                overallDur = overallDur + dur;
+                                rspDur = rspDur + dur;
                                 if ((dur > 6) && Level < 3)
                                 {
                                     LStr = "Severe";
@@ -1666,7 +1718,7 @@ namespace WSPR_Solar
                             }
                             else if (line.EndsWith("/4"))
                             {
-                                overallDur = overallDur + dur;
+                                rspDur = rspDur + dur;
                                 if ((dur > 6) && Level < 4)
                                 {
                                     LStr = "Extreme";
@@ -1676,7 +1728,7 @@ namespace WSPR_Solar
                             if (line.Contains("III") || (line.Contains("VI")))
                             {
                                 if (!l1band.Contains("W")) { l1band = "W"; }
-                                if ((dur > 6 || overallDur > 10) && !band.Contains("W"))
+                                if ((dur > 6 || rspDur > 10) && !band.Contains("W"))
                                 {
                                     band = band + "W"; //wideband VLF - 1GHz
                                 }
@@ -1684,7 +1736,7 @@ namespace WSPR_Solar
                             else if (line.Contains("II") || line.Contains("V"))
                             {
                                 if (!l1band.Contains("T")) { l1band = "T"; }
-                                if ((dur > 6 || overallDur > 10) && !band.Contains("T"))
+                                if ((dur > 6 || rspDur > 10) && !band.Contains("T"))
                                 {
                                     band = band + "T"; //25-200MHz
                                 }
@@ -1692,7 +1744,7 @@ namespace WSPR_Solar
                             else if (line.Contains("I"))
                             {
                                 if (!l1band.Contains("V")) { l1band = "V"; }
-                                if ((dur > 6 || overallDur > 10) && !band.Contains("V"))
+                                if ((dur > 6 || rspDur > 10) && !band.Contains("V"))
                                 {
                                     band = band + "V"; //VHF
                                 }
@@ -1700,7 +1752,7 @@ namespace WSPR_Solar
                             else if (line.Contains("IV"))
                             {
                                 if (!l1band.Contains("G")) { l1band = "G"; }
-                                if ((dur > 6 || overallDur > 10) && !band.Contains("G"))
+                                if ((dur > 6 || rspDur > 10) && !band.Contains("G"))
                                 {
                                     band = band + "G"; //25MHz-2GHz
                                 }
@@ -1708,64 +1760,63 @@ namespace WSPR_Solar
                             else if (line.Contains("CTM"))
                             {
                                 if (!l1band.Contains("W")) { l1band = "W"; }
-                                if ((dur > 6 || overallDur > 10) && !band.Contains("W"))
+                                if ((dur > 6 || rspDur > 10) && !band.Contains("W"))
                                 {
                                     band = band + "W"; //25MHz-2GHz
+                                }
+                            }
+                            if (S.Count() > 7)  //override if a frequency range specified
+                            {
+                                if (S[7].Contains("-")) //if a specific frequency range is given, instead of band
+                                {
+                                    band = S[7];
                                 }
                             }
 
                         }
                     }
-                    else if (line.StartsWith("RBR"))
-                    { 
-                        int f = 0;
-                        if (S.Count() > 2)
-                        {
-                            f = Convert.ToInt32(S[2]);
-                        }
-                        if (f > 30 && f <300)
-                        {
-                            RBRcount++;
-                        }
-                        else if (f >= 300)
-                        {
-                            RBRUcount++;
-                        }
-                        else if (f <= 30 && f > 0)
-                        {
-                            RBRHFcount++;
-                        }
-                    }
-                    else if (line.StartsWith("RNS"))
+                    else if (line.StartsWith("RBR") || line.StartsWith("RNS"))
+                    //RBR = radio burst - fixed frequency short duration indicate severity
+                    //RNS = radio burst - radio noise storm - longer duration
                     {
-
-                        int f = 0;
+                        int sfu = 0;
                         if (S.Count() > 2)
                         {
-                            f = Convert.ToInt32(S[2]);
+                            int.TryParse(S[2], out sfu);
+                            SFU = sfu;
                         }
-                        if (f > 30 && f < 300)
+                        else
                         {
-                            RNScount++;
+                            SFU = 0;
                         }
-                        else if (f >= 300)
+                        if (line.StartsWith("RBR"))
                         {
-                            RNSUcount++;
+                            rbrDur = rbrDur + dur;
+                            if (rbrLevel < sfu)
+                            {
+                                rbrLevel = sfu;
+                            }
                         }
-                        else if (f <= 30 && f > 0)
+                        else
                         {
-                            RNSHFcount++;
+                            rnsDur = rnsDur + dur;
+                            if (rnsLevel < sfu)
+                            {
+                                rnsLevel = sfu;
+                            }
                         }
+
+
                     }
 
                 }
-                if (LStr == "" && overallDur > 0)
+                if (LStr == "" && rspDur > 0)
                 {
                     LStr = "Insignificant";
                 }
-                else if (LStr == "" && overallDur < 1)
+                else if (LStr == "" && rspDur < 1)
                 {
-                    if (RBRcount > 0 || RBRHFcount > 0 || RNScount > 0 || RNSHFcount > 0)
+                    if (rbrDur > 0 && rnsDur > 0)
                     {
                         LStr = "Insignificant";
                     }
@@ -1779,98 +1830,118 @@ namespace WSPR_Solar
                     LStr = "Weak";
                     if (l1band.Contains("W"))
                     {
-                        bd.band[period] = "Wideband";
+                        bd.RSPband[period] = "Wideband";
                     }
                     else if (l1band.Contains("G"))
-                    { bd.band[period] = "25MHz-2GHz"; }
+                    { bd.RSPband[period] = "25MHz-2GHz"; }
                     else if (l1band.Contains("T"))
-                    { bd.band[period] = "25-200MHz"; }
+                    { bd.RSPband[period] = "25-200MHz"; }
                     else if (l1band.Contains("V"))
-                    { bd.band[period] = "VHF"; }
+                    { bd.RSPband[period] = "VHF"; }
                     else
                     {
-                        bd.band[period] = "";
+                        bd.RSPband[period] = "";
                     }
                 }
                 if (band.Contains("W"))
                 {
-                    bd.band[period] = "Wideband";
+                    bd.RSPband[period] = "Wideband";
                 }
                 else if (band.Contains("G"))
-                { bd.band[period] = "25MHz-2GHz"; }
+                { bd.RSPband[period] = "25MHz-2GHz"; }
                 else if (band.Contains("T"))
-                { bd.band[period] = "25-200MHz"; }
+                { bd.RSPband[period] = "25-200MHz"; }
                 else if (band.Contains("V"))
-                { bd.band[period] = "VHF"; }
+                { bd.RSPband[period] = "VHF"; }
                 else
                 {
-                    bd.band[period] = "";
+                    bd.RSPband[period] = "";
                 }
-                bd.Level[period] = LStr;
-                if (overallDur > 0)
+                bd.RSPlevel[period] = LStr;
+                if (rspDur > 5)
                 {
-                    bd.span[period] = overallDur.ToString() + " mins";
+                    bd.RSPspan[period] = rspDur.ToString() + "mins";
+                }
+                else
+                {
+                    bd.RSPspan[period] = "";
+                }
+                if (rbrDur > 0)
+                {
+                    bd.rbrSpan[period] = rbrDur.ToString() + "mins";
+                    if (rbrLevel > 0)
+                    {
+                        bd.rbrLevel[period] = findIntensity(rbrLevel);
+                    }
+                }
+                else
+                {
+                    bd.rbrSpan[period] = "";
+                    bd.rbrLevel[period] = "";
+
+                }
+                if (rnsDur > 0)
+                {
+                    bd.rnsSpan[period] = rnsDur.ToString() + "mins";
+                    if (rnsLevel > 0)
+                    {
+                        bd.rnsLevel[period] = findIntensity(rnsLevel);
+                    }
+                }
+                else
+                {
+                    bd.rnsSpan[period] = "";
+                    bd.rnsLevel[period] = "";
                 }
 
-                if (RBRcount > 0 || RBRHFcount >0 || RBRUcount >0)
-                {
-                    if (RBRHFcount > 0)
-                    {
-                        bd.rbr[period] = (RBRcount + RBRHFcount).ToString() + " short HF/VHF";
-                    }
-                    else if (RBRUcount > 0)
-                    {
-                        bd.rbr[period] = (RBRUcount).ToString() + " short UHF";
-                    }
-                    else
-                    {
-                        bd.rbr[period] = RBRcount.ToString() + " short VHF";
-                    }
-                }
-                else if (RBRHFcount > 0 && RBRcount < 1 && RBRUcount <1)
-                {
-                    bd.rbr[period] = RBRHFcount.ToString() + " short HF";
-                }
-                else
-                {
-                    bd.rbr[period] = "";
-                }
 
-                if (RNScount > 0 || RNSHFcount >0 || RNSUcount >0)
-                {
-                    if (RNSHFcount > 0)
-                    {
-                        bd.rns[period] = (RNScount + RNSHFcount).ToString() + " long HF/VHF";
-                    }
-                    else if (RNSUcount > 0)
-                    {
-                        bd.rns[period] = (RNSUcount).ToString() + " long UHF";
-                    }
-                    else
-                    {
-                        bd.rns[period] = RNScount.ToString() + " long VHF";
-                    }
-                }
-                else if (RNSHFcount > 0 && RNScount < 1 && RNSUcount <1)
-                {
-                    bd.rns[period] = RNSHFcount.ToString() + " long HF";
-                }
-                else
-                {
-                    bd.rns[period] = "";
-                }
                 int p = findHour();
                 if (p < period)
                 {
-                    bd.Level[period] = "";
-                    bd.band[period] = "";
-                    bd.span[period] = "";
-                    bd.rbr[period] = "";
-                    bd.rns[period] = "";
+                    bd.RSPlevel[period] = "";
+                    bd.RSPband[period] = "";
+                    bd.RSPspan[period] = "";
+                    bd.rbrSpan[period] = "";
+                    bd.rnsSpan[period] = "";
+                    bd.rbrLevel[period] = ""; 
+                    bd.rnsLevel[period] = "";
                 }
             }
 
         }
+
+        private string findIntensity(int SFU)
+        {
+            if (SFU < 50)
+            {
+                return "Quiet";
+            }
+            else if (SFU >= 50 && SFU < 200)
+            {
+                return "Low";
+            }
+            else if (SFU >= 200 && SFU < 500)
+            {
+                return "Moderate";
+            }
+            else if (SFU >= 500 && SFU < 1000)
+            {
+                return "High";
+            }
+            else if (SFU >= 1000 && SFU < 10000)
+            {
+                return "Very high";
+            }
+            else if (SFU >= 10000)
+            {
+                return "Extreme";
+            }
+            else
+            {
+                return "";
+            }
+        }
+        
 
         private int findHour()
         {
@@ -1916,6 +1987,7 @@ namespace WSPR_Solar
             }
             return p;
         }
+
         private void findcurrentBurst()
         {
 
@@ -1932,39 +2004,278 @@ namespace WSPR_Solar
             string B = "";
             string O = "";
 
-            string N = bd.Level[p].ToUpper();
+            int RSP = 0;
+            int RNS = 0;
+            int RBR = 0;
+            int totalLevel = 0;
+            string RLevel = "";
 
-            if (N.Contains("INSIGNIFICANT") || N.Contains("NONE"))
+            string r = bd.RSPlevel[p].ToLower();
+            if ((r.Contains("insignificant") || r.Contains("none")) && (bd.rbrLevel[p] == "" && bd.rnsLevel[p] == ""))
+            {
+                Burstwarninglabel.Text = "No significant radio bursts";
+                RLevel = "none";
+                RSP = 0;
+            }
+            else
+            {
+                if (r.Contains("weak"))
+                {
+                    RSP = 1;
+                }
+                else if (r.Contains("moderate"))
+                {
+                    RSP = 2;
+                }
+                else if (r.Contains("strong"))
+                {
+                    RSP = 3;
+                }
+                else if (r.Contains("extreme"))
+                {
+                    RSP = 4;
+                }
+                if (bd.RSPband[p].ToUpper().Contains("WIDEBAND"))
+                {
+                    B = "wideband";
+
+                }
+                else
+                {
+                    B = bd.RSPband[p];
+                }
+
+            }
+            if (bd.rbrLevel[p].Contains("very low"))
+            {
+                RBR = 0;
+            }
+            else if (bd.rbrLevel[p].Contains("low"))
+            {
+                RBR = 1;
+            }
+            else if (bd.rbrLevel[p].Contains("moderate"))
+            {
+                RBR = 2;
+            }
+            else if (bd.rbrLevel[p].Contains("high"))
+            {
+                RBR = 3;
+            }
+            else if (bd.rbrLevel[p].Contains("very high"))
+            {
+                RBR = 4;
+            }
+            else if (bd.rbrLevel[p].Contains("extreme"))
+            {
+                RBR = 4;
+            }
+
+            if (bd.rnsLevel[p].Contains("very low"))
+            {
+                RNS = 0;
+            }
+            else if (bd.rnsLevel[p].Contains("low"))
+            {
+                RNS = 1;
+            }
+            else if (bd.rnsLevel[p].Contains("moderate"))
+            {
+                RNS = 2;
+            }
+            else if (bd.rnsLevel[p].Contains("high"))
+            {
+                RNS = 3;
+            }
+            else if (bd.rnsLevel[p].Contains("very high"))
+            {
+                RNS = 4;
+            }
+            else if (bd.rnsLevel[p].Contains("extreme"))
+            {
+                RNS = 4;
+            }
+
+            if (RSP >= RBR)
+            {
+                totalLevel = RSP;
+            }
+            else
+            {
+                totalLevel = RBR;
+            }
+            if (totalLevel < RNS)
+            {
+                totalLevel = RNS;
+            }
+            
+            if (totalLevel == 0)
+            {
+                RLevel = "none";
+            }
+            else if (totalLevel == 1)
+            {
+                RLevel = "weak";
+            }
+            else if (totalLevel == 2)
+            {
+                RLevel = "moderate";
+            }
+            else if (totalLevel == 3)
+            {
+                RLevel = "strong";
+            }
+            else if (totalLevel >= 4)
+            {
+                RLevel = "extreme";
+
+            }
+            string R = "";
+            if (RSP >0)
+            {
+                R = RLevel + " " + B + " radio sweep";
+            }
+            
+            if (RBR > 0 && RBR > RNS)
+            {
+                O = "short " + RLevel + " radio burst(s)";
+            }
+            if (RNS >0 && RNS >= RBR)
+            {
+                if (R.Contains("radio sweep"))
+                {
+                    R = " and " +R;
+                }
+                O = "longer " + RLevel + " radio noise storm(s)"+R;
+            }
+            O = "Reception may be affected by " + O;
+            if (RSP ==0 && RBR == 0 && RNS == 0)
+            {
+                O = "No significant radio bursts at present";
+            }
+            string P = findPreviousBurst();
+            if (P != "" && O.Contains("No significant"))
+            {
+                O = O + ", but " + P + " bursts reported earlier";
+            }
+            Burstwarninglabel.Text = O;
+        }
+        private string findPreviousBurst()
+        {
+            string S = "";
+            int level = 0;
+            if (BurstdataGridView.Rows.Count > 0)
+            {
+                int cols = BurstdataGridView.Columns.Count;
+                for (int i = 0; i < cols; i++)
+                {
+                    if (BurstdataGridView.Rows[1].Cells[i].Value != null)
+                    {
+                        S = BurstdataGridView.Rows[1].Cells[i].Value.ToString();
+                        if (S.Contains("weak"))
+                        {
+                            if (level < 1)
+                            {
+                                level = 1;
+                            }
+                        }
+                        else if (S.Contains("moderate"))
+                        {
+                            if (level < 2)
+                            {
+                                level = 2;
+                            }                            
+                        }
+                        else if (S.Contains("strong"))
+                        {
+                            if (level < 3)
+                            {
+                                level = 3;
+                            }
+                        }
+                        else if (S.Contains("extreme"))
+                        {
+                            if (level < 4)
+                            {
+                                level = 4;
+                            }
+                        }                        
+                    }
+                }
+                if (level == 0)
+                {
+                    S = "";
+                }
+                else if (level == 1)
+                {
+                    S = "weak";
+                }
+                else if (level == 2)
+                {
+                    S= "moderate";
+                }
+                else if (level == 3)
+                {
+                    S = "strong";
+                }
+                else if (level >= 4)
+                {
+                    S = "extreme";
+                }
+            }
+            return S;
+        }
+        private void findcurrentBurst_OLD()
+        {
+
+            DateTime now = DateTime.Now.ToUniversalTime();
+            int hour = now.Hour;
+            int p = findHour();
+
+            if (p < 0)
+            {
+                current_burst_band = "";
+                current_burst_level = "";
+                return;
+            }
+            string B = "";
+            string O = "";
+
+            string RSP = bd.RSPlevel[p].ToUpper();
+            string RNS = bd.rnsSpan[p];
+            string RBR = bd.rbrSpan[p];
+
+            if ((RSP.Contains("INSIGNIFICANT") || RSP.Contains("NONE")) )
             {
                 Burstwarninglabel.Text = "No significant radio bursts";
 
             }
             else
             {
-                if (!N.Contains("WEAK") && N != "")
+                if (!RSP.Contains("WEAK") && RSP != "")
                 {
-                    if (bd.band[p].ToUpper().Contains("WIDEBAND"))
+                    if (bd.RSPband[p].ToUpper().Contains("WIDEBAND"))
                     {
                         B = "wideband";
                         O = "";
                     }
                     else
                     {
-                        O = "affecting " + bd.band[p];
+                        O = "affecting " + bd.RSPband[p];
                         B = "";
                     }
 
-                    Burstwarninglabel.Text = "Reception may be affected by " + bd.Level[p].ToLower() + " " + B + " radio bursts " + O;
+                    Burstwarninglabel.Text = "Reception may be affected by " + bd.RSPlevel[p].ToLower() + " " + B + " radio bursts " + O;
                 }
             }
 
-            if (bd.Level[p].ToUpper().Contains("NONE"))
+            if (bd.RSPlevel[p].ToUpper().Contains("NONE"))
             {
-                currentBurstlabel.Text = bd.Level[p].ToLower() + " bursts";
+                currentBurstlabel.Text = bd.RSPlevel[p].ToLower() + " bursts";
             }
             else
             {
-                currentBurstlabel.Text = "some " + bd.Level[p] + " " + bd.band[p] + " bursts";
+                currentBurstlabel.Text = "some " + bd.RSPlevel[p] + " " + bd.RSPband[p] + " bursts";
             }
 
 
@@ -3914,6 +4225,7 @@ namespace WSPR_Solar
             }
         }
 
+       
     }
 
 }
