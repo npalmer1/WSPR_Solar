@@ -2194,7 +2194,7 @@ namespace WSPR_Solar
                 }
                 if (RLevel == "none")
                 {
-                    currentBurstlabel.Text = "no significant bursts";
+                    currentBurstlabel.Text = "none or no significant bursts";
                 }
                 else
                 {
