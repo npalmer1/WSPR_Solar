@@ -2192,6 +2192,14 @@ namespace WSPR_Solar
                 {
                     O = O + ", but " + P + " bursts reported earlier";
                 }
+                if (RLevel == "none")
+                {
+                    currentBurstlabel.Text = "no significant bursts";
+                }
+                else
+                {
+                    currentBurstlabel.Text = "some " +totalLevel + " bursts";
+                }
             }
             catch { }
             Burstwarninglabel.Text = O;
