@@ -4167,10 +4167,10 @@ namespace WSPR_Solar
         private void Solar_HelpRequested(object sender, HelpEventArgs hlpevent)
         {
             string exeFolder = Application.StartupPath;
-            helpform.rtf = "C:\\WSPR_Sked\\About_WS_Solar_v2.rtf";
+            helpform.rtf = "C:\\WSPR_Sked\\About_WS_Solar_v3.rtf";
             if (!File.Exists(helpform.rtf))
             {
-                helpform.rtf = exeFolder + "\\About_WS_Solar_v2.rtf";
+                helpform.rtf = exeFolder + "\\About_WS_Solar_v3.rtf";
             }
             if (File.Exists(helpform.rtf))
             {
