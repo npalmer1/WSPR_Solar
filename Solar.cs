@@ -221,7 +221,7 @@ namespace WSPR_Solar
         private void Solar_Load(object sender, EventArgs e)
         {
             System.Version version = Assembly.GetExecutingAssembly().GetName().Version;
-            string ver = "0.1.14";
+            string ver = "0.1.15";
             this.Text = "WSPR Solar                       V." + ver + "    GNU GPLv3 License";
 
             //solarstartuptimer.Enabled = true;
@@ -1565,33 +1565,34 @@ namespace WSPR_Solar
                    
                     BurstgroupBox.BringToFront();
                     string B = "";
+                    string min = "";
                     for (int b = 0; b < columns-1; b++)
                     {
                         B = "";
-                        string s = "min/";
+                        min = "min ";
                         if (bd.RSPspan[b] == "")
                         {
-                            s = "";
+                            min = "";
                             B = B + bd.RSPlevel[b] + Environment.NewLine + Environment.NewLine;
                         }
                         else
                         {
-                            B = bd.RSPlevel[b] + Environment.NewLine;
-                            B = B + bd.RSPspan[b] + s + bd.RSPband[b] + Environment.NewLine;
+                            B = bd.RSPspan[b] + min + bd.RSPlevel[b] + Environment.NewLine;
+                            B = B + bd.RSPband[b] + Environment.NewLine;
                         }
-
-                        string min = "";
+                        min = "";
+                       
                         if (bd.rbrSpan[b] != "")
                         {
                             min = "min ";
                         }
-                        B = B + bd.rbrSpan[b] + min + " " + bd.rbrLevel[b] + Environment.NewLine;
+                        B = B + bd.rbrSpan[b] + min  + bd.rbrLevel[b] + Environment.NewLine;
                         min = "";
                         if (bd.rnsSpan[b] != "")
                         {
                             min = "min ";
                         }
-                        B = B + bd.rnsSpan[b] + min+ " " + bd.rnsLevel[b];
+                        B = B + bd.rnsSpan[b] + min + bd.rnsLevel[b];
                         BurstdataGridView.Rows[0].Cells[b].Value = B;
                     }
                   
@@ -1835,18 +1836,19 @@ namespace WSPR_Solar
                 }
                 if (LStr == "" && rspDur > 0)
                 {
-                    LStr = "Insignificant";
+                    LStr = "insignificant";
                 }
                 else if (LStr == "" && rspDur < 1)
                 {
-                    if (rbrDur > 0 && rnsDur > 0)
+                    LStr = "none";
+                    /*if (rbrDur > 0 && rnsDur > 0)
                     {
-                        LStr = "Insignificant";
+                        LStr = "insignificant";
                     }
                     else
                     {
-                        LStr = "None/insignificant";
-                    }
+                        LStr = "none/insignificant";
+                    }*/
                 }
                 if (Level == 1)
                 {
@@ -1900,7 +1902,7 @@ namespace WSPR_Solar
                 else
                 {
                     bd.rbrSpan[period] = "";
-                    bd.rbrLevel[period] = "";
+                    bd.rbrLevel[period] = "none";
 
                 }
                 if (rnsDur > 0)
@@ -1914,7 +1916,7 @@ namespace WSPR_Solar
                 else
                 {
                     bd.rnsSpan[period] = "";
-                    bd.rnsLevel[period] = "";
+                    bd.rnsLevel[period] = "none";
                 }
 
 
@@ -2198,7 +2200,7 @@ namespace WSPR_Solar
                 }
                 else
                 {
-                    currentBurstlabel.Text = "some " +totalLevel + " bursts";
+                    currentBurstlabel.Text = "some " +RLevel + " bursts";
                 }
             }
             catch { }

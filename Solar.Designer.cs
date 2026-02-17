@@ -489,19 +489,18 @@
             BurstgroupBox.Controls.Add(BurstdataGridView);
             BurstgroupBox.FlatStyle = FlatStyle.Popup;
             BurstgroupBox.ForeColor = SystemColors.MenuText;
-            BurstgroupBox.Location = new Point(25, 252);
+            BurstgroupBox.Location = new Point(40, 261);
             BurstgroupBox.Name = "BurstgroupBox";
-            BurstgroupBox.Size = new Size(1062, 145);
+            BurstgroupBox.Size = new Size(1073, 145);
             BurstgroupBox.TabIndex = 32;
             BurstgroupBox.TabStop = false;
             BurstgroupBox.Text = "Summary of significant radio bursts today";
             BurstgroupBox.Visible = false;
-         
             // 
             // label32
             // 
             label32.AutoSize = true;
-            label32.Location = new Point(6, 84);
+            label32.Location = new Point(16, 84);
             label32.Name = "label32";
             label32.Size = new Size(162, 13);
             label32.TabIndex = 6;
@@ -510,7 +509,7 @@
             // label31
             // 
             label31.AutoSize = true;
-            label31.Location = new Point(4, 70);
+            label31.Location = new Point(14, 70);
             label31.Name = "label31";
             label31.Size = new Size(164, 13);
             label31.TabIndex = 5;
@@ -520,21 +519,21 @@
             // 
             label29.AutoSize = true;
             label29.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label29.Location = new Point(55, 56);
+            label29.Location = new Point(26, 57);
             label29.Name = "label29";
-            label29.Size = new Size(113, 13);
+            label29.Size = new Size(152, 13);
             label29.TabIndex = 4;
-            label29.Text = "Bands affected/level:";
+            label29.Text = "Swept burst bands affected:";
             // 
             // label27
             // 
             label27.AutoSize = true;
             label27.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label27.Location = new Point(44, 43);
+            label27.Location = new Point(11, 44);
             label27.Name = "label27";
-            label27.Size = new Size(125, 13);
+            label27.Size = new Size(168, 13);
             label27.TabIndex = 2;
-            label27.Text = "Swept bursts duration:";
+            label27.Text = "Swept burst duration/intensity:";
             // 
             // label26
             // 
@@ -551,7 +550,7 @@
             BurstdataGridView.BackgroundColor = SystemColors.Info;
             BurstdataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             BurstdataGridView.Columns.AddRange(new DataGridViewColumn[] { Col1, Col2, Col3, Col4, Col5, Col6, Col7, Col8 });
-            BurstdataGridView.Location = new Point(171, 21);
+            BurstdataGridView.Location = new Point(180, 21);
             BurstdataGridView.Name = "BurstdataGridView";
             BurstdataGridView.ReadOnly = true;
             BurstdataGridView.RowHeadersVisible = false;
