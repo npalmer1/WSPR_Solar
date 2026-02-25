@@ -164,6 +164,7 @@
             AusSWSbutton = new Button();
             Internetlabel = new Label();
             label33 = new Label();
+            label34 = new Label();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             groupBox1.SuspendLayout();
             BurstgroupBox.SuspendLayout();
@@ -1441,16 +1442,26 @@
             label33.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
             label33.Location = new Point(12, 704);
             label33.Name = "label33";
-            label33.Size = new Size(475, 13);
+            label33.Size = new Size(521, 13);
             label33.TabIndex = 36;
-            label33.Text = "SSN (correlate to SFI): 0-19 very low, 20-49 low, 50-99 medium, 100-149 high, 150+ very high";
+            label33.Text = "SSN (tends to correlate to SFI): 0-19 very low, 20-49 low, 50-99 medium, 100-149 high, 150+ very high";
+            // 
+            // label34
+            // 
+            label34.AutoSize = true;
+            label34.Location = new Point(12, 719);
+            label34.Name = "label34";
+            label34.Size = new Size(219, 15);
+            label34.TabIndex = 37;
+            label34.Text = "- higher SSN will give rise to higher MUF";
             // 
             // Solar
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.SeaShell;
-            ClientSize = new Size(1222, 728);
+            ClientSize = new Size(1222, 739);
+            Controls.Add(label34);
             Controls.Add(label33);
             Controls.Add(Internetlabel);
             Controls.Add(AusSWSbutton);
@@ -1630,5 +1641,6 @@
         private Label SSNlabel;
         private Label Internetlabel;
         private Label label33;
+        private Label label34;
     }
 }
