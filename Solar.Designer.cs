@@ -483,7 +483,7 @@
             // Burstwarninglabel
             // 
             Burstwarninglabel.AutoSize = true;
-            Burstwarninglabel.Location = new Point(20, 558);
+            Burstwarninglabel.Location = new Point(8, 558);
             Burstwarninglabel.Name = "Burstwarninglabel";
             Burstwarninglabel.Size = new Size(19, 13);
             Burstwarninglabel.TabIndex = 34;
@@ -696,7 +696,7 @@
             // 
             stormconditionlabel.AutoSize = true;
             stormconditionlabel.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            stormconditionlabel.Location = new Point(20, 542);
+            stormconditionlabel.Location = new Point(8, 542);
             stormconditionlabel.Name = "stormconditionlabel";
             stormconditionlabel.Size = new Size(222, 13);
             stormconditionlabel.TabIndex = 25;
@@ -765,7 +765,7 @@
             // conditionlabel
             // 
             conditionlabel.AutoSize = true;
-            conditionlabel.Location = new Point(20, 524);
+            conditionlabel.Location = new Point(8, 524);
             conditionlabel.Name = "conditionlabel";
             conditionlabel.Size = new Size(19, 13);
             conditionlabel.TabIndex = 15;
