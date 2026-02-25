@@ -128,6 +128,7 @@ namespace WSPR_Solar
         string prevG = "";
 
         string SFI = "";
+        string SSN = "";
 
         public bool stopUrl = false;
 
@@ -167,6 +168,7 @@ namespace WSPR_Solar
             if (!check)
             {
                 Msg.TMessageBox("Warning: unable to connect to NOAA", "Solar data", 1500);
+                Internetlabel.Text = "Warning: Internet conenction may be down";
             }
             else
             {
@@ -176,8 +178,8 @@ namespace WSPR_Solar
                 await updateSolar(serverName, db_user, db_pass);
                 await updateAllProtonandFlare(serverName, db_user, db_pass, true); //update yesterday
                 await updateAllProtonandFlare(serverName, db_user, db_pass, false); //update today
-
-            }
+                Internetlabel.Text = "Internet connection normal";
+            }           
 
         }
 
@@ -221,7 +223,7 @@ namespace WSPR_Solar
         private void Solar_Load(object sender, EventArgs e)
         {
             System.Version version = Assembly.GetExecutingAssembly().GetName().Version;
-            string ver = "0.1.15";
+            string ver = "0.1.16";
             this.Text = "WSPR Solar                       V." + ver + "    GNU GPLv3 License";
 
             //solarstartuptimer.Enabled = true;
@@ -671,6 +673,7 @@ namespace WSPR_Solar
                 stormconditionlabel.Text = "Likely normal - (no storm or blackout)";
             }
             conditionlabel.Text = F + "Higher HF propagation: " + P;
+            SSNlabel.Text = findSSNlevel();
             return P;
         }
 
@@ -775,6 +778,7 @@ namespace WSPR_Solar
                 activity_level = L.ToLower();
 
                 cells1[1] = L;
+                SSN = solar.SSN;
             }
             else //if Boulder
             {
@@ -2684,7 +2688,7 @@ namespace WSPR_Solar
                 MySqlCommand command = connection.CreateCommand();
 
                 string Ap = "";
-                string SSN = "";
+                string ssn = "";
                 string and = "";
                 string D = "";
                 if (!filter && !datecheckBox.Checked)
@@ -2706,19 +2710,19 @@ namespace WSPR_Solar
                     }
                     if (SSNtextBox1.Text != "")
                     {
-                        SSN = and + " SSN >= '" + SSNtextBox1.Text + "' ";
+                        ssn = and + " ssn >= '" + SSNtextBox1.Text + "' ";
                         and = "AND";
                     }
                     if (SSNtextBox2.Text != "")
                     {
-                        SSN = SSN + and + " SSN <= '" + SSNtextBox2.Text + "' ";
+                        ssn = ssn + and + " ssn <= '" + SSNtextBox2.Text + "' ";
                     }
                     if (datecheckBox.Checked)
                     {
                         D = " datetime >= '" + datetime1 + "' AND datetime <= '" + datetime2 + "'";
                     }
                     //command.CommandText = "SELECT * FROM received WHERE datetime >= '" + datetime1 + "' AND datetime <= '" + datetime2 + "' AND " + bandstr + callstr + fromstr + tostr + " ORDER BY datetime DESC LIMIT " + maxrows;
-                    command.CommandText = "SELECT * FROM weather WHERE " + D + Ap + SSN + " ORDER BY datetime DESC LIMIT " + 500;
+                    command.CommandText = "SELECT * FROM weather WHERE " + D + Ap + ssn + " ORDER BY datetime DESC LIMIT " + 500;
                 }
                 MySqlDataReader Reader;
                 Reader = command.ExecuteReader();
@@ -4284,21 +4288,61 @@ namespace WSPR_Solar
             await solartimer_action();
         }
 
+        private string findSSNlevel()
+        {
+            string level = "--";
+            try
+            {
+                if (int.TryParse(SSN, out int ssnfig))
+                {
+                    if (ssnfig >= 0 && ssnfig <= 19)
+                    {
+                        level = "Very low";
+                    }
+                    else if (ssnfig >= 20 && ssnfig <= 49)
+                    {
+                        level = "Low";
+                    }
+                    else if (ssnfig >= 50 && ssnfig <= 99)
+                    {
+                        level = "Moderate";
+                    }
+                    else if (ssnfig >= 100 && ssnfig <= 149)
+                    {
+                        level = "High";
+                    }
+                    else if (ssnfig > 150)
+                    {
+                        level = "Very high";
+                    }
+                }
+            }
+            catch
+            {
+            }
+            return level;
+        }
 
         private async Task solartimer_action()
         {
+           
             timercount++;
             DateTime dt = DateTime.Now.ToUniversalTime();
             if (timercount == 9) //45 mins
             {
                 await getLatestSolar(server, user, pass); //update 
-
+               
             }
 
             bool check = await checkNOAA();
             if (!check)
             {
                 Msg.TMessageBox("Unable to reach NOAA", "NOAA data", 1500);
+                Internetlabel.Text = "Warning: Internet conenction may be down";
+            }
+            else
+            {
+                Internetlabel.Text = "Internet connection normal";
             }
 
 
@@ -4331,8 +4375,9 @@ namespace WSPR_Solar
             }
         }
 
-        private void solarstartuptimer_Tick(object sender, EventArgs e)
+        private async void solarstartuptimer_Tick(object sender, EventArgs e)
         {
+           
             getLatestSolar(server, user, pass);
             solarstartuptimer.Enabled = false;
             solarstartuptimer.Stop();

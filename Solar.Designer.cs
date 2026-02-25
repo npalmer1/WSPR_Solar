@@ -57,6 +57,8 @@
             datelabel = new Label();
             label7 = new Label();
             groupBox1 = new GroupBox();
+            label28 = new Label();
+            SSNlabel = new Label();
             currentBurstlabel = new Label();
             label30 = new Label();
             Burstwarninglabel = new Label();
@@ -160,6 +162,7 @@
             linksbutton2 = new Button();
             label23 = new Label();
             AusSWSbutton = new Button();
+            Internetlabel = new Label();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             groupBox1.SuspendLayout();
             BurstgroupBox.SuspendLayout();
@@ -400,6 +403,8 @@
             // 
             // groupBox1
             // 
+            groupBox1.Controls.Add(label28);
+            groupBox1.Controls.Add(SSNlabel);
             groupBox1.Controls.Add(currentBurstlabel);
             groupBox1.Controls.Add(label30);
             groupBox1.Controls.Add(Burstwarninglabel);
@@ -439,10 +444,28 @@
             groupBox1.TabStop = false;
             groupBox1.Text = "Current solar data from Boulder, CO.";
             // 
+            // label28
+            // 
+            label28.AutoSize = true;
+            label28.Location = new Point(344, 523);
+            label28.Name = "label28";
+            label28.Size = new Size(96, 13);
+            label28.TabIndex = 38;
+            label28.Text = "Sunspot number:";
+            // 
+            // SSNlabel
+            // 
+            SSNlabel.AutoSize = true;
+            SSNlabel.Location = new Point(439, 523);
+            SSNlabel.Name = "SSNlabel";
+            SSNlabel.Size = new Size(15, 13);
+            SSNlabel.TabIndex = 37;
+            SSNlabel.Text = "--";
+            // 
             // currentBurstlabel
             // 
             currentBurstlabel.AutoSize = true;
-            currentBurstlabel.Location = new Point(562, 560);
+            currentBurstlabel.Location = new Point(595, 559);
             currentBurstlabel.Name = "currentBurstlabel";
             currentBurstlabel.Size = new Size(15, 13);
             currentBurstlabel.TabIndex = 36;
@@ -451,7 +474,7 @@
             // label30
             // 
             label30.AutoSize = true;
-            label30.Location = new Point(441, 560);
+            label30.Location = new Point(474, 559);
             label30.Name = "label30";
             label30.Size = new Size(114, 13);
             label30.TabIndex = 35;
@@ -460,7 +483,7 @@
             // Burstwarninglabel
             // 
             Burstwarninglabel.AutoSize = true;
-            Burstwarninglabel.Location = new Point(20, 560);
+            Burstwarninglabel.Location = new Point(20, 558);
             Burstwarninglabel.Name = "Burstwarninglabel";
             Burstwarninglabel.Size = new Size(19, 13);
             Burstwarninglabel.TabIndex = 34;
@@ -470,7 +493,7 @@
             // 
             Burstgridbutton.BackColor = Color.MistyRose;
             Burstgridbutton.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            Burstgridbutton.Location = new Point(772, 534);
+            Burstgridbutton.Location = new Point(838, 538);
             Burstgridbutton.Name = "Burstgridbutton";
             Burstgridbutton.Size = new Size(85, 23);
             Burstgridbutton.TabIndex = 33;
@@ -618,7 +641,7 @@
             // RClabel
             // 
             RClabel.AutoSize = true;
-            RClabel.Location = new Point(745, 524);
+            RClabel.Location = new Point(778, 523);
             RClabel.Name = "RClabel";
             RClabel.Size = new Size(15, 13);
             RClabel.TabIndex = 31;
@@ -627,7 +650,7 @@
             // SClabel
             // 
             SClabel.AutoSize = true;
-            SClabel.Location = new Point(722, 524);
+            SClabel.Location = new Point(755, 523);
             SClabel.Name = "SClabel";
             SClabel.Size = new Size(15, 13);
             SClabel.TabIndex = 30;
@@ -636,7 +659,7 @@
             // GClabel
             // 
             GClabel.AutoSize = true;
-            GClabel.Location = new Point(699, 524);
+            GClabel.Location = new Point(732, 523);
             GClabel.Name = "GClabel";
             GClabel.Size = new Size(15, 13);
             GClabel.TabIndex = 29;
@@ -645,7 +668,7 @@
             // label25
             // 
             label25.AutoSize = true;
-            label25.Location = new Point(647, 525);
+            label25.Location = new Point(680, 524);
             label25.Name = "label25";
             label25.Size = new Size(46, 13);
             label25.TabIndex = 28;
@@ -654,7 +677,7 @@
             // label24
             // 
             label24.AutoSize = true;
-            label24.Location = new Point(531, 543);
+            label24.Location = new Point(564, 542);
             label24.Name = "label24";
             label24.Size = new Size(24, 13);
             label24.TabIndex = 27;
@@ -663,7 +686,7 @@
             // stormlabel
             // 
             stormlabel.AutoSize = true;
-            stormlabel.Location = new Point(562, 543);
+            stormlabel.Location = new Point(595, 542);
             stormlabel.Name = "stormlabel";
             stormlabel.Size = new Size(15, 13);
             stormlabel.TabIndex = 26;
@@ -673,7 +696,7 @@
             // 
             stormconditionlabel.AutoSize = true;
             stormconditionlabel.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            stormconditionlabel.Location = new Point(20, 544);
+            stormconditionlabel.Location = new Point(20, 542);
             stormconditionlabel.Name = "stormconditionlabel";
             stormconditionlabel.Size = new Size(222, 13);
             stormconditionlabel.TabIndex = 25;
@@ -683,7 +706,7 @@
             // 
             hamqslbutton.BackColor = Color.MistyRose;
             hamqslbutton.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            hamqslbutton.Location = new Point(942, 535);
+            hamqslbutton.Location = new Point(959, 538);
             hamqslbutton.Name = "hamqslbutton";
             hamqslbutton.Size = new Size(75, 23);
             hamqslbutton.TabIndex = 23;
@@ -706,7 +729,7 @@
             // Rlabel
             // 
             Rlabel.AutoSize = true;
-            Rlabel.Location = new Point(608, 525);
+            Rlabel.Location = new Point(641, 524);
             Rlabel.Name = "Rlabel";
             Rlabel.Size = new Size(15, 13);
             Rlabel.TabIndex = 19;
@@ -715,7 +738,7 @@
             // Slabel
             // 
             Slabel.AutoSize = true;
-            Slabel.Location = new Point(585, 525);
+            Slabel.Location = new Point(618, 524);
             Slabel.Name = "Slabel";
             Slabel.Size = new Size(15, 13);
             Slabel.TabIndex = 18;
@@ -724,7 +747,7 @@
             // Glabel
             // 
             Glabel.AutoSize = true;
-            Glabel.Location = new Point(562, 525);
+            Glabel.Location = new Point(595, 524);
             Glabel.Name = "Glabel";
             Glabel.Size = new Size(15, 13);
             Glabel.TabIndex = 17;
@@ -733,7 +756,7 @@
             // label21
             // 
             label21.AutoSize = true;
-            label21.Location = new Point(464, 525);
+            label21.Location = new Point(497, 524);
             label21.Name = "label21";
             label21.Size = new Size(93, 13);
             label21.TabIndex = 16;
@@ -742,7 +765,7 @@
             // conditionlabel
             // 
             conditionlabel.AutoSize = true;
-            conditionlabel.Location = new Point(20, 525);
+            conditionlabel.Location = new Point(20, 524);
             conditionlabel.Name = "conditionlabel";
             conditionlabel.Size = new Size(19, 13);
             conditionlabel.TabIndex = 15;
@@ -1401,12 +1424,22 @@
             AusSWSbutton.UseVisualStyleBackColor = false;
             AusSWSbutton.Click += AusSWSbutton_Click;
             // 
+            // Internetlabel
+            // 
+            Internetlabel.AutoSize = true;
+            Internetlabel.Location = new Point(267, 11);
+            Internetlabel.Name = "Internetlabel";
+            Internetlabel.Size = new Size(17, 15);
+            Internetlabel.TabIndex = 35;
+            Internetlabel.Text = "--";
+            // 
             // Solar
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.SeaShell;
             ClientSize = new Size(1222, 712);
+            Controls.Add(Internetlabel);
             Controls.Add(AusSWSbutton);
             Controls.Add(label23);
             Controls.Add(linksbutton2);
@@ -1580,5 +1613,8 @@
         private DataGridViewTextBoxColumn Col8;
         private Label label32;
         private Label label31;
+        private Label label28;
+        private Label SSNlabel;
+        private Label Internetlabel;
     }
 }
