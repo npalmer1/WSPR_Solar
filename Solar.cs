@@ -4305,7 +4305,7 @@ namespace WSPR_Solar
                     }
                     else if (ssnfig >= 50 && ssnfig <= 99)
                     {
-                        level = "Moderate";
+                        level = "Medium";
                     }
                     else if (ssnfig >= 100 && ssnfig <= 149)
                     {
