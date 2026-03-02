@@ -173,11 +173,11 @@ namespace WSPR_Solar
             else
             {
                 await savedefaultdata(date); //set blank values in db for today
-                await getLatestSolar(serverName, db_user, db_pass);
+                await getLatestSolar(serverName, db_user, db_pass); //the Ap/Kp indices adn SSN/SFI/xray
                 await updateGeo(serverName, db_user, db_pass, true); //true - update yesterday as well
-                await updateSolar(serverName, db_user, db_pass);
-                await updateAllProtonandFlare(serverName, db_user, db_pass, true); //update yesterday
-                await updateAllProtonandFlare(serverName, db_user, db_pass, false); //update today
+                await updateSolar(serverName, db_user, db_pass);    //save SSN/SFI/xray
+                await updateAllProtonandFlare(serverName, db_user, db_pass, 1); //update yesterday=1 //proton flux, flares, radio bursts
+                await updateAllProtonandFlare(serverName, db_user, db_pass, 0); //update today =0
                 Internetlabel.Text = "Internet connection normal";
             }           
 
@@ -223,7 +223,7 @@ namespace WSPR_Solar
         private void Solar_Load(object sender, EventArgs e)
         {
             System.Version version = Assembly.GetExecutingAssembly().GetName().Version;
-            string ver = "0.1.16";
+            string ver = "0.1.17";
             this.Text = "WSPR Solar                       V." + ver + "    GNU GPLv3 License";
 
             //solarstartuptimer.Enabled = true;
@@ -380,7 +380,7 @@ namespace WSPR_Solar
                 return true;
             }
         }
-        public async Task updateGeo(string server, string user, string pass, bool updateyesterday)
+        public async Task updateGeo(string server, string user, string pass, bool updateyesterday)  //update Ap/Kp indices
         {
             DateTime today = DateTime.Now.ToUniversalTime();
             DateTime ydt;
@@ -391,7 +391,7 @@ namespace WSPR_Solar
             if (updateyesterday)
             {
                 await findGeo(yesterday, "Planetary");
-                await saveGeoData(ydt);
+                await saveGeoData(ydt); //save the daily Ap and Kp indices - yesterday
                 prevG = findKplevel(solar.K21);
                 if (prevG == "")
                 {
@@ -404,7 +404,7 @@ namespace WSPR_Solar
             }
 
             await findGeo(datetime, "Planetary");
-            await saveGeoData(today);
+            await saveGeoData(today);   //save the dauly Ap and Kp indices - today
             await find_data(false, "", "");
         }
         public async Task updateSolar(string server, string user, string pass)
@@ -414,18 +414,22 @@ namespace WSPR_Solar
             DateTime date = DateTime.Now.ToUniversalTime();
             await findSolar();
             date = date.AddDays(-1); //boulder info is from previous day           
-            await SaveSolardata(date); //today
+            await SaveSolardata(date); //SSN/SFI/xray
             await find_data(false, "", "");
         }
 
-        public async Task updateBursts(string server, string user, string pass)
+        public async Task updateBursts(string server, string user, string pass, int prevdays)
         {
 
             await fetchBurstdata();
             DateTime date = DateTime.Now.ToUniversalTime();
-            await findBurst();
+            if (prevdays >0)
+            {
+                date = date.AddDays(-prevdays); //burst info is from previous day
+            }
+            await findBurst(prevdays);
 
-            await SaveBurstdata(date); //today
+            await SaveBurstdata(date); 
             await find_burst_data(false, "", "");
 
         }
@@ -448,7 +452,7 @@ namespace WSPR_Solar
             getLatestSolar(server, user, pass);
         }
 
-        public async Task getLatestSolar(string server, string user, string pass)
+        public async Task getLatestSolar(string server, string user, string pass)       //fill in todays planetary and boulder A and K indices and yesterdays SFI/SSN/xray
         {
             DateTime today = DateTime.Now.ToUniversalTime();
             string datetime = today.ToString("yyyy MMM dd");
@@ -764,7 +768,7 @@ namespace WSPR_Solar
             return r;
         }
 
-        private async Task populateGrid(int row)
+        private async Task populateGrid(int row)    //in the first datagid show planetery A and K inddices and also Boulder for today and also SSN/SFI and xray for yesterday
         {
             if (row > dataGridView1.RowCount)
             {
@@ -992,7 +996,7 @@ namespace WSPR_Solar
         }
 
 
-        public async Task fetchSolardata()
+        public async Task fetchSolardata()  //get solar data: SSN/SFI/xray from yesterday (presented today)
         {
             textBox2.Text = "";
             string results = "";
@@ -1090,7 +1094,7 @@ namespace WSPR_Solar
 
         List<string> st = new List<string>();
         List<string> st2 = new List<string>();
-        public async Task findBurst()
+        public async Task findBurst(int prevdays)
         {
             string[] S;
 
@@ -1117,6 +1121,10 @@ namespace WSPR_Solar
 
                         DateTime dt = new DateTime();
                         DateTime now = DateTime.Now.ToUniversalTime();
+                        if (prevdays> 0)
+                        {
+                            now = now.AddDays(-prevdays);                           
+                        }
                         while ((line = reader.ReadLine()) != null)
                         {
                             if (line.Contains("Created:"))
@@ -2526,11 +2534,13 @@ namespace WSPR_Solar
                 return;
             }
             await updateGeo(server, user, pass, true);
+           
             await updateSolar(server, user, pass);
 
             //await find_data(false, "", "");
 
-            await updateAllProtonandFlare(server, user, pass, false);
+        
+            Burstbutton.Text = "Hide bursts";
 
         }
 
@@ -2552,7 +2562,7 @@ namespace WSPR_Solar
                 groupBox2.Visible = false;
             }
         }
-        public async Task SaveSolardata(DateTime date)
+        public async Task SaveSolardata(DateTime date)  //save SFI,SSN/xray for yestweday - though presented today
         {
 
             string myConnectionString = "server=" + server + ";user id=" + user + ";password=" + pass + ";database=wspr_sol";
@@ -2581,7 +2591,7 @@ namespace WSPR_Solar
 
         }
 
-        public async Task saveGeoData(DateTime date)
+        public async Task saveGeoData(DateTime date)    //save the dauly Ap and Kp indices
         {
 
             string myConnectionString = "server=" + server + ";user id=" + user + ";password=" + pass + ";database=wspr_sol";
@@ -3271,18 +3281,18 @@ namespace WSPR_Solar
             return R;
         }
 
-        public async Task updateAllProtonandFlare(string server, string user, string pass, bool yesterday)
+        public async Task updateAllProtonandFlare(string server, string user, string pass, int prevdays)      //update proton flux, flares and bursts
         {
             int h = 0;
             while (h < 24)
             {
 
                 satErr = false;
-                await getProtonFlux(h, yesterday, true); //yesterday = false, primary = true
+                await getProtonFlux(h, prevdays, true); //yesterday = 1, today = 0, primary = true
 
                 if (satErr)
                 {
-                    await getProtonFlux(h, yesterday, false); //yesterday = false, primary = false (secondary)
+                    await getProtonFlux(h, prevdays, false); //yesterday = 1 today =0, primary = false (secondary)
                 }
                 await setpflux(h, fluxdata);
                 h = h + 3;
@@ -3291,11 +3301,11 @@ namespace WSPR_Solar
             while (h < 24)
             {
                 satErr = false;
-                await getSolarFlares(h, yesterday, true); //yesterday = false, primary = true
+                await getSolarFlares(h, prevdays, true); //yesterday = 1, today =0, primary = true
 
                 if (satErr)
                 {
-                    await getSolarFlares(h, yesterday, false);
+                    await getSolarFlares(h, prevdays, false);  //yesterday = 1, today =0, primary = true
                 }
 
                 await setflare(h, flaredata);
@@ -3303,9 +3313,9 @@ namespace WSPR_Solar
             }
 
             DateTime date = DateTime.Now.ToUniversalTime();
-            if (yesterday)
+            if (prevdays >0)  //save yesteedays full set of data - flares/pf/bursts
             {
-                date = date.AddDays(-1);
+                date = date.AddDays(prevdays * -1);
             }
             date = date.Date;
             await SavePFdata(date);
@@ -3316,14 +3326,13 @@ namespace WSPR_Solar
             await find_extra_data(false, "", "");
 
             findstormlevels();
-            if (!yesterday)
+            if (prevdays ==0)
             {
                 stormlabels();
             }
-            if (!yesterday)
-            {
-                updateBursts(server, user, pass);
-            }
+          
+            updateBursts(server, user, pass, prevdays);
+            
 
         }
 
@@ -3433,48 +3442,7 @@ namespace WSPR_Solar
             findConditions(SFI);
         }
 
-        /*public async Task updateProtonandFlare(string server, string user, string pass, bool yesterday, int h)
-        {
-
-            satErr = false;
-            await getProtonFlux(h, yesterday, true); //yesterday = false, primary = true
-
-            if (satErr)
-            {
-                await getProtonFlux(h, yesterday, false); //yesterday = false, primary = false (secondary)
-            }
-            await setpflux(h, fluxdata);
-
-
-            satErr = false;
-            await getSolarFlares(h, yesterday, true); //yesterday = false, primary = true
-
-            if (satErr)
-            {
-                await getSolarFlares(h, yesterday, false);
-            }
-
-            await setflare(h, flaredata);
-
-            DateTime date = DateTime.Now.ToUniversalTime();
-            if (yesterday)
-            {
-                date = date.AddDays(-1);
-            }
-            date = date.Date;
-            flaredata = "";
-            fluxdata = "";
-            await SavePFdata(date);
-            await SaveFlaredata(date);
-            Glevel = 0;
-            Rlevel = 0;
-            Slevel = 0;
-            await find_extra_data(false, "", "");
-            if (!yesterday)
-            {
-                stormlabels();
-            }
-        }*/
+       
 
         public async Task SavePFdata(DateTime date)
         {
@@ -3831,7 +3799,7 @@ namespace WSPR_Solar
             public string units { get; set; }
         }*/
 
-        private async Task getProtonFlux(int h1, bool yesterday, bool primary)
+        private async Task getProtonFlux(int h1, int prevdays, bool primary)
         {
             fluxdata = "";
             string sat = "primary";
@@ -3891,10 +3859,10 @@ namespace WSPR_Solar
 
                     DateTime dt1 = DateTime.Now.ToUniversalTime();
                     DateTime dt2 = DateTime.Now.ToUniversalTime();
-                    if (yesterday)
+                    if (prevdays >0)
                     {
-                        dt1 = dt1.AddDays(-1);
-                        dt2 = dt2.AddDays(-1);
+                        dt1 = dt1.AddDays(prevdays * -1);
+                        dt2 = dt2.AddDays(prevdays * -1);
                     }
                     dt1 = new DateTime(dt1.Year, dt1.Month, dt1.Day, h1, m1, 0);
 
@@ -3937,7 +3905,7 @@ namespace WSPR_Solar
             }
         }
 
-        private async Task getSolarFlares(int h1, bool yesterday, bool primary)
+        private async Task getSolarFlares(int h1, int prevdays, bool primary)
         {
 
             flaredata = "";
@@ -3996,10 +3964,10 @@ namespace WSPR_Solar
 
                         DateTime dt1 = DateTime.Now.ToUniversalTime();
                         DateTime dt2 = DateTime.Now.ToUniversalTime();
-                        if (yesterday)
+                        if (prevdays >0)
                         {
-                            dt1 = dt1.AddDays(-1);
-                            dt2 = dt2.AddDays(-1);
+                            dt1 = dt1.AddDays(prevdays * -1);
+                            dt2 = dt2.AddDays(prevdays * -1);
                         }
                         dt1 = new DateTime(dt1.Year, dt1.Month, dt1.Day, h1, m1, 0);
 
@@ -4063,7 +4031,7 @@ namespace WSPR_Solar
 
         private async void button1_Click(object sender, EventArgs e)
         {
-            await updateAllProtonandFlare(server, user, pass, false);
+            await updateAllProtonandFlare(server, user, pass, 0);   //0 = today
 
 
         }
@@ -4073,7 +4041,7 @@ namespace WSPR_Solar
 
         }
 
-        private void changebutton_Click(object sender, EventArgs e)
+        private void changebutton_Click(object sender, EventArgs e) //change between Ap/Kp/SSN and flares/bursts/PF data
         {
             if (changebutton.Text.StartsWith("PF"))
             {
@@ -4161,7 +4129,7 @@ namespace WSPR_Solar
         {
             if (Burstbutton.Text == "Show bursts")
             {
-                updateBursts(server, user, pass);
+                updateBursts(server, user, pass,0);
                 Burstbutton.Text = "Hide bursts";
                 RBlabel.Visible = true;
             }
@@ -4354,12 +4322,12 @@ namespace WSPR_Solar
             }
             if (timercount == 6)  //30 mins
             {
-                await updateAllProtonandFlare(server, user, pass, false);
+                await updateAllProtonandFlare(server, user, pass, 0); //0=today
 
             }
             if (timercount == 5 && dt.Hour == 3)  //25 mins
             {
-                await updateAllProtonandFlare(server, user, pass, true); //get results for 2100-2400 yesterday
+                await updateAllProtonandFlare(server, user, pass, 1); //get results for 2100-2400 yesterday =1
 
             }
 
