@@ -849,7 +849,7 @@
             EventsgroupBox.Size = new Size(602, 345);
             EventsgroupBox.TabIndex = 23;
             EventsgroupBox.TabStop = false;
-            EventsgroupBox.Text = "Summary of events";
+            EventsgroupBox.Text = "Summary of events            (radio bursts extracted from this data)";
             EventsgroupBox.Visible = false;
             // 
             // textBox3
