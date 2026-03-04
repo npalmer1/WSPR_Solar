@@ -399,7 +399,7 @@ namespace WSPR_Solar
                 }
                 if (today.Hour < 3)
                 {
-                    GClabel.Text = prevG;
+                    GClabel.Text = prevG.Replace("(", "").Replace(")", "");
                 }
             }
 
@@ -418,19 +418,20 @@ namespace WSPR_Solar
             await find_data(false, "", "");
         }
 
-        public async Task updateBursts(string server, string user, string pass, int prevdays)
+        public async Task updateBursts(string server, string user, string pass)
         {
 
             await fetchBurstdata();
             DateTime date = DateTime.Now.ToUniversalTime();
-            if (prevdays >0)
+            /*if (prevdays >0)
             {
                 date = date.AddDays(-prevdays); //burst info is from previous day
-            }
-            await findBurst(prevdays);
+            }*/
+            await findBurst();
 
             await SaveBurstdata(date); 
             await find_burst_data(false, "", "");
+          
 
         }
 
@@ -450,6 +451,7 @@ namespace WSPR_Solar
                 return;
             }
             getLatestSolar(server, user, pass);
+            SSNlabel.Text = findSSNlevel();
         }
 
         public async Task getLatestSolar(string server, string user, string pass)       //fill in todays planetary and boulder A and K indices and yesterdays SFI/SSN/xray
@@ -1056,7 +1058,7 @@ namespace WSPR_Solar
             results = "";
             textBox3.Text = "";
             string line = "";
-            string Url = "https://services.swpc.noaa.gov/text/solar-geophysical-event-reports.txt";
+            string Url = "https://services.swpc.noaa.gov/text/solar-geophysical-event-reports.txt";     //can only get burts for today
             if (stopUrl)
             {
                 return;
@@ -1094,7 +1096,7 @@ namespace WSPR_Solar
 
         List<string> st = new List<string>();
         List<string> st2 = new List<string>();
-        public async Task findBurst(int prevdays)
+        public async Task findBurst()
         {
             string[] S;
 
@@ -1121,10 +1123,10 @@ namespace WSPR_Solar
 
                         DateTime dt = new DateTime();
                         DateTime now = DateTime.Now.ToUniversalTime();
-                        if (prevdays> 0)
-                        {
-                            now = now.AddDays(-prevdays);                           
-                        }
+                        //if (prevdays> 0)
+                        //{
+                        //    now = now.AddDays(-prevdays);                           
+                        //}
                         while ((line = reader.ReadLine()) != null)
                         {
                             if (line.Contains("Created:"))
@@ -2536,10 +2538,12 @@ namespace WSPR_Solar
             await updateGeo(server, user, pass, true);
            
             await updateSolar(server, user, pass);
+            await updateAllProtonandFlare(serverName, db_user, db_pass, 1); //update yesterday=1 //proton flux, flares, radio bursts
+            await updateAllProtonandFlare(serverName, db_user, db_pass, 0); //update today =0
 
             //await find_data(false, "", "");
 
-        
+
             Burstbutton.Text = "Hide bursts";
 
         }
@@ -3331,7 +3335,7 @@ namespace WSPR_Solar
                 stormlabels();
             }
           
-            updateBursts(server, user, pass, prevdays);
+            updateBursts(server, user, pass);
             
 
         }
@@ -3718,7 +3722,7 @@ namespace WSPR_Solar
                 {
                     pfl = "--";
                 }
-                SClabel.Text = pfl;
+                SClabel.Text =  pfl.Replace("(", "").Replace(")", "");
             }
             catch
             {
@@ -3748,7 +3752,7 @@ namespace WSPR_Solar
                     case 18: { fl = r[6]; break; }
                     case 21: { fl = r[7]; break; }
                 }
-                RClabel.Text = fl;
+                //RClabel.Text = fl;
                 fl = fl.Replace("(", "");
                 fl = fl.Replace(")", "");
                 if (fl == "")
@@ -4129,7 +4133,7 @@ namespace WSPR_Solar
         {
             if (Burstbutton.Text == "Show bursts")
             {
-                updateBursts(server, user, pass,0);
+                updateBursts(server, user, pass);
                 Burstbutton.Text = "Hide bursts";
                 RBlabel.Visible = true;
             }
