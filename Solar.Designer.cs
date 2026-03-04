@@ -1378,7 +1378,7 @@
             // 
             // solarstartuptimer
             // 
-            solarstartuptimer.Interval = 5000;
+            solarstartuptimer.Interval = 6000;
             solarstartuptimer.Tick += solarstartuptimer_Tick;
             // 
             // linksbutton1

@@ -223,7 +223,7 @@ namespace WSPR_Solar
         private void Solar_Load(object sender, EventArgs e)
         {
             System.Version version = Assembly.GetExecutingAssembly().GetName().Version;
-            string ver = "0.1.18";
+            string ver = "0.1.19";
             this.Text = "WSPR Solar                       V." + ver + "    GNU GPLv3 License";
 
             //solarstartuptimer.Enabled = true;
@@ -2522,7 +2522,12 @@ namespace WSPR_Solar
 
 
 
-        private async void forceUpdatebutton_Click_1(object sender, EventArgs e)
+        private void forceUpdatebutton_Click_1(object sender, EventArgs e)
+        {
+            forceUpdate_Action();
+
+        }
+        private async void forceUpdate_Action()
         {
             if (stopUrl)
             {
@@ -2536,7 +2541,7 @@ namespace WSPR_Solar
                 return;
             }
             await updateGeo(server, user, pass, true);
-           
+
             await updateSolar(server, user, pass);
             await updateAllProtonandFlare(serverName, db_user, db_pass, 1); //update yesterday=1 //proton flux, flares, radio bursts
             await updateAllProtonandFlare(serverName, db_user, db_pass, 0); //update today =0
@@ -2545,7 +2550,6 @@ namespace WSPR_Solar
 
 
             Burstbutton.Text = "Hide bursts";
-
         }
 
 
@@ -4317,7 +4321,10 @@ namespace WSPR_Solar
                 Internetlabel.Text = "Internet connection normal";
             }
 
-
+            if (timercount  == 2 && conditionlabel.Text.Trim() == "") //10 mins
+            {
+                forceUpdate_Action();       //if it hasn't populated data at startup then try forcing an update after 10 mins
+            }
             if (timercount == 8)    //40 mins
             {
                 await updateGeo(server, user, pass, true); //true - update yesterday as well
