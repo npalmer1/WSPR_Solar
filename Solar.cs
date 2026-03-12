@@ -223,7 +223,7 @@ namespace WSPR_Solar
         private void Solar_Load(object sender, EventArgs e)
         {
             System.Version version = Assembly.GetExecutingAssembly().GetName().Version;
-            string ver = "0.1.19";
+            string ver = "0.1.20";
             this.Text = "WSPR Solar                       V." + ver + "    GNU GPLv3 License";
 
             //solarstartuptimer.Enabled = true;
@@ -270,12 +270,17 @@ namespace WSPR_Solar
 
             // Automatically adjust row height to fit content
             dataGridView3.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
+           
+            dataGridView2.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.None;
+            dataGridView1.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.None;
 
             BurstdataGridView.DefaultCellStyle.Font = new System.Drawing.Font("Segoe UI", 8);
             BurstdataGridView.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
+          
 
             // Automatically adjust row height to fit content
             BurstdataGridView.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
+           
 
             setConfig(serverName, db_user, db_pass);
         }

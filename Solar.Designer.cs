@@ -1459,6 +1459,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
+            AutoScroll = true;
             BackColor = Color.SeaShell;
             ClientSize = new Size(1222, 739);
             Controls.Add(label34);
