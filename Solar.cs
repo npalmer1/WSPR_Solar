@@ -223,7 +223,7 @@ namespace WSPR_Solar
         private void Solar_Load(object sender, EventArgs e)
         {
             System.Version version = Assembly.GetExecutingAssembly().GetName().Version;
-            string ver = "0.1.19";
+            string ver = "0.1.20";
             this.Text = "WSPR Solar                       V." + ver + "    GNU GPLv3 License";
 
             //solarstartuptimer.Enabled = true;
@@ -930,11 +930,11 @@ namespace WSPR_Solar
             }
             else if (A >= 50 && A <= 99)
             {
-                s = "Mod-strong storm";
+                s = "Major storm";
             }
-            else if (A >= 100 && A <= 400)
+            else if (A >= 100)
             {
-                s = "Severe storm poss.";
+                s = "Severe storm";
             }
             else
             {
