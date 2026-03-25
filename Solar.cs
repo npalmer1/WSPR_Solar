@@ -223,7 +223,7 @@ namespace WSPR_Solar
         private void Solar_Load(object sender, EventArgs e)
         {
             System.Version version = Assembly.GetExecutingAssembly().GetName().Version;
-            string ver = "0.1.20";
+            string ver = "0.1.21";
             this.Text = "WSPR Solar                       V." + ver + "    GNU GPLv3 License";
 
             //solarstartuptimer.Enabled = true;
@@ -2045,7 +2045,7 @@ namespace WSPR_Solar
                 return;
             }
             string B = "";
-            string O = "";
+            string OO = "";
 
             int RSP = 0;
             int RNS = 0;
@@ -2189,11 +2189,12 @@ namespace WSPR_Solar
                 if (RSP > 0)
                 {
                     R = RLevel + " " + B + " radio sweep";
+                    OO = "swept radio burst";
                 }
 
                 if (RBR > 0 && RBR > RNS)
                 {
-                    O = "short " + RLevel + " radio burst(s)";
+                    OO = "short " + RLevel + " radio burst(s)";
                 }
                 if (RNS > 0 && RNS >= RBR)
                 {
@@ -2201,17 +2202,17 @@ namespace WSPR_Solar
                     {
                         R = " and " + R;
                     }
-                    O = "longer " + RLevel + " radio noise storm(s)" + R;
+                    OO = "longer " + RLevel + " radio noise storm(s)" + R;
                 }
-                O = "Reception may be affected by " + O;
+                OO = "Reception may be affected by " + OO;
                 if (RSP == 0 && RBR == 0 && RNS == 0)
                 {
-                    O = "No significant radio bursts at present";
+                    OO = "No significant radio bursts at present";
                 }
                 string P = findPreviousBurst(p);
-                if (P != "" && O.Contains("No significant"))
+                if (P != "" && OO.Contains("No significant"))
                 {
-                    O = O + ", but " + P + " bursts reported earlier";
+                    OO = OO + ", but " + P + " bursts reported earlier";
                 }
                 if (RLevel == "none")
                 {
@@ -2223,7 +2224,7 @@ namespace WSPR_Solar
                 }
             }
             catch { }
-            Burstwarninglabel.Text = O;
+            Burstwarninglabel.Text = OO;
         }
 
 
