@@ -19,6 +19,7 @@ using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Net;
 using System.Net.Http;
 using System.Net.NetworkInformation;
@@ -199,10 +200,7 @@ namespace WSPR_Solar
                 command.CommandText += "fl00,fl03,fl06,fl09,fl12,fl15,fl18,fl21,s00,s03,s06,s09,s12,s15,s18,s21) ";
                 command.CommandText += "VALUES('" + datetime + "', 0,  0,0,0,0,0,0,0,0,  0,0,'0',  '0','0','0','0','0','0','0','0',";
                 command.CommandText += "'0','0','0','0','0','0','0','0', '0','0','0','0','0','0','0','0')";
-                //command.CommandText += " ON DUPLICATE KEY UPDATE Ap = '" + solar.Ap + "', Kp00 = '" + solar.K00 + "'";
-                //command.CommandText += ", Kp03 = '" + solar.K03 + "', Kp06 = '" + solar.K06 + "', Kp09 = '" + solar.K09 + "'";
-                //command.CommandText += ", Kp12 = '" + solar.K12 + "', Kp15 = '" + solar.K15 + "', Kp18 = '" + solar.K18 + "'";
-                //command.CommandText += ", Kp21 = '" + solar.K21 + "'";
+              
 
                 connection.Open();
 
@@ -223,7 +221,7 @@ namespace WSPR_Solar
         private void Solar_Load(object sender, EventArgs e)
         {
             System.Version version = Assembly.GetExecutingAssembly().GetName().Version;
-            string ver = "0.1.21";
+            string ver = "0.1.22";
             this.Text = "WSPR Solar                       V." + ver + "    GNU GPLv3 License";
 
             //solarstartuptimer.Enabled = true;
@@ -1618,7 +1616,7 @@ namespace WSPR_Solar
                     findcurrentBurst();
                 }
                 catch {
-                    Msg.TMessageBox("Test", "", 2000);
+                    Msg.TMessageBox("Error in burst data", "Bursts", 2000);
                 }
                 return true;
             }
@@ -1676,280 +1674,304 @@ namespace WSPR_Solar
 
             int SFU = 0;
 
-            using (StringReader reader = new StringReader(cell))
-            {
-                int dur = 0;
-
-
-                while ((line = reader.ReadLine()) != null)
+            try {
+                using (StringReader reader = new StringReader(cell))
                 {
-                    string[] S = line.Split("/");
-                    string[] t = S[1].Split("-");
-                    dur = 0;
-                    if (line.StartsWith("RSP") || line.StartsWith("RNS") || line.StartsWith("RBR"))
+                    int dur = 0;
+
+                    while ((line = reader.ReadLine()) != null)
                     {
+                        string[] S = line.Split("/");
                         try
-                        {
-
-                            if (t.Count() > 1 && t[0] != "?" && t[1] != "?" && t[0] != "" && t[1] != "")
+                        {                          
+                            string[] t = null;
+                            if (S.Count() > 1)
                             {
-                                t[0] = t[0].Insert(2, ":");
-                                t[1] = t[1].Insert(2, ":");
-                                DateTime from = Convert.ToDateTime(t[0]);
-                                DateTime to = Convert.ToDateTime(t[1]);
-                                dur = (int)Math.Abs((from - to).TotalMinutes);
+                               t = S[1].Split("-");
+                            }
+                            dur = 0;
+                            if (line.StartsWith("RSP") || line.StartsWith("RNS") || line.StartsWith("RBR"))
+                            {
 
-                                if (dur == 0)
+                                    if (t != null)
+                                    {
+                                        if (t.Count() > 1 && t[0] != "?" && t[1] != "?" && t[0] != "" && t[1] != "")
+                                        {
+                                            t[0] = t[0].Insert(2, ":");
+                                            t[1] = t[1].Insert(2, ":");
+                                            DateTime from = Convert.ToDateTime(t[0]);
+                                            DateTime to = Convert.ToDateTime(t[1]);
+                                            dur = (int)Math.Abs((from - to).TotalMinutes);
+
+                                            if (dur == 0)
+                                            {
+                                                dur = 1;
+                                            }
+                                        }
+                                        else
+                                        {
+                                            dur = 1;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        dur = 1;
+                                    }                            
+                            }
+                            else
+                            {
+                                dur = 0; return;
+                            }
+                        }
+                        catch
+                        {
+                            dur = 0;
+                        }
+                        
+
+                        if (line.StartsWith("RSP")) //sweep frequency radio burst - duration and frequency range indicate severity
+                        {
+                            if (S.Count() > 0)
+                            {
+
+
+
+                                if (line.EndsWith("/1"))
                                 {
-                                    dur = 1;
+                                    rspDur = rspDur + dur;
+                                    if (dur > 3 && Level < 1)
+                                    {
+                                        LStr = "Weak";
+                                        Level = 1;
+                                    }
+                                }
+                                else if (line.EndsWith("/2"))
+                                {
+                                    rspDur = rspDur + dur;
+                                    if ((dur > 3) && Level < 2)
+                                    {
+                                        LStr = "Moderate";
+                                        Level = 2;
+                                    }
+                                }
+                                else if (line.EndsWith("/3"))
+                                {
+                                    rspDur = rspDur + dur;
+                                    if ((dur > 3) && Level < 3)
+                                    {
+                                        LStr = "Strong";
+                                        Level = 3;
+                                    }
+                                }
+                                else if (line.EndsWith("/4"))
+                                {
+                                    rspDur = rspDur + dur;
+                                    if ((dur > 3) && Level < 4)
+                                    {
+                                        LStr = "Severe";
+                                        Level = 4;
+                                    }
+                                }
+                                else if (line.EndsWith("/5"))
+                                {
+                                    rspDur = rspDur + dur;
+                                    if ((dur > 3) && Level < 5)
+                                    {
+                                        LStr = "Extreme";
+                                        Level = 5;
+                                    }
+                                }
+                                if (line.Contains("III") || (line.Contains("VI")))
+                                {
+                                    if (!l1band.Contains("W")) { l1band = "W"; }
+                                    if ((dur > 3 || rspDur > 10) && !band.Contains("W"))
+                                    {
+                                        band = band + "W"; //wideband VLF - 1GHz
+                                    }
+                                }
+                                else if (line.Contains("II") || line.Contains("V"))
+                                {
+                                    if (!l1band.Contains("T")) { l1band = "T"; }
+                                    if ((dur > 3 || rspDur > 10) && !band.Contains("T"))
+                                    {
+                                        band = band + "T"; //25-200MHz
+                                    }
+                                }
+                                else if (line.Contains("I"))
+                                {
+                                    if (!l1band.Contains("V")) { l1band = "V"; }
+                                    if ((dur > 3 || rspDur > 10) && !band.Contains("V"))
+                                    {
+                                        band = band + "V"; //VHF
+                                    }
+                                }
+                                else if (line.Contains("IV"))
+                                {
+                                    if (!l1band.Contains("G")) { l1band = "G"; }
+                                    if ((dur > 3 || rspDur > 10) && !band.Contains("G"))
+                                    {
+                                        band = band + "G"; //25MHz-2GHz
+                                    }
+                                }
+                                else if (line.Contains("CTM"))
+                                {
+                                    if (!l1band.Contains("W")) { l1band = "W"; }
+                                    if ((dur > 3 || rspDur > 10) && !band.Contains("W"))
+                                    {
+                                        band = band + "W"; //25MHz-2GHz
+                                    }
+                                }
+                                if (S.Count() > 7)  //override if a frequency range specified
+                                {
+                                    if (S[7].Contains("-")) //if a specific frequency range is given, instead of band
+                                    {
+                                        band = S[7];
+                                    }
+                                }
+
+                            }
+                        }
+                        else if (line.StartsWith("RBR") || line.StartsWith("RNS"))
+                        //RBR = radio burst - fixed frequency short duration indicate severity
+                        //RNS = radio burst - radio noise storm - longer duration
+                        {
+                            int sfu = 0;
+                            if (S.Count() > 2)
+                            {
+                                int.TryParse(S[2], out sfu);
+                                SFU = sfu;
+                            }
+                            else
+                            {
+                                SFU = 0;
+                            }
+                            if (line.StartsWith("RBR"))
+                            {
+                                rbrDur = rbrDur + dur;
+                                if (rbrLevel < sfu)
+                                {
+                                    rbrLevel = sfu;
                                 }
                             }
                             else
                             {
-                                dur = 1;
-                            }
-                        }
-                        catch { dur = 0; }
-                    }
-                    else
-                    {
-                        dur = 0; return;
-                    }
-
-                    if (line.StartsWith("RSP")) //sweep frequency radio burst - duration and frequency range indicate severity
-                    {
-                        if (S.Count() > 0)
-                        {
-
-
-
-                            if (line.EndsWith("/1"))
-                            {
-                                rspDur = rspDur + dur;
-                                if (dur > 3  && Level < 1)
+                                rnsDur = rnsDur + dur;
+                                if (rnsLevel < sfu)
                                 {
-                                    LStr = "Weak";
-                                    Level = 1;
-                                }
-                            }
-                            else if (line.EndsWith("/2"))
-                            {
-                                rspDur = rspDur + dur;
-                                if ((dur > 3) && Level < 2)
-                                {
-                                    LStr = "Moderate";
-                                    Level = 2;
-                                }
-                            }
-                            else if (line.EndsWith("/3"))
-                            {
-                                rspDur = rspDur + dur;
-                                if ((dur > 3) && Level < 3)
-                                {
-                                    LStr = "Strong";
-                                    Level = 3;
-                                }
-                            }
-                            else if (line.EndsWith("/4"))
-                            {
-                                rspDur = rspDur + dur;
-                                if ((dur > 3) && Level < 4)
-                                {
-                                    LStr = "Severe";
-                                    Level = 4;
-                                }
-                            }
-                            else if (line.EndsWith("/5"))
-                            {
-                                rspDur = rspDur + dur;
-                                if ((dur > 3) && Level < 5)
-                                {
-                                    LStr = "Extreme";
-                                    Level = 5;
-                                }
-                            }
-                            if (line.Contains("III") || (line.Contains("VI")))
-                            {
-                                if (!l1band.Contains("W")) { l1band = "W"; }
-                                if ((dur > 3 || rspDur > 10) && !band.Contains("W"))
-                                {
-                                    band = band + "W"; //wideband VLF - 1GHz
-                                }
-                            }
-                            else if (line.Contains("II") || line.Contains("V"))
-                            {
-                                if (!l1band.Contains("T")) { l1band = "T"; }
-                                if ((dur > 3 || rspDur > 10) && !band.Contains("T"))
-                                {
-                                    band = band + "T"; //25-200MHz
-                                }
-                            }
-                            else if (line.Contains("I"))
-                            {
-                                if (!l1band.Contains("V")) { l1band = "V"; }
-                                if ((dur > 3 || rspDur > 10) && !band.Contains("V"))
-                                {
-                                    band = band + "V"; //VHF
-                                }
-                            }
-                            else if (line.Contains("IV"))
-                            {
-                                if (!l1band.Contains("G")) { l1band = "G"; }
-                                if ((dur > 3 || rspDur > 10) && !band.Contains("G"))
-                                {
-                                    band = band + "G"; //25MHz-2GHz
-                                }
-                            }
-                            else if (line.Contains("CTM"))
-                            {
-                                if (!l1band.Contains("W")) { l1band = "W"; }
-                                if ((dur > 3 || rspDur > 10) && !band.Contains("W"))
-                                {
-                                    band = band + "W"; //25MHz-2GHz
-                                }
-                            }
-                            if (S.Count() > 7)  //override if a frequency range specified
-                            {
-                                if (S[7].Contains("-")) //if a specific frequency range is given, instead of band
-                                {
-                                    band = S[7];
+                                    rnsLevel = sfu;
                                 }
                             }
 
-                        }
-                    }
-                    else if (line.StartsWith("RBR") || line.StartsWith("RNS"))
-                    //RBR = radio burst - fixed frequency short duration indicate severity
-                    //RNS = radio burst - radio noise storm - longer duration
-                    {
-                        int sfu = 0;
-                        if (S.Count() > 2)
-                        {
-                            int.TryParse(S[2], out sfu);
-                            SFU = sfu;
-                        }
-                        else
-                        {
-                            SFU = 0;
-                        }
-                        if (line.StartsWith("RBR"))
-                        {
-                            rbrDur = rbrDur + dur;
-                            if (rbrLevel < sfu)
-                            {
-                                rbrLevel = sfu;
-                            }
-                        }
-                        else
-                        {
-                            rnsDur = rnsDur + dur;
-                            if (rnsLevel < sfu)
-                            {
-                                rnsLevel = sfu;
-                            }
-                        }
 
+                        }
 
                     }
-
-                }
-                if (LStr == "" && rspDur > 0)
-                {
-                    LStr = "insignificant";
-                }
-                else if (LStr == "" && rspDur < 1)
-                {
-                    LStr = "none";
-                    /*if (rbrDur > 0 && rnsDur > 0)
+                    if (LStr == "" && rspDur > 0)
                     {
                         LStr = "insignificant";
                     }
-                    else
+                    else if (LStr == "" && rspDur < 1)
                     {
-                        LStr = "none/insignificant";
-                    }*/
-                }
-                if (Level == 1)
-                {
-                    LStr = "Weak";
-                    if (l1band.Contains("W"))
+                        LStr = "none";
+                        /*if (rbrDur > 0 && rnsDur > 0)
+                        {
+                            LStr = "insignificant";
+                        }
+                        else
+                        {
+                            LStr = "none/insignificant";
+                        }*/
+                    }
+                    if (Level == 1)
+                    {
+                        LStr = "Weak";
+                        if (l1band.Contains("W"))
+                        {
+                            bd.RSPband[period] = "Wideband";
+                        }
+                        else if (l1band.Contains("G"))
+                        { bd.RSPband[period] = "25MHz-2GHz"; }
+                        else if (l1band.Contains("T"))
+                        { bd.RSPband[period] = "25-200MHz"; }
+                        else if (l1band.Contains("V"))
+                        { bd.RSPband[period] = "VHF"; }
+                        else
+                        {
+                            bd.RSPband[period] = "";
+                        }
+                    }
+                    if (band.Contains("W"))
                     {
                         bd.RSPband[period] = "Wideband";
                     }
-                    else if (l1band.Contains("G"))
+                    else if (band.Contains("G"))
                     { bd.RSPband[period] = "25MHz-2GHz"; }
-                    else if (l1band.Contains("T"))
+                    else if (band.Contains("T"))
                     { bd.RSPband[period] = "25-200MHz"; }
-                    else if (l1band.Contains("V"))
+                    else if (band.Contains("V"))
                     { bd.RSPband[period] = "VHF"; }
                     else
                     {
                         bd.RSPband[period] = "";
                     }
-                }
-                if (band.Contains("W"))
-                {
-                    bd.RSPband[period] = "Wideband";
-                }
-                else if (band.Contains("G"))
-                { bd.RSPband[period] = "25MHz-2GHz"; }
-                else if (band.Contains("T"))
-                { bd.RSPband[period] = "25-200MHz"; }
-                else if (band.Contains("V"))
-                { bd.RSPband[period] = "VHF"; }
-                else
-                {
-                    bd.RSPband[period] = "";
-                }
-                bd.RSPlevel[period] = LStr;
-                if (rspDur > 5)
-                {
-                    bd.RSPspan[period] = rspDur.ToString(); // + "mins";
-                }
-                else
-                {
-                    bd.RSPspan[period] = "";
-                }
-                if (rbrDur > 0)
-                {
-                    bd.rbrSpan[period] = rbrDur.ToString(); // + "mins";
-                    if (rbrLevel > 0)
+                    bd.RSPlevel[period] = LStr;
+                    if (rspDur > 5)
                     {
-                        bd.rbrLevel[period] = findIntensity(rbrLevel);
+                        bd.RSPspan[period] = rspDur.ToString(); // + "mins";
+                    }
+                    else
+                    {
+                        bd.RSPspan[period] = "";
+                    }
+                    if (rbrDur > 0)
+                    {
+                        bd.rbrSpan[period] = rbrDur.ToString(); // + "mins";
+                        if (rbrLevel > 0)
+                        {
+                            bd.rbrLevel[period] = findIntensity(rbrLevel);
+                        }
+                    }
+                    else
+                    {
+                        bd.rbrSpan[period] = "";
+                        bd.rbrLevel[period] = "none";
+
+                    }
+                    if (rnsDur > 0)
+                    {
+                        bd.rnsSpan[period] = rnsDur.ToString(); // + "mins";
+                        if (rnsLevel > 0)
+                        {
+                            bd.rnsLevel[period] = findIntensity(rnsLevel);
+                        }
+                    }
+                    else
+                    {
+                        bd.rnsSpan[period] = "";
+                        bd.rnsLevel[period] = "none";
+                    }
+
+
+                    int p = findHour();
+                    if (p < period)
+                    {
+                        bd.RSPlevel[period] = "";
+                        bd.RSPband[period] = "";
+                        bd.RSPspan[period] = "";
+                        bd.rbrSpan[period] = "";
+                        bd.rnsSpan[period] = "";
+                        bd.rbrLevel[period] = "";
+                        bd.rnsLevel[period] = "";
                     }
                 }
-                else
-                {
-                    bd.rbrSpan[period] = "";
-                    bd.rbrLevel[period] = "none";
+            
+            }
+         
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error " + ex);
+                //error
 
-                }
-                if (rnsDur > 0)
-                {
-                    bd.rnsSpan[period] = rnsDur.ToString(); // + "mins";
-                    if (rnsLevel > 0)
-                    {
-                        bd.rnsLevel[period] = findIntensity(rnsLevel);
-                    }
-                }
-                else
-                {
-                    bd.rnsSpan[period] = "";
-                    bd.rnsLevel[period] = "none";
-                }
-
-
-                int p = findHour();
-                if (p < period)
-                {
-                    bd.RSPlevel[period] = "";
-                    bd.RSPband[period] = "";
-                    bd.RSPspan[period] = "";
-                    bd.rbrSpan[period] = "";
-                    bd.rnsSpan[period] = "";
-                    bd.rbrLevel[period] = ""; 
-                    bd.rnsLevel[period] = "";
-                }
             }
 
         }
@@ -2659,7 +2681,7 @@ namespace WSPR_Solar
             string myConnectionString = "server=" + server + ";user id=" + user + ";password=" + pass + ";database=wspr_sol";
             MySqlConnection connection = new MySqlConnection(myConnectionString);
 
-            int t = 200;
+            int t = 300;
             rb.s00 = Truncate(rb.s00, t);
             rb.s03 = Truncate(rb.s03, t);
             rb.s06 = Truncate(rb.s06, t);
