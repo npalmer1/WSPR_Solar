@@ -187,7 +187,7 @@ namespace WSPR_Solar
         public async Task savedefaultdata(DateTime date)
         {
 
-            string myConnectionString = "server=" + server + ";user id=" + user + ";password=" + pass + ";database=wspr_sol";
+            string myConnectionString = "server=" + server + ";user id=" + user + ";password=" + pass + ";database=wspr_sol; SslMode = None; AllowPublicKeyRetrieval = True; ";
             MySqlConnection connection = new MySqlConnection(myConnectionString);
             //date = date.Date;   //set h,m,s to 000
             string datetime = date.ToString("yyyy-MM-dd");
@@ -221,7 +221,7 @@ namespace WSPR_Solar
         private void Solar_Load(object sender, EventArgs e)
         {
             System.Version version = Assembly.GetExecutingAssembly().GetName().Version;
-            string ver = "0.1.22";
+            string ver = "0.1.23";
             this.Text = "WSPR Solar                       V." + ver + "    GNU GPLv3 License";
 
             //solarstartuptimer.Enabled = true;
@@ -348,7 +348,7 @@ namespace WSPR_Solar
 
         private bool checkSolarDB()
         {
-            string myConnectionString = "server=" + serverName + ";user id=" + db_user + ";password=" + db_pass + ";database=wspr_solar";
+            string myConnectionString = "server=" + serverName + ";user id=" + db_user + ";password=" + db_pass + ";database=wspr_solar;SslMode=None;AllowPublicKeyRetrieval=True;";
 
             MySqlConnection connection = new MySqlConnection(myConnectionString);
 
@@ -1380,7 +1380,7 @@ namespace WSPR_Solar
 
             int i = 0;
             bool found = false;
-            string myConnectionString = "server=" + server + ";user id=" + user + ";password=" + pass + ";database=wspr_sol";
+            string myConnectionString = "server=" + server + ";user id=" + user + ";password=" + pass + ";database=wspr_sol;SslMode=None;AllowPublicKeyRetrieval=True;";
             rb.s00 = "";
             rb.s03 = "";
             rb.s06 = "";
@@ -2601,7 +2601,7 @@ namespace WSPR_Solar
         public async Task SaveSolardata(DateTime date)  //save SFI,SSN/xray for yestweday - though presented today
         {
 
-            string myConnectionString = "server=" + server + ";user id=" + user + ";password=" + pass + ";database=wspr_sol";
+            string myConnectionString = "server=" + server + ";user id=" + user + ";password=" + pass + ";database=wspr_sol;SslMode=None;AllowPublicKeyRetrieval=True;";
             MySqlConnection connection = new MySqlConnection(myConnectionString);
 
             string datetime = date.ToString("yyyy-MM-dd");
@@ -2630,7 +2630,7 @@ namespace WSPR_Solar
         public async Task saveGeoData(DateTime date)    //save the dauly Ap and Kp indices
         {
 
-            string myConnectionString = "server=" + server + ";user id=" + user + ";password=" + pass + ";database=wspr_sol";
+            string myConnectionString = "server=" + server + ";user id=" + user + ";password=" + pass + ";database=wspr_sol;SslMode=None;AllowPublicKeyRetrieval=True;";
             MySqlConnection connection = new MySqlConnection(myConnectionString);
             //date = date.Date;   //set h,m,s to 000
             string datetime = date.ToString("yyyy-MM-dd");
@@ -2678,7 +2678,7 @@ namespace WSPR_Solar
         public async Task SaveBurstdata(DateTime date)
         {
 
-            string myConnectionString = "server=" + server + ";user id=" + user + ";password=" + pass + ";database=wspr_sol";
+            string myConnectionString = "server=" + server + ";user id=" + user + ";password=" + pass + ";database=wspr_sol;SslMode=None;AllowPublicKeyRetrieval=True;";
             MySqlConnection connection = new MySqlConnection(myConnectionString);
 
             int t = 300;
@@ -2722,7 +2722,7 @@ namespace WSPR_Solar
             //DateTime d = new DateTime();
             int i = 0;
             bool found = false;
-            string myConnectionString = "server=" + server + ";user id=" + user + ";password=" + pass + ";database=wspr_sol";
+            string myConnectionString = "server=" + server + ";user id=" + user + ";password=" + pass + ";database=wspr_sol;SslMode=None;AllowPublicKeyRetrieval=True;";
             MySqlConnection connection = new MySqlConnection(myConnectionString);
 
 
@@ -2920,7 +2920,7 @@ namespace WSPR_Solar
         private int table_count()
         {
             int count;
-            string connectionString = "server=" + server + ";user id=" + user + ";password=" + pass + ";database=wspr_sol";
+            string connectionString = "server=" + server + ";user id=" + user + ";password=" + pass + ";database=wspr_sol;SslMode=None;AllowPublicKeyRetrieval=True;";
 
             try
             {
@@ -3483,7 +3483,7 @@ namespace WSPR_Solar
         public async Task SavePFdata(DateTime date)
         {
 
-            string myConnectionString = "server=" + server + ";user id=" + user + ";password=" + pass + ";database=wspr_sol";
+            string myConnectionString = "server=" + server + ";user id=" + user + ";password=" + pass + ";database=wspr_sol;SslMode=None;AllowPublicKeyRetrieval=True;";
             MySqlConnection connection = new MySqlConnection(myConnectionString);
 
             string datetime = date.ToString("yyyy-MM-dd");
@@ -3515,7 +3515,7 @@ namespace WSPR_Solar
         public async Task SaveFlaredata(DateTime date)
         {
 
-            string myConnectionString = "server=" + server + ";user id=" + user + ";password=" + pass + ";database=wspr_sol";
+            string myConnectionString = "server=" + server + ";user id=" + user + ";password=" + pass + ";database=wspr_sol;SslMode=None;AllowPublicKeyRetrieval=True;";
             MySqlConnection connection = new MySqlConnection(myConnectionString);
 
             string datetime = date.ToString("yyyy-MM-dd");
@@ -3587,7 +3587,7 @@ namespace WSPR_Solar
 
             int i = 0;
             bool found = false;
-            string myConnectionString = "server=" + server + ";user id=" + user + ";password=" + pass + ";database=wspr_sol";
+            string myConnectionString = "server=" + server + ";user id=" + user + ";password=" + pass + ";database=wspr_sol;SslMode=None;AllowPublicKeyRetrieval=True;";
 
             MySqlConnection connection = new MySqlConnection(myConnectionString);
 
