@@ -165,6 +165,7 @@
             Internetlabel = new Label();
             label33 = new Label();
             label34 = new Label();
+            label35 = new Label();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             groupBox1.SuspendLayout();
             BurstgroupBox.SuspendLayout();
@@ -205,7 +206,7 @@
             textBox1.Multiline = true;
             textBox1.Name = "textBox1";
             textBox1.ScrollBars = ScrollBars.Vertical;
-            textBox1.Size = new Size(542, 356);
+            textBox1.Size = new Size(542, 347);
             textBox1.TabIndex = 1;
             // 
             // textBox2
@@ -215,7 +216,7 @@
             textBox2.Multiline = true;
             textBox2.Name = "textBox2";
             textBox2.ScrollBars = ScrollBars.Vertical;
-            textBox2.Size = new Size(454, 356);
+            textBox2.Size = new Size(454, 347);
             textBox2.TabIndex = 2;
             // 
             // label1
@@ -243,7 +244,7 @@
             dataGridView1.ColumnHeadersHeight = 25;
             dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             dataGridView1.Columns.AddRange(new DataGridViewColumn[] { Column1, Column13, Column2, Column3, Column4, Column5, Column6, Column7, Column8, Column9, Column10, Column11, Column14 });
-            dataGridView1.Location = new Point(116, 436);
+            dataGridView1.Location = new Point(116, 410);
             dataGridView1.Name = "dataGridView1";
             dataGridView1.ReadOnly = true;
             dataGridView1.RowHeadersWidth = 30;
@@ -359,7 +360,7 @@
             // 
             label4.AutoSize = true;
             label4.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label4.Location = new Point(335, 418);
+            label4.Location = new Point(335, 392);
             label4.Name = "label4";
             label4.Size = new Size(132, 13);
             label4.TabIndex = 8;
@@ -369,7 +370,7 @@
             // 
             classlabel.AutoSize = true;
             classlabel.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            classlabel.Location = new Point(53, 467);
+            classlabel.Location = new Point(53, 441);
             classlabel.Name = "classlabel";
             classlabel.Size = new Size(57, 13);
             classlabel.TabIndex = 9;
@@ -378,7 +379,7 @@
             // label6
             // 
             label6.AutoSize = true;
-            label6.Location = new Point(117, 417);
+            label6.Location = new Point(117, 391);
             label6.Name = "label6";
             label6.Size = new Size(170, 13);
             label6.TabIndex = 10;
@@ -397,7 +398,7 @@
             // 
             label7.AutoSize = true;
             label7.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label7.Location = new Point(60, 493);
+            label7.Location = new Point(60, 467);
             label7.Name = "label7";
             label7.Size = new Size(50, 13);
             label7.TabIndex = 13;
@@ -405,6 +406,7 @@
             // 
             // groupBox1
             // 
+            groupBox1.Controls.Add(label35);
             groupBox1.Controls.Add(label28);
             groupBox1.Controls.Add(SSNlabel);
             groupBox1.Controls.Add(currentBurstlabel);
@@ -449,7 +451,7 @@
             // label28
             // 
             label28.AutoSize = true;
-            label28.Location = new Point(332, 523);
+            label28.Location = new Point(335, 505);
             label28.Name = "label28";
             label28.Size = new Size(96, 13);
             label28.TabIndex = 38;
@@ -458,7 +460,7 @@
             // SSNlabel
             // 
             SSNlabel.AutoSize = true;
-            SSNlabel.Location = new Point(427, 523);
+            SSNlabel.Location = new Point(430, 505);
             SSNlabel.Margin = new Padding(0);
             SSNlabel.Name = "SSNlabel";
             SSNlabel.Size = new Size(15, 13);
@@ -468,7 +470,7 @@
             // currentBurstlabel
             // 
             currentBurstlabel.AutoSize = true;
-            currentBurstlabel.Location = new Point(615, 559);
+            currentBurstlabel.Location = new Point(618, 541);
             currentBurstlabel.Name = "currentBurstlabel";
             currentBurstlabel.Size = new Size(15, 13);
             currentBurstlabel.TabIndex = 36;
@@ -477,7 +479,7 @@
             // label30
             // 
             label30.AutoSize = true;
-            label30.Location = new Point(494, 559);
+            label30.Location = new Point(497, 541);
             label30.Name = "label30";
             label30.Size = new Size(114, 13);
             label30.TabIndex = 35;
@@ -486,7 +488,7 @@
             // Burstwarninglabel
             // 
             Burstwarninglabel.AutoSize = true;
-            Burstwarninglabel.Location = new Point(8, 558);
+            Burstwarninglabel.Location = new Point(11, 540);
             Burstwarninglabel.Name = "Burstwarninglabel";
             Burstwarninglabel.Size = new Size(19, 13);
             Burstwarninglabel.TabIndex = 34;
@@ -496,7 +498,7 @@
             // 
             Burstgridbutton.BackColor = Color.MistyRose;
             Burstgridbutton.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            Burstgridbutton.Location = new Point(838, 538);
+            Burstgridbutton.Location = new Point(841, 520);
             Burstgridbutton.Name = "Burstgridbutton";
             Burstgridbutton.Size = new Size(85, 23);
             Burstgridbutton.TabIndex = 33;
@@ -515,7 +517,7 @@
             BurstgroupBox.Controls.Add(BurstdataGridView);
             BurstgroupBox.FlatStyle = FlatStyle.Popup;
             BurstgroupBox.ForeColor = SystemColors.MenuText;
-            BurstgroupBox.Location = new Point(40, 261);
+            BurstgroupBox.Location = new Point(61, 243);
             BurstgroupBox.Name = "BurstgroupBox";
             BurstgroupBox.Size = new Size(1073, 145);
             BurstgroupBox.TabIndex = 32;
@@ -644,7 +646,7 @@
             // RClabel
             // 
             RClabel.AutoSize = true;
-            RClabel.Location = new Point(798, 523);
+            RClabel.Location = new Point(801, 505);
             RClabel.Name = "RClabel";
             RClabel.Size = new Size(15, 13);
             RClabel.TabIndex = 31;
@@ -653,7 +655,7 @@
             // SClabel
             // 
             SClabel.AutoSize = true;
-            SClabel.Location = new Point(775, 523);
+            SClabel.Location = new Point(778, 505);
             SClabel.Name = "SClabel";
             SClabel.Size = new Size(15, 13);
             SClabel.TabIndex = 30;
@@ -662,7 +664,7 @@
             // GClabel
             // 
             GClabel.AutoSize = true;
-            GClabel.Location = new Point(752, 523);
+            GClabel.Location = new Point(755, 505);
             GClabel.Name = "GClabel";
             GClabel.Size = new Size(15, 13);
             GClabel.TabIndex = 29;
@@ -671,7 +673,7 @@
             // label25
             // 
             label25.AutoSize = true;
-            label25.Location = new Point(700, 524);
+            label25.Location = new Point(703, 506);
             label25.Name = "label25";
             label25.Size = new Size(46, 13);
             label25.TabIndex = 28;
@@ -680,7 +682,7 @@
             // label24
             // 
             label24.AutoSize = true;
-            label24.Location = new Point(584, 542);
+            label24.Location = new Point(587, 524);
             label24.Name = "label24";
             label24.Size = new Size(24, 13);
             label24.TabIndex = 27;
@@ -689,7 +691,7 @@
             // stormlabel
             // 
             stormlabel.AutoSize = true;
-            stormlabel.Location = new Point(615, 542);
+            stormlabel.Location = new Point(618, 524);
             stormlabel.Name = "stormlabel";
             stormlabel.Size = new Size(15, 13);
             stormlabel.TabIndex = 26;
@@ -699,7 +701,7 @@
             // 
             stormconditionlabel.AutoSize = true;
             stormconditionlabel.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            stormconditionlabel.Location = new Point(8, 542);
+            stormconditionlabel.Location = new Point(11, 524);
             stormconditionlabel.Name = "stormconditionlabel";
             stormconditionlabel.Size = new Size(222, 13);
             stormconditionlabel.TabIndex = 25;
@@ -709,7 +711,7 @@
             // 
             hamqslbutton.BackColor = Color.MistyRose;
             hamqslbutton.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            hamqslbutton.Location = new Point(959, 538);
+            hamqslbutton.Location = new Point(962, 520);
             hamqslbutton.Name = "hamqslbutton";
             hamqslbutton.Size = new Size(75, 23);
             hamqslbutton.TabIndex = 23;
@@ -732,7 +734,7 @@
             // Rlabel
             // 
             Rlabel.AutoSize = true;
-            Rlabel.Location = new Point(661, 524);
+            Rlabel.Location = new Point(664, 506);
             Rlabel.Name = "Rlabel";
             Rlabel.Size = new Size(15, 13);
             Rlabel.TabIndex = 19;
@@ -741,7 +743,7 @@
             // Slabel
             // 
             Slabel.AutoSize = true;
-            Slabel.Location = new Point(638, 524);
+            Slabel.Location = new Point(641, 506);
             Slabel.Name = "Slabel";
             Slabel.Size = new Size(15, 13);
             Slabel.TabIndex = 18;
@@ -750,7 +752,7 @@
             // Glabel
             // 
             Glabel.AutoSize = true;
-            Glabel.Location = new Point(615, 524);
+            Glabel.Location = new Point(618, 506);
             Glabel.Name = "Glabel";
             Glabel.Size = new Size(15, 13);
             Glabel.TabIndex = 17;
@@ -759,7 +761,7 @@
             // label21
             // 
             label21.AutoSize = true;
-            label21.Location = new Point(517, 524);
+            label21.Location = new Point(520, 506);
             label21.Name = "label21";
             label21.Size = new Size(93, 13);
             label21.TabIndex = 16;
@@ -768,7 +770,7 @@
             // conditionlabel
             // 
             conditionlabel.AutoSize = true;
-            conditionlabel.Location = new Point(8, 524);
+            conditionlabel.Location = new Point(11, 506);
             conditionlabel.Name = "conditionlabel";
             conditionlabel.Size = new Size(19, 13);
             conditionlabel.TabIndex = 15;
@@ -779,7 +781,7 @@
             // 
             label17.AutoSize = true;
             label17.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label17.Location = new Point(842, 518);
+            label17.Location = new Point(845, 500);
             label17.Name = "label17";
             label17.Size = new Size(283, 13);
             label17.TabIndex = 14;
@@ -1455,6 +1457,15 @@
             label34.TabIndex = 37;
             label34.Text = "- higher SSN will give rise to higher MUF";
             // 
+            // label35
+            // 
+            label35.AutoSize = true;
+            label35.Location = new Point(13, 560);
+            label35.Name = "label35";
+            label35.Size = new Size(393, 13);
+            label35.TabIndex = 39;
+            label35.Text = "(Radio bursts can increase background noise as well as affect propagation)\r\n";
+            // 
             // Solar
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -1643,5 +1654,6 @@
         private Label Internetlabel;
         private Label label33;
         private Label label34;
+        private Label label35;
     }
 }
