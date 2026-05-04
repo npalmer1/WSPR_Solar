@@ -221,7 +221,7 @@ namespace WSPR_Solar
         private void Solar_Load(object sender, EventArgs e)
         {
             System.Version version = Assembly.GetExecutingAssembly().GetName().Version;
-            string ver = "0.1.24";
+            string ver = "0.1.25";
             this.Text = "WSPR Solar                       V." + ver + "    GNU GPLv3 License";
 
             //solarstartuptimer.Enabled = true;
@@ -482,10 +482,12 @@ namespace WSPR_Solar
 
             bool found = false;
 
-            if (datetime[9] == '0')
+
+            if (datetime.Length >= 10 && datetime[9] == '0')
             {
                 datetime = datetime.Remove(9, 1);
             }
+           
             int index = textBox1.Text.IndexOf(datetime);
 
             if (index > 1)
