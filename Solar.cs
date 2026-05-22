@@ -221,7 +221,7 @@ namespace WSPR_Solar
         private void Solar_Load(object sender, EventArgs e)
         {
             System.Version version = Assembly.GetExecutingAssembly().GetName().Version;
-            string ver = "0.1.25";
+            string ver = "0.1.26";
             this.Text = "WSPR Solar                       V." + ver + "    GNU GPLv3 License";
 
             //solarstartuptimer.Enabled = true;
@@ -3496,7 +3496,7 @@ namespace WSPR_Solar
                 command.CommandText = "INSERT INTO weather(datetime,pf00,pf03,pf06,pf09,pf12,pf15,pf18,pf21) ";
                 command.CommandText += "VALUES('" + datetime + "', '" + pflux.pf00 + "', '" + pflux.pf03 + "', '" + pflux.pf06 + "', ";
                 command.CommandText += "'" + pflux.pf09 + "', '" + pflux.pf12 + "', '" + pflux.pf15 + "', '" + pflux.pf18 + "', '" + pflux.pf21 + "') ";
-                command.CommandText += " ON DUPLICATE KEY UPDATE pf00 = '" + pflux.pf00 + "', pf03 = '" + pflux.pf06 + "', pf06 = '" + pflux.pf06 + "' ";
+                command.CommandText += " ON DUPLICATE KEY UPDATE pf00 = '" + pflux.pf00 + "', pf03 = '" + pflux.pf03 + "', pf06 = '" + pflux.pf06 + "' ";
                 command.CommandText += ", pf09 = '" + pflux.pf09 + "', pf12 = '" + pflux.pf12 + "', pf15 = '" + pflux.pf15 + "', pf18 = '" + pflux.pf18 + "'";
                 command.CommandText += ", pf21 = '" + pflux.pf21 + "'";
                 connection.Open();
