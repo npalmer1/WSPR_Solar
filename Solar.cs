@@ -114,6 +114,8 @@ namespace WSPR_Solar
         Bursts rb = new Bursts();
 
         MessageClass Msg = new MessageClass();
+        
+        private static readonly HttpClient sharedHttpClient = new HttpClient();
 
         string fluxdata = "";
         string flaredata = "";
@@ -221,7 +223,7 @@ namespace WSPR_Solar
         private void Solar_Load(object sender, EventArgs e)
         {
             System.Version version = Assembly.GetExecutingAssembly().GetName().Version;
-            string ver = "0.1.26";
+            string ver = "0.1.27";
             this.Text = "WSPR Solar                       V." + ver + "    GNU GPLv3 License";
 
             //solarstartuptimer.Enabled = true;
@@ -1002,8 +1004,49 @@ namespace WSPR_Solar
             }
         }
 
-
         public async Task fetchSolardata()  //get solar data: SSN/SFI/xray from yesterday (presented today)
+        {
+            textBox2.Text = "";
+            string results = "";
+            string Url = "https://services.swpc.noaa.gov/text/sgas.txt";
+            if (stopUrl)
+            {
+                return;
+            }
+            if (await Msg.IsUrlReachable(Url))
+            {
+                try
+                {
+                    results = await sharedHttpClient.GetStringAsync(Url);
+                }
+                catch (HttpRequestException ex)
+                {
+                    MessageBox.Show("Error: " + ex.Message);
+                }
+
+                using var reader = new StringReader(results);
+                {
+                    string line = "";
+                    try
+                    {
+                        while (line != null)
+                        {
+                            line = reader.ReadLine();
+                            textBox2.Text = textBox2.Text + line + Environment.NewLine;
+                        }
+                    }
+                    catch
+                    {
+                    }
+                }
+                reader.Close();
+            }
+            else
+            {
+                Msg.TMessageBox("Unable to reach NOAA solar data", "Solar data", 1000);
+            }
+        }
+        /*public async Task fetchSolardata()  //get solar data: SSN/SFI/xray from yesterday (presented today)
         {
             textBox2.Text = "";
             string results = "";
@@ -1053,7 +1096,7 @@ namespace WSPR_Solar
             {
                 Msg.TMessageBox("Unable to reach NOAA solar data", "Solar data", 1000);
             }
-        }
+        }*/
 
 
 
@@ -3837,7 +3880,7 @@ namespace WSPR_Solar
             public string units { get; set; }
         }*/
 
-        private async Task getProtonFlux(int h1, int prevdays, bool primary)
+        /*private async Task getProtonFlux(int h1, int prevdays, bool primary)
         {
             fluxdata = "";
             string sat = "primary";
@@ -3868,7 +3911,41 @@ namespace WSPR_Solar
                 int h2 = h1 + 2; //do this for 2h55mins
                 int m1 = 0;
                 int m2 = 55;    //measure proton flux from 5 min data from GOES in 3 hour periods
+
+
                 string json = await client.GetStringAsync(url);
+        */
+
+        private async Task getProtonFlux(int h1, int prevdays, bool primary)
+        {
+            fluxdata = "";
+            string sat = "primary";
+            if (!primary)
+            {
+                sat = "secondary";
+            }
+
+            string url = "https://services.swpc.noaa.gov/json/goes/" + sat + "/integral-protons-3-day.json";
+            if (stopUrl)
+            {
+                return;
+            }
+
+            bool ok = false;
+            ok = await Msg.IsUrlReachable(url);
+            if (!ok)
+            {
+                Msg.TMessageBox("Unable to reach NOAA", "GOES data ", 1500); return;
+            }
+
+            string satno = "";
+            try
+            {
+                int h2 = h1 + 2;
+                int m1 = 0;
+                int m2 = 55;
+                string json = await sharedHttpClient.GetStringAsync(url);               
+
                 JsonArray array = JsonNode.Parse(json).AsArray();
                 if (array == null)
                 {
@@ -3943,7 +4020,7 @@ namespace WSPR_Solar
             }
         }
 
-        private async Task getSolarFlares(int h1, int prevdays, bool primary)
+        /*private async Task getSolarFlares(int h1, int prevdays, bool primary)
         {
 
             flaredata = "";
@@ -3965,6 +4042,25 @@ namespace WSPR_Solar
                     int m1 = 0;
                     int m2 = 55;    //measure proton flux from 5 min data from GOES in 3 hour periods
                     string json = await client.GetStringAsync(url);
+*/
+        private async Task getSolarFlares(int h1, int prevdays, bool primary)
+        {
+            flaredata = "";
+            string url = "https://services.swpc.noaa.gov/json/goes/primary/xray-flares-7-day.json";
+            if (stopUrl)
+            {
+                return;
+            }
+            if (await Msg.IsUrlReachable(url))
+            {
+                string satno = "";
+                try
+                {
+                    string nl = "";
+                    int h2 = h1 + 2;
+                    int m1 = 0;
+                    int m2 = 55;
+                    string json = await sharedHttpClient.GetStringAsync(url);                  
                     JsonArray array = JsonNode.Parse(json).AsArray();
                     if (array == null)
                     {
